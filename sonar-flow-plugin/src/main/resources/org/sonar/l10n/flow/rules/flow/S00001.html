@@ -1,0 +1,19 @@
+<p>
+  A top-level service schould contain a try-catch.
+</p>
+
+<p>
+  Top-level services should be able to catch exceptions and log,transform and obscure data from them.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+Any non-compliant variant
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+SEQUENCE (Exit on success)
+	SEQUENCE (Exit on failure)
+	SEQUENCE (Exit on done)
+</pre>

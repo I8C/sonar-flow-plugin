@@ -1,0 +1,17 @@
+<p>
+  Services should not contain any save- or restorePipeline services.
+</p>
+
+<p>
+  Services should be free of any debugging code snippets.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+Invoke:pub.flow:savePipelineToFile
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+No invoke
+</pre>
