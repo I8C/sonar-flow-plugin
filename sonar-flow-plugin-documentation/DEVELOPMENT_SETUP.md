@@ -24,7 +24,8 @@ The sonarqube server is now ready to receive webMethods-flow code to analyse fro
 ### 3 Get the sonarqube scanner
 The scanner can be downloaded from:
 https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-2.6.1.zip
-Unzip the file somewhere on your machine. This contains the scripts which send your code the server. Optionally you can add the bin folder to your path.
+
+Unzip the file somewhere on your machine. This contains the scripts which will send your code to the server. Optionally you can add the bin folder to your path.
 
 ![dir scanner](assets/development_tutorial/devtut_9.png)
 Configure the conf/sonar-scanner.properties file to point to your sonarqube-server.
