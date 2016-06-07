@@ -25,6 +25,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.InterfaceCommentsCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.SavePipelineCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.TryCatchCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.NodeAstScanner;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitors.SimpleMetricVisitor;
@@ -37,5 +39,10 @@ public class NodeAstScannerTest {
 	  public void scanFile() {
 		logger.debug("Scanning file");
 		NodeAstScanner.scanSingleFile(new File("src/test/resources/node.ndf"));
+	}
+	
+	@Test
+	  public void savePipelineCheck() {
+		NodeAstScanner.scanSingleFile(new File("src/test/resources/node.ndf"), new InterfaceCommentsCheck());
 	}
 }

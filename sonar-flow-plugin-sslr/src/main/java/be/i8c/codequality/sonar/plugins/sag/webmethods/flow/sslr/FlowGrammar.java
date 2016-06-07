@@ -87,7 +87,7 @@ public enum FlowGrammar implements GrammarRuleKey{
 	    b.rule(DATA).is(START_DATA,ATTRIBUTES,b.optional(VALUES),STOP_DATA);
 	    b.rule(VALUES).is(START_VALUES,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD)),STOP_VALUES);
 	    b.rule(RECORD).is(START_RECORD,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD)),STOP_RECORD);
-	    b.rule(VALUE).is(START_VALUE,ATTRIBUTES,STOP_VALUE);
+	    b.rule(VALUE).is(START_VALUE,ATTRIBUTES,b.zeroOrMore(ELEMENT_VALUE),STOP_VALUE);
 	    b.rule(ARRAY).is(START_ARRAY,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD)),STOP_ARRAY);
 	    
 	    b.rule(UNDEF_ATT).is(b.sequence(IDENTIFIER, LITERAL));

@@ -38,6 +38,7 @@ public class FlowContentHandler extends DefaultHandler {
 	private Lexer lex;
 	private Token.Builder tokenBuilder;
 	private Locator locator;
+	private boolean ignoreWS=true;
 	
 	public FlowContentHandler(Lexer lex, Token.Builder tokenBuilder) {
 		this.lex = lex;
@@ -83,6 +84,18 @@ public class FlowContentHandler extends DefaultHandler {
 		if(FlowLexer.FlowTypes.isInEnum("STOP_" + name.toUpperCase())){
 			logger.debug("Stop element: " + qName + "[" + line + "," + column + "]");
 			Token token = tokenBuilder.setType(FlowLexer.FlowTypes.valueOf("STOP_" + name.toUpperCase())).setValueAndOriginalValue(name.toUpperCase(),name)
+					.setURI(lex.getURI()).setLine(line).setColumn(column).build();
+			lex.addToken(token);
+		}
+	}
+	
+	public void characters(char ch[], int start, int length) {
+		String value = new String(ch, start, length);
+		if(ignoreWS && !value.trim().replace("\n", "").replace("\r", "").equals("")){
+			int line = locator.getLineNumber();
+			int column = locator.getColumnNumber();
+			logger.debug("elemnt value" + "[" + line + "," + column + "]");
+			Token token = tokenBuilder.setType(FlowLexer.FlowTypes.ELEMENT_VALUE).setValueAndOriginalValue(value)
 					.setURI(lex.getURI()).setLine(line).setColumn(column).build();
 			lex.addToken(token);
 		}

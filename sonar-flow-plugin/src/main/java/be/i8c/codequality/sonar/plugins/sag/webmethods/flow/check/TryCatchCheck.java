@@ -30,6 +30,7 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
 import com.sonar.sslr.api.AstNode;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 

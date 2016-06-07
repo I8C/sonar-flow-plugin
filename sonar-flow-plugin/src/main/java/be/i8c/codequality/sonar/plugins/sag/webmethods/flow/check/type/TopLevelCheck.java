@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check;
+package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type;
 
 import org.sonar.squidbridge.checks.SquidCheck;
 

@@ -61,7 +61,8 @@ import com.sonar.sslr.api.Grammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.FlowLanguage;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.FlowPlugin;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.CheckList;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.TopLevelCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.NodeCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.metric.FlowMetric;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.NodeAstScanner;
@@ -134,6 +135,9 @@ public class FlowSquidSensor implements Sensor {
 	    	for(SourceCode nodeFile : nodeFiles){
 	    		if((new File(nodeFile.getKey())).getParent().equals((new File(squidSourceFile.getKey())).getParent())){
 	    			squidSourceFile.addChild(nodeFile);
+	    			String relativePath = pathResolver.relativePath(fileSystem.baseDir(), new java.io.File(nodeFile.getKey()));
+	    			InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasRelativePath(relativePath));
+	    			saveViolations(inputFile, (SourceFile) nodeFile);
 	    		}
 	    		
 	    	}
@@ -205,9 +209,14 @@ public class FlowSquidSensor implements Sensor {
 				if(squidFile.getInt(FlowMetric.IS_TOP_LEVEL)!=1 && c instanceof TopLevelCheck){
 					logger.debug("+++Ignoring toplevelCheck: " + c.getKey() + " for file: " + squidFile.getKey());
 				}else{
-					RuleKey ruleKey = checks.ruleKey((SquidCheck<Grammar>) message.getCheck());
+					logger.debug("+++ Message " + message.getDefaultMessage());
+					logger.debug("+++ Message " + message.toString());
+					RuleKey ruleKey;
+					if(message.getCheck() instanceof NodeCheck){
+						ruleKey = nodeChecks.ruleKey((SquidCheck<Grammar>) message.getCheck());
+					}else
+						ruleKey = checks.ruleKey((SquidCheck<Grammar>) message.getCheck());
 					Issuable issuable = resourcePerspectives.as(Issuable.class, inputFile);
-	
 					if (issuable != null) {
 						IssueBuilder issueBuilder = issuable.newIssueBuilder().ruleKey(ruleKey).line(message.getLine())
 								.message(message.getText(Locale.ENGLISH));

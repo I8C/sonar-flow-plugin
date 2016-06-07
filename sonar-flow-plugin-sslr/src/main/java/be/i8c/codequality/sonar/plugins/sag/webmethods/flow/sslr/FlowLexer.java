@@ -58,7 +58,11 @@ public class FlowLexer {
 	    START_VALUE, STOP_VALUE,
 	    START_ARRAY, STOP_ARRAY,
 	    
+	    ELEMENT_VALUE,
+	    
 	    START_COMMENT, STOP_COMMENT;
+	    
+	    
 
 	    public static boolean isInEnum(String value) {
 	         return Arrays.stream(FlowTypes.values()).anyMatch(e -> e.name().equals(value));
