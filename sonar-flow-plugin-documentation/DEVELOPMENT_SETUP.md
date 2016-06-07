@@ -59,3 +59,8 @@ sonar.flow.ignore.toplevel=false
 
 Now just call the sonarqube-scanner script from inside this folder.
 ![call scanner](assets/development_tutorial/devtut_13.png) 
+
+Open your browser go to the url of you sonarqube server. In this example http://192.168.99.100:9000/
+There you'll see the results of the flow validation
+
+
