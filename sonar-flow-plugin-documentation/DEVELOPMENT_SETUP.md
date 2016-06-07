@@ -1,0 +1,39 @@
+## QUICK SETUP
+
+### Get the source code from git
+You’ll find the git repository for this project on cronos private git provider.
+https://git.cronos.be/i8c/codequality
+
+First step is to clone this repository to your local machine
+![get from git](assets/development_tutorial/devtut_1.png)
+
+Open eclipse and import the sonar-flows-plugin and sonar-flow-plugin-sslr maven projects.
+![get from git](assets/development_tutorial/devtut_2.png)
+![get from git](assets/development_tutorial/devtut_3.png)
+
+Build the webMethods flow-code plugin jar.
+![get from git](assets/development_tutorial/devtut_4.png)
+
+### Start the sonarqube server with docker kitematic 
+For this we will use the sonarqube docker image from the docker hub. More info about this images can be found here: https://hub.docker.com/_/sonarqube/
+Simply search the sonarqube image and click create. This will pull the sonarqube docker image from the docker hub and start it. 
+![get from git](assets/development_tutorial/devtut_5.png)
+![get from git](assets/development_tutorial/devtut_6.png)
+
+The server is now up and running. Next you’ll need to copy the webMethods-plugin jar you just created into the volume /opt/sonarqube/extensions.
+![get from git](assets/development_tutorial/devtut_7.png)
+The sonarqube server is now ready to receive code to analyse from the sonarqube-scanners
+
+### Get the sonarqube scanner
+https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-2.6.1.zip
+Unzip the file somewhere on your machine. This contains the scripts which will analyse your code. Optionally you can add the bin folder to your path.
+
+![get from git](assets/development_tutorial/devtut_8.png)
+Configure the conf/sonar-scanner.properties file to point to you’re server. For now leave the other configurations untouched.
+
+The source code for the sonarqube scanner cli can be found here: 
+https://github.com/Sonarsource/sonar-scanner-cli
+![get from git](assets/development_tutorial/devtut_9.png)
+
+### Analyse your code
+Go to webMethods IS package you want to validate. 
