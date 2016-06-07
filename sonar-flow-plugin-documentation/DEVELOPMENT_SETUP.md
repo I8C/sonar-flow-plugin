@@ -1,43 +1,67 @@
 ## QUICK SETUP
 
-### Get the source code from git
-You’ll find the git repository for this project on cronos private git provider.
-https://git.cronos.be/i8c/codequality
-
+### 1 Get the source code from git
 First step is to clone this repository to your local machine.
-![get from git](assets/development_tutorial/devtut_1.png)
+![git clone](assets/development_tutorial/devtut_1.png)
 
 Open eclipse and import the sonar-flows-plugin and sonar-flow-plugin-sslr maven projects.
 ![eclipse import](assets/development_tutorial/devtut_3.png)
 
 Build the webMethods flow-code plugin jar which we will add as a plugin to the sonarqube server. The generated jar is located under the target directory.
-![get from git](assets/development_tutorial/devtut_4.png)
+![eclise build](assets/development_tutorial/devtut_4.png)
 
-### Start the sonarqube server with docker kitematic 
-For this we will use the sonarqube docker image from the docker hub. More info about this images can be found here: https://hub.docker.com/_/sonarqube/
-Simply search the sonarqube image and click create. This will pull the sonarqube docker image from the docker hub and start it. 
-![get from git](assets/development_tutorial/devtut_6.png)
-![get from git](assets/development_tutorial/devtut_7.png)
+### 2 Start the sonarqube server with docker kitematic 
+For this tutorial we will use the sonarqube docker image from the docker hub. More info about this images can be found on: https://hub.docker.com/_/sonarqube/
+In kitematic simply search the sonarqube image and click create. This will pull the sonarqube docker image from the docker hub and start it. 
+![kitematic search](assets/development_tutorial/devtut_6.png)
+![kitematic create](assets/development_tutorial/devtut_7.png)
+Notice the access URL in the description. This will open the sonarqube dashboard.
 
-The server is now up and running. Next you’ll need to copy the webMethods-plugin jar you just created into the volume /opt/sonarqube/extensions.
-![get from git](assets/development_tutorial/devtut_8.png)
-The sonarqube server is now ready to receive code to analyse from the sonarqube-scanners
+The server is now up and running. Next copy the webMethods-plugin-jar from step 1 into the volume /opt/sonarqube/extensions.
+![kitematic volume](assets/development_tutorial/devtut_8.png)
+The sonarqube server is now ready to receive webMethods-flow code to analyse from the sonarqube-scanners
 
-### Get the sonarqube scanner
+### 3 Get the sonarqube scanner
+The scanner can be downloaded from:
 https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-2.6.1.zip
-Unzip the file somewhere on your machine. This contains the scripts which will analyse your code. Optionally you can add the bin folder to your path.
+Unzip the file somewhere on your machine. This contains the scripts which send your code the server. Optionally you can add the bin folder to your path.
 
-![get from git](assets/development_tutorial/devtut_9.png)
-Configure the conf/sonar-scanner.properties file to point to you’re server. For now leave the other configurations untouched.
+![dir scanner](assets/development_tutorial/devtut_9.png)
+Configure the conf/sonar-scanner.properties file to point to your sonarqube-server.
+See following example of a "sonar-scanner.properties" file:
+```text
+#Configure here general information about the environment, such as SonarQube DB details for example
+#No information about specific project should appear here
 
-The source code for the sonarqube scanner cli can be found here: 
-https://github.com/Sonarsource/sonar-scanner-cli
-![get from git](assets/development_tutorial/devtut_10.png)
+#----- Default SonarQube server
+sonar.host.url=http://192.168.99.100:9000/
 
-### Analyse your code
-Go to webMethods IS package you want to validate. Create a property file named "sonar-project.properties"
+#----- Default source code encoding
+sonar.sourceEncoding=UTF-8
+
+#----- Global database settings (not used for SonarQube 5.2+)
+#sonar.jdbc.username=sonar
+#sonar.jdbc.password=sonar
+
+#----- PostgreSQL
+#sonar.jdbc.url=jdbc:postgresql://localhost/sonar
+
+#----- MySQL
+#sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8
+
+#----- Oracle
+#sonar.jdbc.url=jdbc:oracle:thin:@localhost/XE
+
+#----- Microsoft SQLServer
+#sonar.jdbc.url=jdbc:jtds:sqlserver://localhost/sonar;SelectMethod=Cursor
+```
+
+
+### 4 Analyse your code
+Go to webMethods IS package you want to validate. Create a property file named "sonar-project.properties" in this directory
 ![dir IS package](assets/development_tutorial/devtut_11.png)
-See following example
+
+See following example of a "sonar-project.properties" file:
 ```
 # must be unique in a given SonarQube instance
 sonar.projectKey=flow:testTutorial
@@ -61,6 +85,7 @@ Now just call the sonarqube-scanner script from inside this folder.
 ![call scanner](assets/development_tutorial/devtut_13.png) 
 
 Open your browser go to the url of you sonarqube server. In this example http://192.168.99.100:9000/
+
 There you'll see the results of the flow validation
 
 
