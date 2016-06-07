@@ -38,7 +38,7 @@ https://github.com/Sonarsource/sonar-scanner-cli
 Go to webMethods IS package you want to validate. Create a property file named "sonar-project.properties"
 ![dir IS package](assets/development_tutorial/devtut_11.png)
 See following example
-```properties
+```
 # must be unique in a given SonarQube instance
 sonar.projectKey=flow:testTutorial
 # this is the name displayed in the SonarQube UI
