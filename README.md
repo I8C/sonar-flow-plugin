@@ -21,4 +21,5 @@ You can find documentation to setup the development environment [here](sonar-flo
 ## Usage
 The plugin will check and scan flow.xml files. It will also scan the node.ndf files and add them to the corresponding flow.xml file as child.
 
-
+## License
+The sonar-flow-plugin is available under the [GNU Lesser General Public License v3.0](LICENSE.txt).
