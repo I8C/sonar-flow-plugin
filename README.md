@@ -1,6 +1,6 @@
 # The sonar-flow-plugin project
 
-This project provides sonarQube plugin for the webMethods flow language.
+This project provides a SonarQube plugin for the webMethods flow language.
 
 Currently the plugin comes with following predefined rules:
 
