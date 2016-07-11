@@ -1,4 +1,4 @@
-## OVERVIEW
+## DEVELOPMENT GUIDE
 
 The project consits of 3 parts:
 
