@@ -1,6 +1,6 @@
 ## Quick setup
 
-For this guide we will use the sonarqube docker image from the docker hub and add the sonar-flow-plugin jar to it. More info about this images can be found on: https://hub.docker.com/_/sonarqube/
+For this guide we will use the sonarqube docker image from the docker hub and add the sonar-flow-plugin jar to it. More info about this image can be found on: https://hub.docker.com/_/sonarqube/
 
 Download the sonar-flow-plugin jar to your working directory. The jar can be found on the github [release page](https://github.com/I8C/sonar-flow-plugin/releases).
 
@@ -20,7 +20,7 @@ FROM sonarqube
 
 COPY ./sonar-flow-plugin-0.1.jar /opt/sonarqube/extensions/plugins
 ```
-This will use the official SonarQube image as base and add the jar to the plugin directory of the sonarqube server.
+This will use the official SonarQube image as base and add the jar to the plugins directory of the sonarqube server.
 
 Next is to build this container and run it using following commands:
 
@@ -82,10 +82,10 @@ And finally run SonarQube Scanner script inside this directory.
 
 ### View results
 
-Now go to your browser and go to `http://<your SonarQube host ip>:9000`. Here you'll see that the project "Sonar flow plugin tutorial" has been added and 2 code smells were detected in my Integration server package.
+Now go to your browser and go to `http://<your SonarQube host ip>:9000`. Here you'll see that the project "Sonar flow plugin tutorial" has been added and 2 code smells were detected in this Integration server package.
 ![sonar gui projects view](assets/setup/sonar-gui-project-view.png)
 
-When you look at those 2 issues you'll see that you should add a comment and remove the savePipeline flow.
+When you look at those 2 issues you'll see that I should have added a comment and removed the savePipeline flow.
 ![sonar gui issues view](assets/setup/sonar-gui-issues-view.png)
 
 
