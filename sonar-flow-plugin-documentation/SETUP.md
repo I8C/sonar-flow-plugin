@@ -42,7 +42,7 @@ wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanne
 unzip sonar-scanner-2.6.1.zip
 ```
 
-Now configure the SonarQube scanner to point to your SonarQube server. This is done using the config file at `sonar-scanner-2.6.1/conf/sonar-scanner.properties`.
+Now configure the SonarQube scanner to point to your SonarQube server. This is done using the config file at `sonar-scanner-2.6.1/conf/sonar-scanner.properties`. The content of this file should look like this:
 
 ```
 #No information about specific project should appear here
@@ -56,7 +56,7 @@ sonar.sourceEncoding=UTF-8
 
 ### Run the SonarQube Scanner
 
-Go in your filesystem to webMethods Integration server package you want to check. And make a new file `sonar-project.properties` with following content:
+Go in your filesystem to the webMethods Integration server package you want to check. And make a new file `sonar-project.properties` with following content:
 
 ```
 # Must be unique in a given SonarQube instance
