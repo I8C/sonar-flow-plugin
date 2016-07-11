@@ -1,7 +1,5 @@
 ## Quick setup
 
-For this guide we will use the sonarqube docker image from the docker hub and add the sonar-flow-plugin jar to it. More info about this image can be found on: https://hub.docker.com/_/sonarqube/
-
 Download the sonar-flow-plugin jar to your working directory. The jar can be found on the github [release page](https://github.com/I8C/sonar-flow-plugin/releases).
 
 ```sh
@@ -13,7 +11,9 @@ To install this plugin just add the downloaded jar to your SonarQube server in t
 
 #### (Optional) Create a SonarQube server with flow plugin using docker
 
-If you do not have a SonarQube server, you can quickly create one using docker. In the same directory as the downloaded jar, create a Dockerfile with the following content:
+If you do not have a SonarQube server, you can quickly create one using docker. For this part we will use the sonarqube docker image from the docker hub and add the sonar-flow-plugin jar to it. More info about this image can be found on: https://hub.docker.com/_/sonarqube/
+
+In the same directory as the downloaded jar, create a Dockerfile with the following content:
 
 ```
 FROM sonarqube
