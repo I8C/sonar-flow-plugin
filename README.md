@@ -11,7 +11,7 @@ Currently the plugin comes with following predefined rules:
 ## Quick setup guide
 Here you'll find a [quick setup](sonar-flow-plugin-documentation/QUICK_SETUP.md).
 
-## Development your own flow code checks
+## Develop your own flow code checks
 You can find the documentation to develop you own rules [here](sonar-flow-plugin-documentation/DEVELOPMENT_SETUP.md).
 
 ## License
