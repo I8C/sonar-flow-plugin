@@ -1,6 +1,6 @@
 ## Quick setup
 
-Download the sonar-flow-plugin jar to your working directory. The jar can be found on the github [release page](https://github.com/I8C/sonar-flow-plugin/releases).
+Download the sonar-flow-plugin jar to your working directory. The jar can be found on the GitHub [release page](https://github.com/I8C/sonar-flow-plugin/releases).
 
 ```sh
 wget https://github.com/I8C/sonar-flow-plugin/releases/download/v0.1/sonar-flow-plugin-0.1.jar
