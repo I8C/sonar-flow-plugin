@@ -2,7 +2,7 @@
 
 For this guide we will use the sonarqube docker image from the docker hub and add the sonar-flow-plugin jar to it. More info about this images can be found on: https://hub.docker.com/_/sonarqube/
 
-Download the sonar-flow-plugin jar to your working directory. The jar can be found on the github release page.
+Download the sonar-flow-plugin jar to your working directory. The jar can be found on the github [release page](https://github.com/I8C/sonar-flow-plugin/releases).
 
 ```sh
 wget https://github.com/I8C/sonar-flow-plugin/releases/download/v0.1/sonar-flow-plugin-0.1.jar
