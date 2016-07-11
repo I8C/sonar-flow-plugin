@@ -13,6 +13,8 @@ Now you are ready to develop your own checks. Use the flow code checks in be.i8c
 * TryCatchCheck.java
 * InterfaceCommentsCheck.java
 
+See the [DEVELOPMENT GUIDE](DEVELOPMENT.md) for more info about this plugin.
+
 ### Build the plugin jar
 Build the webMethods flow-code plugin jar and add it to your SonarQube server (see the [QUICK SETUP GUIDE](QUICK_SETUP.md)). The generated jar is located under the target directory.
 ![eclise build](assets/development_tutorial/devtut_4.png)
