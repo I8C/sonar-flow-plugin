@@ -83,9 +83,9 @@ And finally run SonarQube Scanner script inside this directory.
 ### View results
 
 Now go to your browser and go to `http://<your SonarQube host ip>:9000`. Here you'll see that the project "Sonar flow plugin tutorial" has been added and 2 code smells were detected in this Integration server package.
-![sonar gui projects view](assets/setup/sonar-gui-project-view.png)
+![sonar gui projects view](assets/sonar-gui-project-view.png)
 
 When you look at those 2 issues you'll see that I should have added a comment and removed the savePipeline flow.
-![sonar gui issues view](assets/setup/sonar-gui-issues-view.png)
+![sonar gui issues view](assets/sonar-gui-issues-view.png)
 
 
