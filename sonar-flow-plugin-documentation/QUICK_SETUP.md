@@ -1,15 +1,15 @@
-## Quick setup
+# Quick setup
 
 Download the sonar-flow-plugin jar to your working directory. The jar can be found on the GitHub [release page](https://github.com/I8C/sonar-flow-plugin/releases).
 
 ```sh
 wget https://github.com/I8C/sonar-flow-plugin/releases/download/v0.1/sonar-flow-plugin-0.1.jar
 ```
-### Install the plugin on the SonarQube server
+## Install the plugin on the SonarQube server
 
 To install this plugin just add the downloaded jar to your SonarQube server in the plugins folder `/opt/sonarqube/extensions/plugins/`. You will need to restart your server.
 
-#### (Optional) Create a SonarQube server with flow plugin using docker
+### (Optional) Create a SonarQube server with flow plugin using docker
 
 If you do not have a SonarQube server, you can quickly create one using docker. For this part we will use the sonarqube docker image from the docker hub and add the sonar-flow-plugin jar to it. More info about this image can be found on: https://hub.docker.com/_/sonarqube/
 
@@ -32,7 +32,7 @@ docker run -d -p 9000:9000 -p 9092:9092 i8c/wm-sonarqube
 
 Now you should have a running SonarQube server with the sonar-flow-plugin installed on port 9000 of your dockerhost.
 
-### Configure the SonarQube Scanner
+## Configure the SonarQube Scanner
 
 The documentation for the scanner can be found [here](http://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner).
 Download the scanner to your filesystem and unzip it.
@@ -54,7 +54,7 @@ sonar.host.url=http://192.168.99.100:9000/
 sonar.sourceEncoding=UTF-8
 ```
 
-### Run the SonarQube Scanner
+## Run the SonarQube Scanner
 
 Go in your filesystem to the webMethods Integration server package you want to check. And make a new file `sonar-project.properties` with following content:
 
@@ -80,7 +80,7 @@ And finally run SonarQube Scanner script inside this directory.
 ../sonar-scanner-2.6.1/bin/sonar-scanner
 ```
 
-### View results
+## View results
 
 Now go to your browser and go to `http://<your SonarQube host ip>:9000`. Here you'll see that the project "Sonar flow plugin tutorial" has been added and 2 code smells were detected in this Integration server package.
 ![sonar gui projects view](assets/sonar-gui-project-view.png)
