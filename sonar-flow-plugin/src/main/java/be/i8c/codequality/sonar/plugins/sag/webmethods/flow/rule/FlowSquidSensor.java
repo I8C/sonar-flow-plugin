@@ -147,7 +147,9 @@ public class FlowSquidSensor implements Sensor {
 	private void setTopLevelServices(Collection<SourceCode> squidSourceFiles) {
 		HashSet<String> dependencies = new HashSet<String>();
 		for (SourceCode squidSourceFile : squidSourceFiles) {
-			dependencies.addAll((ArrayList<String>) squidSourceFile.getData(FlowMetric.DEPENDENCIES));
+			ArrayList<String> deps = (ArrayList<String>) squidSourceFile.getData(FlowMetric.DEPENDENCIES);
+			if(deps != null)
+				dependencies.addAll(deps);
 		}
 		for (SourceCode squidSourceFile : squidSourceFiles) {
 			String relativePath = pathResolver.relativePath(fileSystem.baseDir(), new java.io.File(squidSourceFile.getKey()));
