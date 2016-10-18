@@ -38,11 +38,11 @@ public class NodeAstScannerTest {
 	@Test
 	  public void scanFile() {
 		logger.debug("Scanning file");
-		NodeAstScanner.scanSingleFile(new File("src/test/resources/node.ndf"));
+		NodeAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/node.ndf"));
 	}
 	
 	@Test
 	  public void savePipelineCheck() {
-		NodeAstScanner.scanSingleFile(new File("src/test/resources/node.ndf"), new InterfaceCommentsCheck());
+		NodeAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/node.ndf"), new InterfaceCommentsCheck());
 	}
 }

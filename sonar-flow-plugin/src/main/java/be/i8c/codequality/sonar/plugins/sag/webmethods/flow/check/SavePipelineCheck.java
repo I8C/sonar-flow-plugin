@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
@@ -46,7 +47,14 @@ public class SavePipelineCheck extends SquidCheck<Grammar>{
 
 	final static Logger logger = LoggerFactory.getLogger(SavePipelineCheck.class);
 	
-	private String pipelineServices = "pub.flow:savePipeline,pub.flow:savePipelineToFile,pub.flow:restorePipeline,pub.flow:restorePipelineFromFile";
+	private static final String DEFAULT_PS = "pub.flow:savePipeline,pub.flow:savePipelineToFile,pub.flow:restorePipeline,pub.flow:restorePipelineFromFile";
+
+	@RuleProperty(
+			key = "pipelineServices",
+			description = "Comma-seperated list of pipeline services",
+			defaultValue = "" + DEFAULT_PS)
+	private String pipelineServices = DEFAULT_PS;
+	  
 	@Override
 	public void init() {
 		logger.debug("++ Initializing " + this.getClass().getName() + " ++");
