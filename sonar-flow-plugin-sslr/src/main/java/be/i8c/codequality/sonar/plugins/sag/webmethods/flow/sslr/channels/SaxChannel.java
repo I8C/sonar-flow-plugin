@@ -54,7 +54,7 @@ public class SaxChannel extends Channel<Lexer> {
 			saxParser = spf.newSAXParser();
 			XMLReader xmlReader = saxParser.getXMLReader();
 			xmlReader.setContentHandler(new FlowContentHandler(lex,tokenBuilder));
-			xmlReader.parse(new InputSource(new ByteArrayInputStream(new StringBuilder(code).toString().getBytes())));
+			xmlReader.parse(new InputSource(new ByteArrayInputStream(new StringBuilder(code).toString().getBytes("UTF-8"))));
 			int length = code.length();
 			for (int j = 0; j < length; j++) {
 				code.pop();
