@@ -19,7 +19,6 @@
  */
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
 
-import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import com.sonar.sslr.api.AstNode;
@@ -57,6 +56,8 @@ public class FlowLexer {
 	    START_RECORD, STOP_RECORD,
 	    START_VALUE, STOP_VALUE,
 	    START_ARRAY, STOP_ARRAY,
+	    START_NUMBER, STOP_NUMBER,
+	    START_BOOLEAN, STOP_BOOLEAN,
 	    
 	    ELEMENT_VALUE,
 	    

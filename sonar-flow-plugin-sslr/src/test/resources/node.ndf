@@ -5,6 +5,8 @@
   <value name="svc_subtype">default</value>
   <value name="svc_sigtype">java 3.5</value>
   <record name="svc_sig" javaclass="someClass">
+    <number name="jmsTriggerType" type="Integer">0</number>
+    <Boolean name="enabled">false</Boolean>
     <record name="sig_in" javaclass="someClass">
       <value name="node_type">record</value>
       <value name="is_public">false</value>
@@ -54,6 +56,12 @@
     <value name="stopExecution">false</value>
     <value name="onError">true</value>
   </record>
+  <array name="rec_fields" type="record" depth="1">
+    <record javaclass="com.wm.util.Values">
+      <value name="node_type">record</value>
+        <null name="durableSubscriberName"/>
+    </record>
+  </array>
   <value name="pipeline_option">1</value>
   <null name="originURI"/>
   <value name="modifiable">true</value>

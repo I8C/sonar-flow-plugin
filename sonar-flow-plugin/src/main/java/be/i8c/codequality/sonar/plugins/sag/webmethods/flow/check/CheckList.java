@@ -60,11 +60,14 @@ public class CheckList {
 	}
 
 	private static List<Class> getNodeChecks() {
-		return ImmutableList.<Class> of(InterfaceCommentsCheck.class);
+		return ImmutableList.<Class> of(
+				InterfaceCommentsCheck.class);
 	}
 
 	private static List<Class> getTopLevelChecks() {
-		return ImmutableList.<Class> of(TryCatchCheck.class);
+		return ImmutableList.<Class> of(
+				TryCatchCheck.class,
+				ExitCheck.class);
 	}
 
 	private static List<Class> getOtherChecks() {

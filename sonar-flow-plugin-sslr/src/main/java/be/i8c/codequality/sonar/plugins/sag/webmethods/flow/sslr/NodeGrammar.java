@@ -35,6 +35,8 @@ public enum NodeGrammar implements GrammarRuleKey{
 	RECORD,
 	VALUE,
 	ARRAY,
+	NUMBER,
+	BOOLEAN,
 	
 	UNDEF_ATT,
 	ATTRIBUTES;
@@ -44,10 +46,12 @@ public enum NodeGrammar implements GrammarRuleKey{
 	    LexerfulGrammarBuilder b = LexerfulGrammarBuilder.create();
 	    
 	    b.rule(DATA).is(START_DATA,ATTRIBUTES,b.optional(VALUES),STOP_DATA);
-	    b.rule(VALUES).is(START_VALUES,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD)),STOP_VALUES);
-	    b.rule(RECORD).is(START_RECORD,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD)),STOP_RECORD);
+	    b.rule(VALUES).is(START_VALUES,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD,NUMBER,BOOLEAN)),STOP_VALUES);
+	    b.rule(RECORD).is(START_RECORD,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD,NUMBER,BOOLEAN)),STOP_RECORD);
 	    b.rule(VALUE).is(START_VALUE,ATTRIBUTES,b.zeroOrMore(ELEMENT_VALUE),STOP_VALUE);
 	    b.rule(ARRAY).is(START_ARRAY,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD)),STOP_ARRAY);
+	    b.rule(NUMBER).is(START_NUMBER,ATTRIBUTES,ELEMENT_VALUE,STOP_NUMBER);
+	    b.rule(BOOLEAN).is(START_BOOLEAN,ATTRIBUTES,ELEMENT_VALUE,STOP_BOOLEAN);
 	    
 	    b.rule(UNDEF_ATT).is(b.sequence(IDENTIFIER, LITERAL));
 	    b.rule(ATTRIBUTES).is(b.zeroOrMore(b.firstOf(SERVICE,EXIT_ON,MODE,NAME,UNDEF_ATT)));
