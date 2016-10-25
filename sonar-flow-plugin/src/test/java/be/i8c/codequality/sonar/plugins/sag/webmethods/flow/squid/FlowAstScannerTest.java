@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.ExitCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.QualifiedNameCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.SavePipelineCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.TryCatchCheck;
@@ -54,5 +55,10 @@ public class FlowAstScannerTest {
 	@Test
 	  public void qualifiedNameCheck() {
 		FlowAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/flow.xml"), new QualifiedNameCheck());
+	}
+	
+	@Test
+	  public void exitCheck() {
+		FlowAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/mySecondService/flow.xml"), new ExitCheck());
 	}
 }

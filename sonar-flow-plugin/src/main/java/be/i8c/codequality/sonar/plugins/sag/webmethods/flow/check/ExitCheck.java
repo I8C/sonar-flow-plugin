@@ -19,8 +19,6 @@
  */
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.server.rule.RulesDefinition;
@@ -32,12 +30,13 @@ import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import com.sonar.sslr.api.AstNode;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 
 @Rule(key="S00006",name = "In the EXIT step, \"Exit from \" property must be defined and "
 		+ "the \"Failure message\" must be defined if the \"signal\" property is FAILURE", 
-		priority = Priority.MINOR, tags = {Tags.ERROR_HANDLING})
+		priority = Priority.MINOR, tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE})
 @ActivatedByDefault
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.EXCEPTION_HANDLING)
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")
 public class ExitCheck extends TopLevelCheck{
 
@@ -46,40 +45,40 @@ public class ExitCheck extends TopLevelCheck{
 	@Override
 	public void init() {
 		logger.debug("++ Initializing {} ++", this.getClass().getName());
-		subscribeTo(FlowGrammar.FLOW);
+		subscribeTo(FlowGrammar.EXIT);
 	}
 
 	@Override
 	public void visitNode(AstNode astNode) {
-		AstNode exitNode = getContent(astNode).getFirstChild(FlowGrammar.EXIT);
-		String exitFrom = getExitFrom(exitNode);
-		if (exitFrom == null) {
-			logger.debug("++ \"Exit from\" property found to be empty! ++");
-			getContext().createLineViolation(this, "++ The \"Exit from\" "
-			+ "property must be defined for the interface element 'EXIT'. ++", exitNode);
-		}
-		if (hasSignalSetToFailure(exitNode)) {
-			String exitFailureMessage = getExitFailureMessage(exitNode);
-			if (exitFailureMessage == null) {
-				logger.debug("++ Failure message has not been set even though"
-						+ " the signal status has been set to failure! ++");
-				getContext().createLineViolation(this, "Create a Failure message"
-						+ " for the interface element 'EXIT'." , exitNode);
+		AstNode exitNode = astNode.getFirstChild(FlowGrammar.ATTRIBUTES);
+		if (exitNode != null){
+			logger.debug("++ Exit interface element found. ++");
+			String exitFrom = getExitFrom(exitNode);
+			if (exitFrom == null || exitFrom.trim().equals("")) {
+				logger.debug("++ \"Exit from\" property found to be empty! ++");
+				getContext().createLineViolation(this, "++ The \"Exit from\" "
+				+ "property must be defined for the interface element 'EXIT'. ++", exitNode);
+			}
+			if (hasSignalSetToFailure(exitNode)) {
+				String exitFailureMessage = getExitFailureMessage(exitNode);
+				if (exitFailureMessage == null || exitFailureMessage.trim().equals("")) {
+					logger.debug("++ Failure message has not been set even though"
+							+ " the signal status has been set to failure! ++");
+					getContext().createLineViolation(this, "Create a Failure message"
+							+ " for the interface element 'EXIT'." , exitNode);
+				}
 			}
 		}
-		
 	}
 
 	private String getExitFrom(AstNode exitNode) {
 		if (exitNode != null) {
-			AstNode attributes = exitNode.getFirstChild(FlowGrammar.ATTRIBUTES);
-			if (attributes != null) {
-				List<AstNode> undefAttList = attributes.getDescendants(FlowGrammar.UNDEF_ATT);
-				for (AstNode undefAtt : undefAttList) {
-					if (undefAtt.equals("FROM")) {
-						logger.debug("++ From field found! ++");
-						return undefAtt.getTokenValue();
-					}
+			AstNode fromAtt = exitNode.getFirstChild(FlowAttTypes.FROM);
+			if (fromAtt != null) {
+				String fromType = fromAtt.getToken().getOriginalValue();
+				logger.debug("++ From field found! ++");
+				if ( fromType != null) {
+					return fromType;
 				}
 			}
 		}
@@ -88,34 +87,25 @@ public class ExitCheck extends TopLevelCheck{
 	
 	private String getExitFailureMessage(AstNode exitNode) {
 		if (exitNode != null) {
-			AstNode attributes = exitNode.getFirstChild(FlowGrammar.UNDEF_ATT);
-			if (attributes != null) {
-				List<AstNode> undefAttList = attributes.getDescendants(FlowGrammar.UNDEF_ATT);
-				for (AstNode undefAtt : undefAttList) {
-					if (undefAtt.equals("FAILURE-MESSAGE")) {
-						logger.debug("++ Failure message field found! ++");
-						return undefAtt.getTokenValue();
-					}
-				}
-			}
+			AstNode failureMessageAtt = exitNode.getFirstChild(FlowAttTypes.FAILUREMESSAGE);
+			if (failureMessageAtt != null) {
+				logger.debug("++ Failure message field found! ++");
+				return failureMessageAtt.getToken().getOriginalValue();
+			}			
 		}
 		return null;
 	}
 	
 	private Boolean hasSignalSetToFailure(AstNode exitNode) {
 		if (exitNode != null) {
-			AstNode attributes = exitNode.getFirstChild(FlowGrammar.ATTRIBUTES);
-			if (attributes != null) {
-				List<AstNode> undefAttList = attributes.getDescendants(FlowGrammar.UNDEF_ATT);
-				for (AstNode undefAtt : undefAttList) {
-					if (undefAtt.equals("SIGNAL")){
-						String signalValue = undefAtt.getTokenValue();
-						if (signalValue != null){
-							if (signalValue.equalsIgnoreCase("FAILURE")){
-								logger.debug("++ Signal is set to FAILURE! ++");
-								return true;
-							}
-						}
+			AstNode signalAtt = exitNode.getFirstChild(FlowAttTypes.SIGNAL);
+			if (signalAtt != null){
+				logger.debug("++ Signal found ++");
+				String signalValue = signalAtt.getToken().getOriginalValue();
+				if (signalValue != null){
+					if (signalValue.equalsIgnoreCase("FAILURE")){
+						logger.debug("++ Signal is set to FAILURE! ++");
+						return true;
 					}
 				}
 			}
@@ -123,10 +113,4 @@ public class ExitCheck extends TopLevelCheck{
 		return false;
 	}
 	
-	private AstNode getContent(AstNode sequenceNode) {
-		if (sequenceNode != null) {
-			return sequenceNode.getFirstChild(FlowGrammar.CONTENT);
-		}
-		return null;
-	}
 }

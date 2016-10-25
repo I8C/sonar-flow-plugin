@@ -54,7 +54,7 @@ public enum NodeGrammar implements GrammarRuleKey{
 	    b.rule(BOOLEAN).is(START_BOOLEAN,ATTRIBUTES,ELEMENT_VALUE,STOP_BOOLEAN);
 	    
 	    b.rule(UNDEF_ATT).is(b.sequence(IDENTIFIER, LITERAL));
-	    b.rule(ATTRIBUTES).is(b.zeroOrMore(b.firstOf(SERVICE,EXIT_ON,MODE,NAME,UNDEF_ATT)));
+	    b.rule(ATTRIBUTES).is(b.zeroOrMore(b.firstOf(SERVICE,EXITON,MODE,NAME,UNDEF_ATT)));
 	    b.setRootRule(VALUES);
 	    
 	    return b.build();

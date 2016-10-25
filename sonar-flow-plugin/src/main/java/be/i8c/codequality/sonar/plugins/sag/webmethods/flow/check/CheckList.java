@@ -66,14 +66,14 @@ public class CheckList {
 
 	private static List<Class> getTopLevelChecks() {
 		return ImmutableList.<Class> of(
-				TryCatchCheck.class,
-				ExitCheck.class);
+				TryCatchCheck.class);
 	}
 
 	private static List<Class> getOtherChecks() {
 		return ImmutableList.<Class> of(
 				QualifiedNameCheck.class,
 				SavePipelineCheck.class,
-				DisabledCheck.class);
+				DisabledCheck.class,
+				ExitCheck.class);
 	}
 }
