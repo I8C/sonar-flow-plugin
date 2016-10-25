@@ -59,6 +59,6 @@ public class FlowAstScannerTest {
 	
 	@Test
 	  public void exitCheck() {
-		FlowAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/mySecondService/flow.xml"), new ExitCheck());
+		FlowAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/flow.xml"), new ExitCheck());
 	}
 }
