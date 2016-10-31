@@ -91,7 +91,7 @@ public enum FlowGrammar implements GrammarRuleKey{
 	    b.rule(ARRAY).is(START_ARRAY,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD)),STOP_ARRAY);
 	    
 	    b.rule(UNDEF_ATT).is(b.sequence(IDENTIFIER, LITERAL));
-	    b.rule(ATTRIBUTES).is(b.zeroOrMore(b.firstOf(SERVICE,EXIT_ON,MODE,NAME,DISABLED,UNDEF_ATT)));
+	    b.rule(ATTRIBUTES).is(b.zeroOrMore(b.firstOf(SERVICE,EXIT_ON,MODE,NAME,DISABLED,UNDEF_ATT,SWITCH,LABELEXPRESSIONS)));
 	    b.setRootRule(FLOW);
 	    
 	    return b.build();

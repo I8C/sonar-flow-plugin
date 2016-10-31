@@ -91,7 +91,7 @@ public class FlowLexer {
 	  
 	  public static enum FlowAttTypes implements TokenType {
 
-		    SERVICE,EXIT_ON,MODE,NAME,DISABLED;
+		    SERVICE,EXIT_ON,MODE,NAME,DISABLED,SWITCH,LABELEXPRESSIONS;
 
 		    public static boolean isInEnum(String value) {
 		         return Arrays.stream(FlowAttTypes.values()).anyMatch(e -> e.name().equalsIgnoreCase(value));
