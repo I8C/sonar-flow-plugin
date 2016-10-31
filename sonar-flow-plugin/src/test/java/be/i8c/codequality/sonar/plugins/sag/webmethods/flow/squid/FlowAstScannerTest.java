@@ -19,12 +19,19 @@
  */
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
+import java.util.Set;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.squidbridge.api.CheckMessage;
+import org.sonar.squidbridge.api.SourceFile;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.BranchSwitchAndEvaluateLabelsCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.SavePipelineCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.TryCatchCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
@@ -37,16 +44,35 @@ public class FlowAstScannerTest {
 	@Test
 	  public void scanFile() {
 		logger.debug("Scanning file");
-		FlowAstScanner.scanSingleFile(new File("src/test/resources/flow.xml"), new SimpleMetricVisitor());
+		FlowAstScanner.scanSingleFile(new File("src/test/resources/WmPackage/ns/WmPackage/flows/testFlow/flow.xml"), new SimpleMetricVisitor());
 	}
 	
 	@Test
 	  public void tryCatchCheck() {
-		FlowAstScanner.scanSingleFile(new File("src/test/resources/flow.xml"), new TryCatchCheck());
+		FlowAstScanner.scanSingleFile(new File("src/test/resources/WmPackage/ns/WmPackage/flows/testFlow/flow.xml"), new TryCatchCheck());
 	}
 	
 	@Test
 	  public void savePipelineCheck() {
-		FlowAstScanner.scanSingleFile(new File("src/test/resources/flow.xml"), new SavePipelineCheck());
+		FlowAstScanner.scanSingleFile(new File("src/test/resources/WmPackage/ns/WmPackage/flows/testFlow/flow.xml"), new SavePipelineCheck());
 	}
+	
+	@Test
+	public void branchEvaluateLabelsCheck() {
+		
+		String expectedMessageA = "Both switch and evaluate labels are defined in properties of BRANCH";
+		String expectedMessageB = "Evaluate labels must be true when no switch parameter is defined in BRANCH";
+		
+		SourceFile sf = FlowAstScanner.scanSingleFile( new File("src/test/resources/WmPackage/ns/WmPackage/flows/violationBranchEvaluateLabels/flow.xml"), new BranchSwitchAndEvaluateLabelsCheck());
+		Set<CheckMessage> scm = sf.getCheckMessages();
+
+		// check expected number of checkMessages
+		assertEquals(2, scm.size());
+		
+		// check if both violations were encountered
+		for (CheckMessage checkMessage : scm) {
+			assertTrue( "Expected returned check messages were not found", (expectedMessageA.equals(checkMessage.getDefaultMessage() ) || expectedMessageB.equals(checkMessage.getDefaultMessage()) ) );
+		}
+	}
+	
 }

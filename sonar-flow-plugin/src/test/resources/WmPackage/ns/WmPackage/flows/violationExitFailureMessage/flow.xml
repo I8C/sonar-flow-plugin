@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FLOW VERSION="3.0" CLEANUP="true">
+  <COMMENT></COMMENT>
+
+  <!-- nodes -->
+
+<EXIT FROM="$flow" SIGNAL="FAILURE" FAILURE-MESSAGE="">
+  <COMMENT></COMMENT>
+</EXIT>
+</FLOW>

@@ -25,6 +25,7 @@ import java.io.File;
 
 import org.junit.Test;
 
+import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.impl.Parser;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowParser;
@@ -33,6 +34,11 @@ public class FlowParserTest {
 	
 	@Test
 	  public void parseFile() {
-		FlowParser.parseFile("src/test/resources/flow.xml");
+		AstNode astNode = FlowParser.parseFile("src/test/resources/flow.xml");
+	}
+	@Test
+	public void parseFileLabels() {
+		AstNode astNode = FlowParser.parseFile("src/test/resources/flowlabels.xml");
+	
 	}
 }
