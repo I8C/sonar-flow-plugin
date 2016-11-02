@@ -25,10 +25,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.ExitCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.QualifiedNameCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.SavePipelineCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.TryCatchCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.*;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitors.SimpleMetricVisitor;
 
@@ -36,29 +33,42 @@ public class FlowAstScannerTest {
 
 	final static Logger logger = LoggerFactory.getLogger(FlowAstScannerTest.class);
 	
+	File flowFile = new File("src/test/resources/ns/MyPackage/flow/myService/flow.xml");
+	
+	
 	@Test
 	  public void scanFile() {
 		logger.debug("Scanning file");
-		FlowAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/flow.xml"), new SimpleMetricVisitor());
+		FlowAstScanner.scanSingleFile( flowFile , new SimpleMetricVisitor());
 	}
 	
 	@Test
 	  public void tryCatchCheck() {
-		FlowAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/flow.xml"), new TryCatchCheck());
+		FlowAstScanner.scanSingleFile( flowFile , new TryCatchCheck());
 	}
 	
 	@Test
 	  public void savePipelineCheck() {
-		FlowAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/flow.xml"), new SavePipelineCheck());
+		FlowAstScanner.scanSingleFile( flowFile , new SavePipelineCheck());
 	}
 	
 	@Test
 	  public void qualifiedNameCheck() {
-		FlowAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/flow.xml"), new QualifiedNameCheck());
+		FlowAstScanner.scanSingleFile( flowFile , new QualifiedNameCheck());
 	}
 	
 	@Test
 	  public void exitCheck() {
-		FlowAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/flow.xml"), new ExitCheck());
+		FlowAstScanner.scanSingleFile( flowFile , new ExitCheck());
+	}
+	
+	@Test 
+	  public void EmptyMapCheck() {
+		FlowAstScanner.scanSingleFile( flowFile , new EmptyMapCheck());
+	}
+	
+	@Test
+	  public void EmptyFlowCheck() {
+		FlowAstScanner.scanSingleFile( flowFile , new EmptyFlowCheck());
 	}
 }

@@ -66,7 +66,8 @@ public class CheckList {
 
 	private static List<Class> getTopLevelChecks() {
 		return ImmutableList.<Class> of(
-				TryCatchCheck.class);
+				TryCatchCheck.class,
+				EmptyFlowCheck.class);
 	}
 
 	private static List<Class> getOtherChecks() {
@@ -74,6 +75,7 @@ public class CheckList {
 				QualifiedNameCheck.class,
 				SavePipelineCheck.class,
 				DisabledCheck.class,
-				ExitCheck.class);
+				ExitCheck.class,
+				EmptyMapCheck.class);
 	}
 }

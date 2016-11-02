@@ -35,14 +35,16 @@ public class NodeAstScannerTest {
 
 	final static Logger logger = LoggerFactory.getLogger(NodeAstScannerTest.class);
 	
+	File nodeFile = new File("src/test/resources/ns/MyPackage/flow/myService/node.ndf");
+	
 	@Test
 	  public void scanFile() {
 		logger.debug("Scanning file");
-		NodeAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/node.ndf"));
+		NodeAstScanner.scanSingleFile(nodeFile);
 	}
 	
 	@Test
 	  public void savePipelineCheck() {
-		NodeAstScanner.scanSingleFile(new File("src/test/resources/ns/MyPackage/flow/myService/node.ndf"), new InterfaceCommentsCheck());
+		NodeAstScanner.scanSingleFile(nodeFile);
 	}
 }
