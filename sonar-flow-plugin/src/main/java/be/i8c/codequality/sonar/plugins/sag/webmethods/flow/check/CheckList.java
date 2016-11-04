@@ -76,6 +76,7 @@ public class CheckList {
 				SavePipelineCheck.class,
 				DisabledCheck.class,
 				ExitCheck.class,
-				EmptyMapCheck.class);
+				EmptyMapCheck.class,
+				BranchCheck.class);
 	}
 }

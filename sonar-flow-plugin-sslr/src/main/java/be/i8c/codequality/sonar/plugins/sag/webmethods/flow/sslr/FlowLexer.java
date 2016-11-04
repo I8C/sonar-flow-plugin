@@ -90,10 +90,11 @@ public class FlowLexer {
 
 	  }
 	  
-	  public static enum FlowAttTypes implements TokenType {	    
-		  SERVICE,EXITON("EXIT-ON"),MODE,NAME,DISABLED,FROM,SIGNAL,FAILUREMESSAGE("FAILURE-MESSAGE");
+	public static enum FlowAttTypes implements TokenType {	    
+		SERVICE,EXITON("EXIT-ON"),MODE,NAME,DISABLED,FROM,SIGNAL,FAILUREMESSAGE("FAILURE-MESSAGE"),SWITCH,
+		LABELEXPRESSIONS;
 
-		  private String attName;
+		private String attName;
 		  
 		    public static boolean isInEnum(String value) {
 		         return Arrays.stream(FlowAttTypes.values()).anyMatch(e -> e.getAttName().equalsIgnoreCase(value));

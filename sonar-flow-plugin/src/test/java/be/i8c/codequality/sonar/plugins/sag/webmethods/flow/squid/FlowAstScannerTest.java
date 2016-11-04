@@ -63,12 +63,17 @@ public class FlowAstScannerTest {
 	}
 	
 	@Test 
-	  public void EmptyMapCheck() {
+	  public void emptyMapCheck() {
 		FlowAstScanner.scanSingleFile( flowFile , new EmptyMapCheck());
 	}
 	
 	@Test
-	  public void EmptyFlowCheck() {
+	  public void emptyFlowCheck() {
 		FlowAstScanner.scanSingleFile( flowFile , new EmptyFlowCheck());
+	}
+	
+	@Test
+	  public void branchCheck() {
+		FlowAstScanner.scanSingleFile( flowFile , new BranchCheck());
 	}
 }
