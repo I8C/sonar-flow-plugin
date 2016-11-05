@@ -19,25 +19,27 @@
  */
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
 
-
-
 import org.junit.Test;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowParser;
 
 public class FlowParserTest {
 	final static Logger logger = LoggerFactory.getLogger(FlowParserTest.class);
+	
 	@Test
-	  public void parseFileFlow() {
+	public void parseFileFlow() {
 		FlowParser.parseFile("src/test/resources/flow.xml");
 		logger.debug("Flow.xml successfully parsed.");
 	}
 	
 	@Test
-	  public void parseFileNode(){
+	public void parseFileNode(){
 		NodeParser.parseFile("src/test/resources/node.ndf");
 		logger.debug("node.ndf succesfully parsed.");
+
 	}
 }

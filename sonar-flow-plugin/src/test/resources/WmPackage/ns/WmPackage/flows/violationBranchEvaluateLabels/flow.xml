@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FLOW VERSION="3.0" CLEANUP="true">
+  <COMMENT></COMMENT>
+
+  <!-- nodes -->
+
+<BRANCH TIMEOUT="" SWITCH="/inputParam">
+  <COMMENT></COMMENT>
+</BRANCH>
+
+<BRANCH TIMEOUT="" SWITCH="/inputParam" LABELEXPRESSIONS="true">
+  <COMMENT></COMMENT>
+</BRANCH>
+
+<BRANCH TIMEOUT="">
+  <COMMENT></COMMENT>
+</BRANCH>
+
+<BRANCH TIMEOUT="" LABELEXPRESSIONS="true">
+  <COMMENT></COMMENT>
+</BRANCH>
+</FLOW>

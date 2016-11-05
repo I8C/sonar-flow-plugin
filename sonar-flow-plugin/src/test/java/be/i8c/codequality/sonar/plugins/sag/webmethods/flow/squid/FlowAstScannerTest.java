@@ -19,11 +19,17 @@
  */
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
+import java.util.Set;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.squidbridge.api.CheckMessage;
+import org.sonar.squidbridge.api.SourceFile;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.*;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
@@ -40,6 +46,7 @@ public class FlowAstScannerTest {
 	  public void scanFile() {
 		logger.debug("Scanning file");
 		FlowAstScanner.scanSingleFile( flowFile , new SimpleMetricVisitor());
+
 	}
 	
 	@Test
@@ -76,4 +83,23 @@ public class FlowAstScannerTest {
 	  public void branchCheck() {
 		FlowAstScanner.scanSingleFile( flowFile , new BranchCheck());
 	}
+	
+	@Test
+	public void branchEvaluateLabelsCheck() {
+		
+		String expectedMessageA = "Both switch and evaluate labels are defined in properties of BRANCH";
+		String expectedMessageB = "Evaluate labels must be true when no switch parameter is defined in BRANCH";
+		
+		SourceFile sf = FlowAstScanner.scanSingleFile( new File("src/test/resources/WmPackage/ns/WmPackage/flows/violationBranchEvaluateLabels/flow.xml"), new BranchSwitchAndEvaluateLabelsCheck());
+		Set<CheckMessage> scm = sf.getCheckMessages();
+
+		// check expected number of checkMessages
+		assertEquals(2, scm.size());
+		
+		// check if both violations were encountered
+		for (CheckMessage checkMessage : scm) {
+			assertTrue( "Expected returned check messages were not found", (expectedMessageA.equals(checkMessage.getDefaultMessage() ) || expectedMessageB.equals(checkMessage.getDefaultMessage()) ) );
+		}
+	}
+	
 }

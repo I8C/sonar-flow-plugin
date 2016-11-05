@@ -89,7 +89,7 @@ public class FlowLexer {
 	    }
 
 	  }
-	  
+
 	public static enum FlowAttTypes implements TokenType {	    
 		SERVICE,EXITON("EXIT-ON"),MODE,NAME,DISABLED,FROM,SIGNAL,FAILUREMESSAGE("FAILURE-MESSAGE"),SWITCH,
 		LABELEXPRESSIONS;
