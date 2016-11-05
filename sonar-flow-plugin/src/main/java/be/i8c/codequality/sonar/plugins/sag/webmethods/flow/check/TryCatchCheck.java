@@ -71,7 +71,7 @@ public class TryCatchCheck extends TopLevelCheck {
 		if (sequenceNode != null) {
 			AstNode attributes = sequenceNode.getFirstChild(FlowGrammar.ATTRIBUTES);
 			if (attributes != null) {
-				AstNode exitOn = attributes.getFirstChild(FlowAttTypes.EXIT_ON);
+				AstNode exitOn = attributes.getFirstChild(FlowAttTypes.EXITON);
 				if (exitOn != null) {
 					return exitOn.getTokenValue();
 				}

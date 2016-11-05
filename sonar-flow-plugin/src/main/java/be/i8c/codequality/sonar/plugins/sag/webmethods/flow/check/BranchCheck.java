@@ -27,44 +27,53 @@ import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 
-@Rule(key = "S00003", name = "No disabled elements should be in code", priority = Priority.MAJOR, tags = {
-		Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
+@Rule(key="S00009",name = "In the branch step if the \"switch\" property is 'null', "
+		+ "then the \"evaluate labels\" property must be set to 'true'.", 
+		priority = Priority.MINOR, tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE})
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")
-public class DisabledCheck extends SquidCheck<Grammar>{
-
-	final static Logger logger = LoggerFactory.getLogger(DisabledCheck.class);
+public class BranchCheck extends TopLevelCheck{
+	
+	final static Logger logger = LoggerFactory.getLogger(BranchCheck.class);
+	String test = "test";
 	
 	@Override
 	public void init() {
-		logger.debug("++ Initializing " + this.getClass().getName() + " ++");
-		subscribeTo(FlowGrammar.INVOKE,
-				FlowGrammar.EXIT,
-				FlowGrammar.BRANCH,
-				FlowGrammar.LOOP,
-				FlowGrammar.MAP,
-				FlowGrammar.RETRY,
-				FlowGrammar.SEQUENCE);
+		logger.debug("++ Initializing {} ++", this.getClass().getName());
+		subscribeTo(FlowGrammar.BRANCH);
 	}
-
+	
 	@Override
 	public void visitNode(AstNode astNode) {
-		AstNode disabled = astNode.getFirstChild(FlowGrammar.ATTRIBUTES).getFirstChild(FlowAttTypes.DISABLED);
-		if(disabled != null){
-			String isDisabled = disabled.getToken().getOriginalValue();
-			if(Boolean.valueOf(isDisabled)){
-				getContext().createLineViolation(this, "Remove disabled code", astNode);
-			}
-		}
+		AstNode attributes = astNode.getFirstChild(FlowGrammar.ATTRIBUTES);
+		AstNode switchAttNode = attributes.getFirstChild(FlowAttTypes.SWITCH);
+		if (checkSwitch(switchAttNode)){
+			logger.debug("++ Found an empty switch statement ++");
+			AstNode labelExpNode = attributes.getFirstChild(FlowAttTypes.LABELEXPRESSIONS);
+			if(checkLabelExp(labelExpNode)) {
+				logger.debug("++ Found an empty or not set to true label expression ++");
+				getContext().createLineViolation(this, "Set label expression to true or create a switch value.", astNode);
+			}	
+		}		
 	}
 
+	private boolean checkSwitch(AstNode switchAttNode) {
+		if (switchAttNode == null ) return true;
+		if (switchAttNode != null && switchAttNode.getTokenOriginalValue().equalsIgnoreCase("")) return true;
+		return false;
+	}
+	private boolean checkLabelExp (AstNode labelExpNode) {
+		if (labelExpNode == null ) return true;
+		if (labelExpNode != null  
+				&& !labelExpNode.getTokenOriginalValue().equalsIgnoreCase("true")) return true;
+		return false;
+	}
 }

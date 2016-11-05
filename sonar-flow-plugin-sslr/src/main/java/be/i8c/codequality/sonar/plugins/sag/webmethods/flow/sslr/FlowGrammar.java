@@ -73,7 +73,7 @@ public enum FlowGrammar implements GrammarRuleKey{
 	    b.rule(RETRY).is(START_RETRY,ATTRIBUTES, COMMENT, CONTENT, STOP_RETRY);
 	    
 	    
-	    b.rule(COMMENT).is(START_COMMENT, STOP_COMMENT);
+	    b.rule(COMMENT).is(START_COMMENT, b.zeroOrMore(ELEMENT_VALUE), STOP_COMMENT);
 	    b.rule(CONTENT).is(b.zeroOrMore(b.firstOf(SEQUENCE,INVOKE,MAP, BRANCH, LOOP, EXIT, RETRY)));
 	    
 	    b.rule(MAPPING).is(b.optional(MAPTARGET),b.optional(MAPSOURCE), b.zeroOrMore(b.firstOf(MAPINVOKE, MAPDELETE,MAPSET,MAPCOPY)));
@@ -91,7 +91,7 @@ public enum FlowGrammar implements GrammarRuleKey{
 	    b.rule(ARRAY).is(START_ARRAY,ATTRIBUTES,b.zeroOrMore(b.firstOf(VALUE,ARRAY,RECORD)),STOP_ARRAY);
 	    
 	    b.rule(UNDEF_ATT).is(b.sequence(IDENTIFIER, LITERAL));
-	    b.rule(ATTRIBUTES).is(b.zeroOrMore(b.firstOf(SERVICE,EXIT_ON,MODE,NAME,DISABLED,UNDEF_ATT)));
+	    b.rule(ATTRIBUTES).is(b.zeroOrMore(b.firstOf(SERVICE,EXITON,MODE,NAME,DISABLED,FROM,FAILUREMESSAGE,SIGNAL,SWITCH,LABELEXPRESSIONS,UNDEF_ATT)));
 	    b.setRootRule(FLOW);
 	    
 	    return b.build();

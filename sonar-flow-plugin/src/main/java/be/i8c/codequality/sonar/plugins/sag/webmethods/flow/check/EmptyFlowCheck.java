@@ -19,6 +19,8 @@
  */
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.server.rule.RulesDefinition;
@@ -27,44 +29,42 @@ import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 
-@Rule(key = "S00003", name = "No disabled elements should be in code", priority = Priority.MAJOR, tags = {
-		Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
+@Rule(key="S00008", name="Services must contain flow steps.", priority = Priority.MINOR, tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE})
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")
-public class DisabledCheck extends SquidCheck<Grammar>{
-
-	final static Logger logger = LoggerFactory.getLogger(DisabledCheck.class);
+public class EmptyFlowCheck extends TopLevelCheck {
+	
+	final static Logger logger = LoggerFactory.getLogger(EmptyFlowCheck.class);
 	
 	@Override
 	public void init() {
-		logger.debug("++ Initializing " + this.getClass().getName() + " ++");
-		subscribeTo(FlowGrammar.INVOKE,
-				FlowGrammar.EXIT,
-				FlowGrammar.BRANCH,
-				FlowGrammar.LOOP,
-				FlowGrammar.MAP,
-				FlowGrammar.RETRY,
-				FlowGrammar.SEQUENCE);
+		logger.debug("++ Initializing {} ++", this.getClass().getName());
+		subscribeTo(FlowGrammar.FLOW);
 	}
-
+	
 	@Override
 	public void visitNode(AstNode astNode) {
-		AstNode disabled = astNode.getFirstChild(FlowGrammar.ATTRIBUTES).getFirstChild(FlowAttTypes.DISABLED);
-		if(disabled != null){
-			String isDisabled = disabled.getToken().getOriginalValue();
-			if(Boolean.valueOf(isDisabled)){
-				getContext().createLineViolation(this, "Remove disabled code", astNode);
+		List<AstNode> flowChildren = astNode.getChildren();
+		for (AstNode child:flowChildren) {
+			if (child.getName().equalsIgnoreCase("CONTENT")){
+				List<AstNode> contentChildren = child.getChildren();
+				int numberOfSteps = contentChildren.size();
+				if (numberOfSteps == 1) {
+					logger.debug("The service contains {} flow step.",numberOfSteps);
+				} else if (numberOfSteps == 0) {
+					getContext().createLineViolation(this, "Service doesn't contain any flow steps. Remove service or add flow steps.", astNode);
+					logger.debug("The service contains {} flow steps. Remove this service or add flow steps.", numberOfSteps);
+				} else if (numberOfSteps > 1) {
+					logger.debug("The service contains {} flow steps.",numberOfSteps);
+				} 
 			}
 		}
 	}
-
 }

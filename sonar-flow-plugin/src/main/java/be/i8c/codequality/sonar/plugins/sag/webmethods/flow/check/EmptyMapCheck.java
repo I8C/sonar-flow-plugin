@@ -19,6 +19,8 @@
  */
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.server.rule.RulesDefinition;
@@ -27,44 +29,49 @@ import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
-import org.sonar.squidbridge.checks.SquidCheck;
 
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 
-@Rule(key = "S00003", name = "No disabled elements should be in code", priority = Priority.MAJOR, tags = {
-		Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
+@Rule(key="S00007",name = "Interface should not contain empty map steps.", 
+		priority = Priority.MINOR, tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE})
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")
-public class DisabledCheck extends SquidCheck<Grammar>{
+public class EmptyMapCheck extends TopLevelCheck{
 
-	final static Logger logger = LoggerFactory.getLogger(DisabledCheck.class);
+	final static Logger logger = LoggerFactory.getLogger(EmptyMapCheck.class);
 	
 	@Override
 	public void init() {
-		logger.debug("++ Initializing " + this.getClass().getName() + " ++");
-		subscribeTo(FlowGrammar.INVOKE,
-				FlowGrammar.EXIT,
-				FlowGrammar.BRANCH,
-				FlowGrammar.LOOP,
-				FlowGrammar.MAP,
-				FlowGrammar.RETRY,
-				FlowGrammar.SEQUENCE);
+		logger.debug("++ Initializing {} ++", this.getClass().getName());
+		subscribeTo(FlowGrammar.MAP);
 	}
 
 	@Override
 	public void visitNode(AstNode astNode) {
-		AstNode disabled = astNode.getFirstChild(FlowGrammar.ATTRIBUTES).getFirstChild(FlowAttTypes.DISABLED);
-		if(disabled != null){
-			String isDisabled = disabled.getToken().getOriginalValue();
-			if(Boolean.valueOf(isDisabled)){
-				getContext().createLineViolation(this, "Remove disabled code", astNode);
+		String mode = astNode.getFirstChild(FlowGrammar.ATTRIBUTES).getFirstChild(FlowAttTypes.MODE).getToken().getOriginalValue();
+		if (mode.equalsIgnoreCase("STANDALONE")) {
+			logger.debug("++ Map step found in the flow ++");
+			boolean isEmptyMap = true;
+			List<AstNode> children = astNode.getChildren();
+			for (AstNode child:children) {
+				if (child.getTokenOriginalValue().equalsIgnoreCase("INVOKEINPUT")
+						|| child.getTokenOriginalValue().equalsIgnoreCase("INVOKEOUTPUT")
+						|| child.getTokenOriginalValue().equalsIgnoreCase("MAPDELETE")
+						|| child.getTokenOriginalValue().equalsIgnoreCase("MAPCOPY")) {
+					logger.debug("++ This is not an empty map ++");
+					isEmptyMap = false;
+				}
+			}
+			if (isEmptyMap) {
+				logger.debug("++ This map step in the flow is empty, create content or remove the map. ++");
+				getContext().createLineViolation(this, "This map step in the flow is empty, "
+						+ "create content or remove the map.", astNode);
 			}
 		}
 	}
-
 }

@@ -17,27 +17,10 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
+package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
 
+public class VariableDropCheck extends TopLevelCheck{
 
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowParser;
-
-public class FlowParserTest {
-	final static Logger logger = LoggerFactory.getLogger(FlowParserTest.class);
-	@Test
-	  public void parseFileFlow() {
-		FlowParser.parseFile("src/test/resources/flow.xml");
-		logger.debug("Flow.xml successfully parsed.");
-	}
-	
-	@Test
-	  public void parseFileNode(){
-		NodeParser.parseFile("src/test/resources/node.ndf");
-		logger.debug("node.ndf succesfully parsed.");
-	}
 }

@@ -59,8 +59,8 @@ public class FlowContentHandler extends DefaultHandler {
 			lex.addToken(token);
 			// CHECK THE ATTRIBUTES
 			for(int i=0; i<atts.getLength();i++){
-				if(FlowLexer.FlowAttTypes.isInEnum(atts.getQName(i).replaceAll("-", "_").toUpperCase())){
-					token = tokenBuilder.setType(FlowLexer.FlowAttTypes.valueOf(atts.getQName(i).replaceAll("-", "_").toUpperCase())).setValueAndOriginalValue(atts.getValue(i).toUpperCase(),atts.getValue(i))
+				if(FlowLexer.FlowAttTypes.isInEnum(atts.getQName(i).toUpperCase())){
+					token = tokenBuilder.setType(FlowLexer.FlowAttTypes.getEnum(atts.getQName(i).toUpperCase())).setValueAndOriginalValue(atts.getValue(i).toUpperCase(),atts.getValue(i))
 							.setURI(lex.getURI()).setLine(line).setColumn(0).build();
 					lex.addToken(token);
 					logger.debug("TOKEN " + token.getValue() + "[" + token.getLine() + "," + token.getColumn() + "]");

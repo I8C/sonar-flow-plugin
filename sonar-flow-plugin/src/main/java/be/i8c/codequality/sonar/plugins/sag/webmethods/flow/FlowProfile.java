@@ -40,7 +40,7 @@ public class FlowProfile extends ProfileDefinition {
 	    AnnotationBasedProfileBuilder annotationBasedProfileBuilder = new AnnotationBasedProfileBuilder(ruleFinder);
 	    return annotationBasedProfileBuilder.build(
 	        CheckList.REPOSITORY_KEY,
-	        CheckList.SONAR_WAY_PROFILE,
+	        CheckList.I8C_PROFILE,
 	        FlowLanguage.KEY,
 	        CheckList.getChecks(),
 	        validation);
