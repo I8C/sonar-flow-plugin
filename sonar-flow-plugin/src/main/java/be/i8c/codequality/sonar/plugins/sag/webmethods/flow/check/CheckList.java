@@ -77,6 +77,6 @@ public class CheckList {
 				DisabledCheck.class,
 				ExitCheck.class,
 				EmptyMapCheck.class,
-				BranchCheck.class);
+				BranchPropertiesCheck.class);
 	}
 }

@@ -23,6 +23,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
@@ -39,7 +41,7 @@ public class FlowAstScannerTest {
 
 	final static Logger logger = LoggerFactory.getLogger(FlowAstScannerTest.class);
 	
-	File flowFile = new File("src/test/resources/ns/MyPackage/flow/myService/flow.xml");
+	File flowFile = new File("src/test/resources/WmPackage/ns/WmPackage/flows/myService/flow.xml");
 	
 	
 	@Test
@@ -80,26 +82,25 @@ public class FlowAstScannerTest {
 	}
 	
 	@Test
-	  public void branchCheck() {
-		FlowAstScanner.scanSingleFile( flowFile , new BranchCheck());
-	}
-	
-	@Test
-	public void branchEvaluateLabelsCheck() {
-		
+	public void branchPropertiesCheck() {
 		String expectedMessageA = "Both switch and evaluate labels are defined in properties of BRANCH";
 		String expectedMessageB = "Evaluate labels must be true when no switch parameter is defined in BRANCH";
 		
-		SourceFile sf = FlowAstScanner.scanSingleFile( new File("src/test/resources/WmPackage/ns/WmPackage/flows/violationBranchEvaluateLabels/flow.xml"), new BranchSwitchAndEvaluateLabelsCheck());
-		Set<CheckMessage> scm = sf.getCheckMessages();
-
-		// check expected number of checkMessages
-		assertEquals(2, scm.size());
+		// Check correct flow
+		SourceFile sfCorrect = FlowAstScanner.scanSingleFile( new File("src/test/resources/WmPackage/ns/WmPackage/flows/branchProperties/correct/flow.xml"), new BranchPropertiesCheck());
+		Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
+		assertEquals(0, scmCorrect.size());
 		
-		// check if both violations were encountered
-		for (CheckMessage checkMessage : scm) {
-			assertTrue( "Expected returned check messages were not found", (expectedMessageA.equals(checkMessage.getDefaultMessage() ) || expectedMessageB.equals(checkMessage.getDefaultMessage()) ) );
-		}
+		// Check violation flow A: both switch and evaluate labels defined
+		SourceFile sfViolationA = FlowAstScanner.scanSingleFile( new File("src/test/resources/WmPackage/ns/WmPackage/flows/branchProperties/violationA/flow.xml"), new BranchPropertiesCheck());
+		List<CheckMessage> violationAMessages = new ArrayList<CheckMessage>(sfViolationA.getCheckMessages());
+		assertEquals(1, violationAMessages.size());
+		assertTrue("Returned check message not as expected",expectedMessageA.equals(violationAMessages.get(0).getDefaultMessage()));
+		
+		// Check violation flow B: neither switch nor evaluate labels defined
+		SourceFile sfViolationB = FlowAstScanner.scanSingleFile( new File("src/test/resources/WmPackage/ns/WmPackage/flows/branchProperties/violationB/flow.xml"), new BranchPropertiesCheck());
+		List<CheckMessage> violationBMessages = new ArrayList<CheckMessage>(sfViolationB.getCheckMessages());
+		assertEquals(1, violationBMessages.size());
+		assertTrue("Returned check message not as expected", expectedMessageB.equals(violationBMessages.get(0).getDefaultMessage()));
 	}
-	
 }

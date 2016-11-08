@@ -35,7 +35,7 @@ public class NodeAstScannerTest {
 
 	final static Logger logger = LoggerFactory.getLogger(NodeAstScannerTest.class);
 	
-	File nodeFile = new File("src/test/resources/ns/MyPackage/flow/myService/node.ndf");
+	File nodeFile = new File("src/test/resources/WmPackage/ns/WmPackage/flows/myService/node.ndf");
 	
 	@Test
 	  public void scanFile() {
