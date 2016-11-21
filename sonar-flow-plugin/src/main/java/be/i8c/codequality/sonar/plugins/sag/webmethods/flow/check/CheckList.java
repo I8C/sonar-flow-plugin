@@ -34,7 +34,7 @@ public class CheckList {
 
 	public static List<Class> getChecks() {
 		Builder<Class> builder = new ImmutableList.Builder<Class>();
-		builder.addAll(getNodeChecks());
+		//builder.addAll(getNodeChecks());
 		builder.addAll(getTopLevelChecks());
 		builder.addAll(getOtherChecks());
 		
