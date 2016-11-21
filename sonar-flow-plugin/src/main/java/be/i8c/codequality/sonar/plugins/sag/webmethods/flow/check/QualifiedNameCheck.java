@@ -47,7 +47,7 @@ public class QualifiedNameCheck extends SquidCheck<Grammar>{
 
 	final static Logger logger = LoggerFactory.getLogger(QualifiedNameCheck.class);
 	
-	private static final String DEFAULT_NC = "([A-Z]([A-Z0-9]*[a-z][a-z0-9]*[A-Z]|[a-z0-9]*[A-Z][A-Z0-9]*[a-z])[A-Za-z0-9]*)(\\.([a-z]+))+:[a-z]+[A-Z0-9][a-z0-9]*";
+	private static final String DEFAULT_NC = "[A-Z][a-z0-9]*[A-Z0-9][a-z0-9]+[A-Z.a-z0-9]*:[a-z]+[A-Z0-9][a-z0-9]+[A-Za-z0-9]*";
 
 	@RuleProperty(
 			key = "Naming convention",
