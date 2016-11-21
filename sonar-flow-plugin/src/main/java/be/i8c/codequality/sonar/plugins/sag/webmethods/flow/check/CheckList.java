@@ -27,18 +27,17 @@ import com.google.common.collect.ImmutableList.Builder;
 public class CheckList {
 	public static final String REPOSITORY_KEY = "flow";
 
-	public static final String SONAR_WAY_PROFILE = "Sonar way";
+	public static final String I8C_PROFILE = "i8c Quality Profile";
 
 	private CheckList() {
 	}
 
 	public static List<Class> getChecks() {
 		Builder<Class> builder = new ImmutableList.Builder<Class>();
-		builder.addAll(getNodeChecks());
+		//builder.addAll(getNodeChecks());
 		builder.addAll(getTopLevelChecks());
 		builder.addAll(getOtherChecks());
 		
-
 		return builder.build();
 	}
 
@@ -60,16 +59,24 @@ public class CheckList {
 	}
 
 	private static List<Class> getNodeChecks() {
-		return ImmutableList.<Class> of(InterfaceCommentsCheck.class);
+		return ImmutableList.<Class> of(
+				InterfaceCommentsCheck.class);
 	}
 
 	private static List<Class> getTopLevelChecks() {
-		return ImmutableList.<Class> of(TryCatchCheck.class);
+		return ImmutableList.<Class> of(
+				TryCatchCheck.class
+				);
 	}
 
 	private static List<Class> getOtherChecks() {
 		return ImmutableList.<Class> of(
+				QualifiedNameCheck.class,
 				SavePipelineCheck.class,
-				DisabledCheck.class);
+				DisabledCheck.class,
+				ExitCheck.class,
+				EmptyMapCheck.class,
+				BranchPropertiesCheck.class,
+				EmptyFlowCheck.class);
 	}
 }

@@ -1,0 +1,16 @@
+<p>
+  There should always be a branching condition defined in the properties of a BRANCH step. Either in the switch property or in the labels of the child steps. 
+</p>  
+<p>  
+  If the switch property of a BRANCH step is not defined, then the 'evaluate labels' property should be set to true. This indicates that the branching conditions are defined in the labels of the child step. If the switch is defined then the 'evaluate labels' property should be false or null.
+</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+  Any service with a branch step that doesn't have the label expression set to 'true' while no switch value has been given.
+</pre>
+
+<h2>Compliant Solution</h2>
+<pre>
+  Give a switch value or set the label expression value to 'true'.
+</pre>

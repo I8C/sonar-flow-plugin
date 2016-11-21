@@ -19,7 +19,6 @@
  */
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
 
-import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import com.sonar.sslr.api.AstNode;
@@ -58,6 +57,7 @@ public class FlowLexer {
 	    START_VALUE, STOP_VALUE,
 	    START_NUMBER, STOP_NUMBER,
 	    START_ARRAY, STOP_ARRAY,
+	    START_BOOLEAN, STOP_BOOLEAN,
 	    
 	    ELEMENT_VALUE,
 	    
@@ -89,19 +89,33 @@ public class FlowLexer {
 	    }
 
 	  }
-	  
-	  public static enum FlowAttTypes implements TokenType {
 
-		    SERVICE,EXIT_ON,MODE,NAME,DISABLED;
+	public static enum FlowAttTypes implements TokenType {	    
+		SERVICE,EXITON("EXIT-ON"),MODE,NAME,DISABLED,FROM,SIGNAL,FAILUREMESSAGE("FAILURE-MESSAGE"),SWITCH,
+		LABELEXPRESSIONS;
 
+		private String attName;
+		  
 		    public static boolean isInEnum(String value) {
-		         return Arrays.stream(FlowAttTypes.values()).anyMatch(e -> e.name().equalsIgnoreCase(value));
+		         return Arrays.stream(FlowAttTypes.values()).anyMatch(e -> e.getAttName().equalsIgnoreCase(value));
+		    }
+		    
+		    public static FlowAttTypes getEnum(String value) {
+		        return Arrays.stream(FlowAttTypes.values()).filter(e -> e.getAttName().equalsIgnoreCase(value)).findFirst().get();
 		    }
 		    
 		    private FlowAttTypes() {
-
+		    	this.attName = name();
+		    }
+		    
+		    private FlowAttTypes(String name) {
+				  this.attName = name;
 		    }
 
+		    public String getAttName() {
+		    	return this.attName;
+		    }
+		    
 		    @Override
 		    public String getName() {
 		      return name();

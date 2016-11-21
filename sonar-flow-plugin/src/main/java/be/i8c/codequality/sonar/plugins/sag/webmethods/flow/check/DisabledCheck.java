@@ -19,8 +19,6 @@
  */
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check;
 
-import java.util.Arrays;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.server.rule.RulesDefinition;
