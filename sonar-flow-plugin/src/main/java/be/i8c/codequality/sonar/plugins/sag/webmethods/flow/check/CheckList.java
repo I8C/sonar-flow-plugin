@@ -38,7 +38,6 @@ public class CheckList {
 		builder.addAll(getTopLevelChecks());
 		builder.addAll(getOtherChecks());
 		
-
 		return builder.build();
 	}
 
@@ -66,8 +65,8 @@ public class CheckList {
 
 	private static List<Class> getTopLevelChecks() {
 		return ImmutableList.<Class> of(
-				TryCatchCheck.class,
-				EmptyFlowCheck.class);
+				TryCatchCheck.class
+				);
 	}
 
 	private static List<Class> getOtherChecks() {
@@ -77,6 +76,7 @@ public class CheckList {
 				DisabledCheck.class,
 				ExitCheck.class,
 				EmptyMapCheck.class,
-				BranchPropertiesCheck.class);
+				BranchPropertiesCheck.class,
+				EmptyFlowCheck.class);
 	}
 }

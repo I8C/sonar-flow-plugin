@@ -86,9 +86,7 @@ public class FlowAstScanner {
 		    final Parser<Grammar> parser = FlowParser.create(conf);
 
 		    AstScanner.Builder<Grammar> builder = AstScanner.<Grammar>builder(context).setBaseParser(parser);
-		    
-
-
+		   
 		    setCommentAnalyser(builder);
 		    
 
