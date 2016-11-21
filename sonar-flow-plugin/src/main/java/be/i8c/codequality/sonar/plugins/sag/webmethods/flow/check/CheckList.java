@@ -34,11 +34,10 @@ public class CheckList {
 
 	public static List<Class> getChecks() {
 		Builder<Class> builder = new ImmutableList.Builder<Class>();
-		builder.addAll(getNodeChecks());
+		//builder.addAll(getNodeChecks());
 		builder.addAll(getTopLevelChecks());
 		builder.addAll(getOtherChecks());
 		
-
 		return builder.build();
 	}
 
@@ -66,8 +65,8 @@ public class CheckList {
 
 	private static List<Class> getTopLevelChecks() {
 		return ImmutableList.<Class> of(
-				TryCatchCheck.class,
-				EmptyFlowCheck.class);
+				TryCatchCheck.class
+				);
 	}
 
 	private static List<Class> getOtherChecks() {
@@ -77,6 +76,7 @@ public class CheckList {
 				DisabledCheck.class,
 				ExitCheck.class,
 				EmptyMapCheck.class,
-				BranchCheck.class);
+				BranchPropertiesCheck.class,
+				EmptyFlowCheck.class);
 	}
 }

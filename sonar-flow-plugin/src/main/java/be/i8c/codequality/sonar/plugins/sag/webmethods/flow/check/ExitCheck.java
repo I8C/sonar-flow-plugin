@@ -27,7 +27,11 @@ import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
+import org.sonar.squidbridge.checks.SquidCheck;
+
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Grammar;
+
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
@@ -38,7 +42,7 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowA
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")
-public class ExitCheck extends TopLevelCheck{
+public class ExitCheck extends SquidCheck<Grammar>{
 
 	final static Logger logger = LoggerFactory.getLogger(ExitCheck.class);
 	
@@ -56,8 +60,8 @@ public class ExitCheck extends TopLevelCheck{
 			String exitFrom = getExitFrom(exitNode);
 			if (exitFrom == null || exitFrom.trim().equals("")) {
 				logger.debug("++ \"Exit from\" property found to be empty! ++");
-				getContext().createLineViolation(this, "++ The \"Exit from\" "
-				+ "property must be defined for the interface element 'EXIT'. ++", exitNode);
+				getContext().createLineViolation(this, "The \"Exit from\" "
+				+ "property must be defined for the interface element 'EXIT'", exitNode);
 			}
 			if (hasSignalSetToFailure(exitNode)) {
 				String exitFailureMessage = getExitFailureMessage(exitNode);

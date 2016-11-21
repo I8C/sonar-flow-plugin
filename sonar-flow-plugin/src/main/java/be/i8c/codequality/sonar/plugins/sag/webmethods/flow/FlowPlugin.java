@@ -39,12 +39,12 @@ public class FlowPlugin extends SonarPlugin {
 
 
   @Override
-  public List getExtensions() {
+  public List<Object> getExtensions() {
     return ImmutableList.of(
       FlowLanguage.class,
+      
       FlowProfile.class,
-      
-      
+ 
       FlowSquidSensor.class,
       
       FlowRulesDefinition.class,

@@ -85,6 +85,7 @@ public class FlowSquidSensor implements Sensor {
 
 	public FlowSquidSensor(Settings settings, CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory,
 		                         FileSystem fileSystem, ResourcePerspectives resourcePerspectives, PathResolver pathResolver) {
+			logger.debug("** FlowSquidSenser constructor");
 			this.settings = settings;
 			this.pathResolver = pathResolver;
 		    this.checks = checkFactory
@@ -109,14 +110,19 @@ public class FlowSquidSensor implements Sensor {
 	@Override
 	public void analyse(Project project, SensorContext context) {
 		this.context = context;
-
-	    List<SquidAstVisitor<Grammar>> visitors = Lists.newArrayList(checks.all());
+		logger.debug( "** FLowSquidSensor analyse called on project: " +project.getName());
+	    
+		List<SquidAstVisitor<Grammar>> visitors = Lists.newArrayList(checks.all());	
 	    visitors.add(new FlowLinesOfCodeVisitor<Grammar>(FlowMetric.LINES_OF_CODE));
+	    logger.debug("** * Visiters: " + visitors.toString());
+	    
 	    this.scanner = FlowAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
 	    FilePredicates p = fileSystem.predicates();
+	    logger.debug("** * FilePredicates: " + p.toString() );
+	    
 	    scanner.scanFiles(Lists.newArrayList(fileSystem.files(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(FlowLanguage.KEY), p.matchesPathPattern("**/flow.xml")))));
-
 	    Collection<SourceCode> squidSourceFiles = scanner.getIndex().search(new QueryByType(SourceFile.class));
+	    
 	    // Process sourceFiles
 	    getInterfaceFiles(squidSourceFiles);
 	    setTopLevelServices(squidSourceFiles);

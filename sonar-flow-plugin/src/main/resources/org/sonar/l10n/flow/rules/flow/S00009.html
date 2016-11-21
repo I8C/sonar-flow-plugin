@@ -1,9 +1,8 @@
 <p>
-  All branch steps should be configured correctly
-</p>
-
-<p>
-  All branch steps should have the switch value set or have the label expressions set to 'true'
+  There should always be a branching condition defined in the properties of a BRANCH step. Either in the switch property or in the labels of the child steps. 
+</p>  
+<p>  
+  If the switch property of a BRANCH step is not defined, then the 'evaluate labels' property should be set to true. This indicates that the branching conditions are defined in the labels of the child step. If the switch is defined then the 'evaluate labels' property should be false or null.
 </p>
 
 <h2>Noncompliant Code Example</h2>
