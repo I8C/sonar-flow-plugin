@@ -36,6 +36,8 @@ public class FlowPlugin extends SonarPlugin {
   public static final String FILE_SUFFIXES_DEFVALUE = "xml,ndf";
   public static final String IGNORE_TOPLEVEL_KEY = "sonar.flow.ignore.toplevel";
   public static final String IGNORE_TOPLEVEL_DEFVALUE = "false";
+  public static final String FAIL_ON_SCANERROR = "sonar.flow.fail.scanerror";
+  public static final String FAIL_ON_SCANERROR_DEFVALUE = "true";
 
 
   @Override
@@ -61,9 +63,14 @@ public class FlowPlugin extends SonarPlugin {
         .name("Ignore top-level services")
         .description("Ignore top-level service checks")
         .onQualifiers(Qualifiers.PROJECT)
+        .build(),
+
+      PropertyDefinition.builder(FAIL_ON_SCANERROR)
+        .defaultValue(FAIL_ON_SCANERROR_DEFVALUE)
+        .name("Fail on scan error")
+        .description("Scanning process fails when a scanning a single file fails")
+        .onQualifiers(Qualifiers.PROJECT)
         .build()
-
-
     );
   }
 
