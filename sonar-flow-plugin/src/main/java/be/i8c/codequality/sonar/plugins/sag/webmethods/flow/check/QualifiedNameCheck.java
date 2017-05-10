@@ -39,7 +39,7 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.utils.FlowUtils;
 
 @Rule(key = "S00005", name = "Flow assets should follow the predefined naming convention", priority = Priority.MAJOR, tags = {
-		Tags.BAD_PRACTICE })
+		 Tags.BAD_PRACTICE })
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("1min")

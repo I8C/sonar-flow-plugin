@@ -35,7 +35,7 @@ import com.sonar.sslr.api.Grammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 
-@Rule(key = "S00003", name = "No disabled elements should be in code", priority = Priority.MAJOR, tags = {
+@Rule(key = "S00003", name = "No disabled elements should be in code", priority = Priority.MINOR, tags = { 
 		Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
