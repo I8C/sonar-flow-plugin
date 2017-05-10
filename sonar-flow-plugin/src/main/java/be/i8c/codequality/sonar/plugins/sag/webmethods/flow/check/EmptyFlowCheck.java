@@ -37,7 +37,7 @@ import com.sonar.sslr.api.Grammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 
-@Rule(key="S00008", name="Services must contain flow steps.", priority = Priority.MINOR, tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE})
+@Rule(key="S00008", name="Services must contain flow steps.", priority = Priority.MINOR, tags = { Tags.DEBUG_CODE, Tags.BAD_PRACTICE})
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")

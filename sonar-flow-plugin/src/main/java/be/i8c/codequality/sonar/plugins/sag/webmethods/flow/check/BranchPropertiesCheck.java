@@ -36,7 +36,7 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 
 @Rule(key="S00009",name = "Checks \"evaluate labels\" and \"switch\" properties of a branch", 
-		priority = Priority.MINOR, tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE})
+		priority = Priority.MAJOR, tags = { "bug", Tags.DEBUG_CODE, Tags.BAD_PRACTICE})
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")

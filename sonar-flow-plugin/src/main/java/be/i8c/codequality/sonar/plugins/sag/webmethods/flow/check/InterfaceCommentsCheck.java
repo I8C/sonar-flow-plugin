@@ -35,7 +35,7 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowT
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.NodeGrammar;
 
 @Rule(key = "S00004", name = "Interfaces of services should contain comments", priority = Priority.MINOR, tags = {
-		Tags.BAD_PRACTICE })
+		 Tags.BAD_PRACTICE })
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")

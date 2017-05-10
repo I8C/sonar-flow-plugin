@@ -34,7 +34,7 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelC
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 
-@Rule(key = "S00001", name = "Try-catch should be the top implementation", priority = Priority.MINOR, tags = {
+@Rule(key = "S00001", name = "Try-catch should be the top implementation", priority = Priority.MAJOR, tags = {"bug", 
 		Tags.ERROR_HANDLING })
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.EXCEPTION_HANDLING)
