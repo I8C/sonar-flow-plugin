@@ -39,7 +39,7 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 
 @Rule(key = "S00002", name = "No invokes of savePipeline or restorePipeline should be in code", priority = Priority.MAJOR, tags = {
-		Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
+		"bug", Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")

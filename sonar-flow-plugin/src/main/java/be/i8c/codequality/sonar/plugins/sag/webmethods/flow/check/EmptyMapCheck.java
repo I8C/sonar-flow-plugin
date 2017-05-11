@@ -24,9 +24,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
+import org.sonar.squidbridge.annotations.RuleTemplate;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 import org.sonar.squidbridge.checks.SquidCheck;
@@ -38,8 +40,8 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelC
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
 
-@Rule(key="S00007",name = "Interface should not contain empty map steps.", 
-		priority = Priority.MINOR, tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE})
+@Rule(key="S00007", name = "Interface should not contain empty map steps.", 
+		priority = Priority.MINOR, tags = { Tags.DEBUG_CODE, Tags.BAD_PRACTICE} )
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.LOGIC_RELIABILITY)
 @SqaleConstantRemediation("2min")
@@ -51,6 +53,7 @@ public class EmptyMapCheck extends SquidCheck<Grammar>{
 	public void init() {
 		logger.debug("++ Initializing {} ++", this.getClass().getName());
 		subscribeTo(FlowGrammar.MAP);
+		
 	}
 
 	@Override
