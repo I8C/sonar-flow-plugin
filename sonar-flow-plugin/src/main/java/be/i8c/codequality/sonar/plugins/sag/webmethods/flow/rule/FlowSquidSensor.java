@@ -117,16 +117,34 @@ public class FlowSquidSensor implements Sensor {
 	    logger.debug("** * Visiters: " + visitors.toString());
 	    
 	    this.scanner = FlowAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
+	    
 	    FilePredicates p = fileSystem.predicates();
 	    logger.debug("** * FilePredicates: " + p.toString() );
 	    
-	    scanner.scanFiles(Lists.newArrayList(fileSystem.files(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(FlowLanguage.KEY), p.matchesPathPattern("**/flow.xml")))));
+		ArrayList<File> fileList = Lists.newArrayList(fileSystem.files(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(FlowLanguage.KEY), p.matchesPathPattern("**/flow.xml"))));
+		for (File flowFile : fileList)
+		{
+			try {
+				logger.debug("** * Scanning File: "+flowFile.getPath());
+				scanner.scanFile(flowFile);
+			} catch (Exception e)
+			{
+				if(settings.getBoolean(FlowPlugin.FAIL_ON_SCANERROR))
+					throw e;
+				else
+					logger.error("** * Exception while scanning file, skipping.",e);
+			}
+		}
 	    Collection<SourceCode> squidSourceFiles = scanner.getIndex().search(new QueryByType(SourceFile.class));
-	    
-	    // Process sourceFiles
-	    getInterfaceFiles(squidSourceFiles);
-	    setTopLevelServices(squidSourceFiles);
-	    save(squidSourceFiles);
+	    logger.debug("** Done Scanning");
+
+		// Process sourceFiles
+		logger.debug("** Getting Interface Files");
+		getInterfaceFiles(squidSourceFiles);
+		logger.debug("** Setting Top Level Services");
+		setTopLevelServices(squidSourceFiles);
+		logger.debug("** Saving Source Files");
+		save(squidSourceFiles);
 	}
 
 	private void getInterfaceFiles(Collection<SourceCode> squidSourceFiles) {
@@ -134,7 +152,21 @@ public class FlowSquidSensor implements Sensor {
 		List<SquidAstVisitor<Grammar>> visitors = Lists.newArrayList(nodeChecks.all());
 		AstScanner<Grammar> scanner = NodeAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
 		FilePredicates p = fileSystem.predicates();
-		scanner.scanFiles(Lists.newArrayList(fileSystem.files(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(FlowLanguage.KEY), p.matchesPathPattern("**/node.ndf")))));
+		logger.debug("Scanning Interface Files");
+		ArrayList<File> interfaceList = Lists.newArrayList(fileSystem.files(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(FlowLanguage.KEY), p.matchesPathPattern("**/node.ndf"))));
+		for (File interfaceFile: interfaceList)
+		{
+			try {
+				logger.debug("** * Scanning File: "+interfaceFile.getPath());
+				scanner.scanFile(interfaceFile);
+			} catch (Exception e)
+			{
+				if(settings.getBoolean(FlowPlugin.FAIL_ON_SCANERROR))
+					throw e;
+				else
+					logger.error("** * Exception while scanning file, skipping.",e);
+			}
+		}
 	    Collection<SourceCode> nodeFiles = scanner.getIndex().search(new QueryByType(SourceFile.class));
 	    logger.debug("*NODE* nodes found:" + nodeFiles.size() + " *");
 	    for(SourceCode squidSourceFile : squidSourceFiles){
