@@ -53,13 +53,6 @@ public class FlowAstScannerTest {
 	}
 	
 	@Test
-	  public void gitFolderTest() {
-		logger.debug("Scanning file");
-		FlowAstScanner.scanSingleFile( new File("src/test/resources/WmPackage/.git/someFile") , new SimpleMetricVisitor());
-
-	}
-	
-	@Test
 	  public void scanFile() {
 		logger.debug("Scanning file");
 		FlowAstScanner.scanSingleFile( new File("src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest/flows/subProcess/flow.xml") , new SimpleMetricVisitor());
