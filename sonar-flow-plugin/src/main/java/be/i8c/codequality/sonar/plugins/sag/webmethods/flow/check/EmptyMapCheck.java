@@ -64,12 +64,17 @@ public class EmptyMapCheck extends SquidCheck<Grammar>{
 			boolean isEmptyMap = true;
 			List<AstNode> children = astNode.getChildren();
 			for (AstNode child:children) {
-				if (child.getTokenOriginalValue().equalsIgnoreCase("INVOKEINPUT")
-						|| child.getTokenOriginalValue().equalsIgnoreCase("INVOKEOUTPUT")
-						|| child.getTokenOriginalValue().equalsIgnoreCase("MAPDELETE")
-						|| child.getTokenOriginalValue().equalsIgnoreCase("MAPCOPY")) {
-					logger.debug("++ This is not an empty map ++");
-					isEmptyMap = false;
+				if (child.getName().equalsIgnoreCase("MAPPING")) {
+					for (AstNode child2:child.getChildren()) {
+						if (child2.getTokenOriginalValue().equalsIgnoreCase("INVOKEINPUT")
+								|| child2.getTokenOriginalValue().equalsIgnoreCase("INVOKEOUTPUT")
+								|| child2.getTokenOriginalValue().equalsIgnoreCase("MAPDELETE")
+								|| child2.getTokenOriginalValue().equalsIgnoreCase("MAPCOPY")
+								|| child2.getTokenOriginalValue().equalsIgnoreCase("MAPSET")) {
+							logger.debug("++ This is not an empty map ++");
+							isEmptyMap = false;
+						}
+					}
 				}
 			}
 			if (isEmptyMap) {
