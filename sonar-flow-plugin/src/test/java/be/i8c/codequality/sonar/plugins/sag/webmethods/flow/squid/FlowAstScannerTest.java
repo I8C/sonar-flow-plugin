@@ -148,6 +148,15 @@ public class FlowAstScannerTest {
 		assertTrue("Returned check message not as expected", expectedMessage.equals(violationMessages.get(0).getDefaultMessage()));
 	}
 	
+	@Test 
+	  public void emptyMapCheckValid() {
+		String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest/pub/checkEmptyMapValid/flow.xml";
+		
+		SourceFile sfViolation = FlowAstScanner.scanSingleFile(new File(invalidPath), new EmptyMapCheck());
+		List<CheckMessage> violationMessages = new ArrayList<CheckMessage>(sfViolation.getCheckMessages());
+		assertEquals(0, violationMessages.size());
+	}
+	
 	@Test
 	  public void emptyFlowCheck() {
 		String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest/pub/checkEmptyFlowInvalid/flow.xml";
