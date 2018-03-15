@@ -17,46 +17,62 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.impl.Parser;
-import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import org.apache.commons.io.FileUtils;
 
+/**
+ * Parser for flow files.
+ * @author DEWANST
+ *
+ */
 public class FlowParser {
-	private static final Parser<Grammar> P = FlowParser.create();
-	private static FlowConfiguration conf;
-	
-	private FlowParser() {
-	}
+  private static final Parser<Grammar> P = FlowParser.create();
+  private static FlowConfiguration conf;
 
-	public static Parser<Grammar> create(FlowConfiguration conf) {
-		FlowParser.conf=conf;
-		return Parser.builder(FlowGrammar.create()).withLexer(FlowLexer.create(conf)).build();
-	}
+  private FlowParser() {
+  }
 
-	public static Parser<Grammar> create() {
-		FlowParser.conf=new FlowConfiguration(Charset.defaultCharset());
-		return Parser.builder(FlowGrammar.create())
-				.withLexer(FlowLexer.create(FlowParser.conf)).build();
-	}
+  public static Parser<Grammar> create(FlowConfiguration conf) {
+    FlowParser.conf = conf;
+    return Parser.builder(FlowGrammar.create()).withLexer(FlowLexer.create(conf)).build();
+  }
 
-	public static AstNode parseFile(String filePath) {
-		AstNode astNode;
-		File file = FileUtils.getFile(filePath);
-		if (file == null || !file.exists()) {
-			throw new AssertionError("The file \"" + filePath + "\" does not exist.");
-		}
-		astNode = P.parse(file);
-		return astNode;
-	}
+  /**
+   * Creates this parser.
+   * @return
+   */
+  public static Parser<Grammar> create() {
+    FlowParser.conf = new FlowConfiguration(Charset.defaultCharset());
+    return Parser.builder(FlowGrammar.create()).withLexer(FlowLexer.create(FlowParser.conf))
+        .build();
+  }
 
-	public static AstNode parseString(String source) {
-		return P.parse(source);
-	}
+  /**
+   * Parses a file and returns the AstNode tree.
+   * @param filePath
+   * path to the file.
+   * @return
+   */
+  public static AstNode parseFile(String filePath) {
+    AstNode astNode;
+    File file = FileUtils.getFile(filePath);
+    if (file == null || !file.exists()) {
+      throw new AssertionError("The file \"" + filePath + "\" does not exist.");
+    }
+    astNode = P.parse(file);
+    return astNode;
+  }
+
+  public static AstNode parseString(String source) {
+    return P.parse(source);
+  }
 
 }

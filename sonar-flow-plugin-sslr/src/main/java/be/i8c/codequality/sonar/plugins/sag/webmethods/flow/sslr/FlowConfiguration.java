@@ -17,26 +17,32 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
 
 import java.nio.charset.Charset;
 
 import org.sonar.squidbridge.api.SquidConfiguration;
 
+/**
+ * Configuration for Squid.
+ * @author DEWANST
+ *
+ */
 public class FlowConfiguration extends SquidConfiguration {
 
-	private boolean ignoreNodeNdf;
+  private boolean ignoreNodeNdf;
 
-	public FlowConfiguration(Charset encoding) {
-		super(encoding);
-	}
+  public FlowConfiguration(Charset encoding) {
+    super(encoding);
+  }
 
-	public boolean getIgnoreNodeNdf() {
-		return ignoreNodeNdf;
-	}
+  public boolean getIgnoreNodeNdf() {
+    return ignoreNodeNdf;
+  }
 
-	public void setIgnoreNodeNdf(boolean ignoreNodeNdf) {
-		this.ignoreNodeNdf = ignoreNodeNdf;
-	}
+  public void setIgnoreNodeNdf(boolean ignoreNodeNdf) {
+    this.ignoreNodeNdf = ignoreNodeNdf;
+  }
 
 }

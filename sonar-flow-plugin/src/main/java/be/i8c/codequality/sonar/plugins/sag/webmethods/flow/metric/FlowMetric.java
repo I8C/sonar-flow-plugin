@@ -17,46 +17,51 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.metric;
 
 import org.sonar.squidbridge.measures.CalculatedMetricFormula;
 import org.sonar.squidbridge.measures.MetricDef;
 
+/**
+ * An enum of flow metrics.
+ * @author DEWANST
+ */
 public enum FlowMetric implements MetricDef {
 
-	FLOWS,
-	INVOKES,
-	SEQUENCES,
-	LOOPS,
-	BRANCHES,
-	MAPS,
-	LINES,
-	FILES,
-	LINES_OF_CODE, 
-	COMPLEXITY, 
-	COMMENT_LINES, 
-	STATEMENTS, 
-	DEPENDENCIES,
-	IS_TOP_LEVEL;
-	
-	public boolean aggregateIfThereIsAlreadyAValue() {
-		return true;
-	}
+  FLOWS, 
+  INVOKES, 
+  SEQUENCES, 
+  LOOPS, 
+  BRANCHES, 
+  MAPS, 
+  LINES, 
+  FILES, 
+  LINES_OF_CODE, 
+  COMPLEXITY, 
+  COMMENT_LINES, 
+  STATEMENTS, 
+  DEPENDENCIES, 
+  IS_TOP_LEVEL;
 
-	public CalculatedMetricFormula getCalculatedMetricFormula() {
-		return null;
-	}
+  public boolean aggregateIfThereIsAlreadyAValue() {
+    return true;
+  }
 
-	public String getName() {
-	    return name();
-	  }
+  public CalculatedMetricFormula getCalculatedMetricFormula() {
+    return null;
+  }
 
-	public boolean isCalculatedMetric() {
-		return false;
-	}
+  public String getName() {
+    return name();
+  }
 
-	public boolean isThereAggregationFormula() {
-		return true;
-	}
+  public boolean isCalculatedMetric() {
+    return false;
+  }
+
+  public boolean isThereAggregationFormula() {
+    return true;
+  }
 
 }

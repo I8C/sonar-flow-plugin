@@ -17,34 +17,46 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.InterfaceCommentsCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
+
+import com.sonar.sslr.api.Grammar;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.InterfaceCommentsCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.SavePipelineCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.TryCatchCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.NodeAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitors.SimpleMetricVisitor;
+import org.sonar.squidbridge.SquidAstVisitor;
 
 public class NodeAstScannerTest {
 
-	final static Logger logger = LoggerFactory.getLogger(NodeAstScannerTest.class);
-	
-	File nodeFile = new File("src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest/flows/subProcess/node.ndf");
-	
-	@Test
-	  public void scanFile() {
-		logger.debug("Scanning file");
-		NodeAstScanner.scanSingleFile(nodeFile);
-	}
-	
-	@Test
-	  public void savePipelineCheck() {
-		NodeAstScanner.scanSingleFile(nodeFile);
-	}
+  static final Logger logger = LoggerFactory.getLogger(NodeAstScannerTest.class);
+
+  File nodeFile = new File(
+      "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest/flows/subProcess/node.ndf");
+
+  @Test
+  public void scanFile() {
+    logger.debug("Scanning file");
+    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
+    metrics.add(new SimpleMetricVisitor());
+    List<FlowCheck> checks = new ArrayList<FlowCheck>();
+    NodeAstScanner.scanSingleFile(nodeFile, checks, metrics);
+  }
+
+  @Test
+  public void savePipelineCheck() {
+    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
+    metrics.add(new SimpleMetricVisitor());
+    List<FlowCheck> checks = new ArrayList<FlowCheck>();
+    checks.add(new InterfaceCommentsCheck());
+    NodeAstScanner.scanSingleFile(nodeFile, checks, metrics);
+  }
 }

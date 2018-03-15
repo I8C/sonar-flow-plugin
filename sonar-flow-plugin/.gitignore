@@ -3,3 +3,6 @@
 /.classpath
 /.project
 /bin/
+/node/
+/node_modules/
+/yarn.lock

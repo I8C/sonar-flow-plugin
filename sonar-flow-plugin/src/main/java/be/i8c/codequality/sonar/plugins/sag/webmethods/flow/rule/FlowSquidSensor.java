@@ -17,263 +17,272 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule;
+
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.FlowLanguage;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.metric.FlowMetric;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.settings.FlowLanguageProperties;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.NodeAstScanner;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowConfiguration;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.CheckList;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
+
+import com.sonar.sslr.api.Grammar;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FilePredicate;
-import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.Checks;
-import org.sonar.api.component.ResourcePerspectives;
-import org.sonar.api.config.Settings;
-import org.sonar.api.issue.Issuable;
-import org.sonar.api.issue.Issuable.IssueBuilder;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.resources.Project;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.squidbridge.AstScanner;
-import org.sonar.squidbridge.SquidAstVisitor;
 import org.sonar.squidbridge.api.CheckMessage;
 import org.sonar.squidbridge.api.SourceClass;
 import org.sonar.squidbridge.api.SourceCode;
 import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.SquidCheck;
 import org.sonar.squidbridge.indexer.QueryByParent;
 import org.sonar.squidbridge.indexer.QueryByType;
 
-import com.google.common.collect.Lists;
-import com.sonar.sslr.api.Grammar;
-
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.FlowLanguage;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.FlowPlugin;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.CheckList;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.NodeCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.check.type.TopLevelCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.metric.FlowMetric;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.NodeAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowConfiguration;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitors.FlowLinesOfCodeVisitor;
-
+/**
+ * The FlowSquidSensor is the Sensor used by the Flow plugin. It will run the @see FlowAstScanner on
+ * the flow files.
+ * 
+ * @author DEWANST
+ */
 public class FlowSquidSensor implements Sensor {
-	
-	final Logger logger = LoggerFactory.getLogger(getClass());
-	private final Checks<SquidCheck<Grammar>> checks,nodeChecks;
-	private final FileLinesContextFactory fileLinesContextFactory;
-	private final FileSystem fileSystem;
-	private final ResourcePerspectives resourcePerspectives;
-	private final FilePredicate mainFilePredicates;
-	private final PathResolver pathResolver;
-	private final Settings settings;
-	
-	private SensorContext context;
-	private AstScanner<Grammar> scanner;
 
-	public FlowSquidSensor(Settings settings, CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory,
-		                         FileSystem fileSystem, ResourcePerspectives resourcePerspectives, PathResolver pathResolver) {
-			logger.debug("** FlowSquidSenser constructor");
-			this.settings = settings;
-			this.pathResolver = pathResolver;
-		    this.checks = checkFactory
-		      .<SquidCheck<Grammar>>create(CheckList.REPOSITORY_KEY)
-		      .addAnnotatedChecks((Iterable)CheckList.getChecks(settings.getBoolean(FlowPlugin.IGNORE_TOPLEVEL_KEY),false));
-		    this.nodeChecks = checkFactory
-				      .<SquidCheck<Grammar>>create(CheckList.REPOSITORY_KEY)
-				      .addAnnotatedChecks((Iterable)CheckList.getChecks(settings.getBoolean(FlowPlugin.IGNORE_TOPLEVEL_KEY), true));
-		    this.fileLinesContextFactory = fileLinesContextFactory;
-		    this.fileSystem = fileSystem;
-		    this.resourcePerspectives = resourcePerspectives;
-		    this.mainFilePredicates = fileSystem.predicates().and(
-		      fileSystem.predicates().hasLanguage(FlowLanguage.KEY),
-		      fileSystem.predicates().hasType(InputFile.Type.MAIN));
-		  }
+  final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Override
-	public boolean shouldExecuteOnProject(Project project) {
-		return fileSystem.hasFiles(mainFilePredicates);
-	}
+  private final Checks<FlowCheck> flowChecks;
+  private final Checks<FlowCheck> nodeChecks;
+  private final FileSystem fileSystem;
+  private final Configuration config;
+  private final PathResolver pathResolver;
 
-	@Override
-	public void analyse(Project project, SensorContext context) {
-		this.context = context;
-		logger.debug( "** FLowSquidSensor analyse called on project: " +project.getName());
-	    
-		List<SquidAstVisitor<Grammar>> visitors = Lists.newArrayList(checks.all());	
-	    visitors.add(new FlowLinesOfCodeVisitor<Grammar>(FlowMetric.LINES_OF_CODE));
-	    logger.debug("** * Visiters: " + visitors.toString());
-	    
-	    this.scanner = FlowAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
-	    
-	    FilePredicates p = fileSystem.predicates();
-	    logger.debug("** * FilePredicates: " + p.toString() );
-	    
-		ArrayList<File> fileList = Lists.newArrayList(fileSystem.files(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(FlowLanguage.KEY), p.matchesPathPattern("**/flow.xml"))));
-		for (File flowFile : fileList)
-		{
-			try {
-				logger.debug("** * Scanning File: "+flowFile.getPath());
-				scanner.scanFile(flowFile);
-			} catch (Exception e)
-			{
-				if(settings.getBoolean(FlowPlugin.FAIL_ON_SCANERROR))
-					throw e;
-				else
-					logger.error("** * Exception while scanning file, skipping.",e);
-			}
-		}
-	    Collection<SourceCode> squidSourceFiles = scanner.getIndex().search(new QueryByType(SourceFile.class));
-	    logger.debug("** Done Scanning");
+  /**
+   * Main Constructor. Parameters are injected.
+   * 
+   * @param config
+   *          Configuration
+   * @param checkFactory
+   *          Checkfactory
+   * @param fileSystem
+   *          Filesystem
+   * @param pathResolver
+   *          Pathresolver
+   */
+  public FlowSquidSensor(Configuration config, CheckFactory checkFactory,
+      FileSystem fileSystem, PathResolver pathResolver) {
+    logger.debug("** FlowSquidSenser constructor");
+    this.fileSystem = fileSystem;
+    this.config = config;
+    this.pathResolver = pathResolver;
+    this.flowChecks = checkFactory.<FlowCheck>create(FlowRulesDefinition.REPO_KEY)
+        .addAnnotatedChecks(CheckList.getFlowChecks().toArray())
+        .addAnnotatedChecks(config.getBoolean(
+            FlowLanguageProperties.IGNORE_TOPLEVEL_KEY).get() ? null
+                : CheckList.getTopLevelChecks().toArray());
+    this.nodeChecks = checkFactory.<FlowCheck>create(FlowRulesDefinition.REPO_KEY)
+        .addAnnotatedChecks(CheckList.getNodeChecks().toArray())
+        .addAnnotatedChecks(config.getBoolean(
+            FlowLanguageProperties.IGNORE_TOPLEVEL_KEY).get() ? null
+                : CheckList.getTopLevelChecks().toArray());
+  }
 
-		// Process sourceFiles
-		logger.debug("** Getting Interface Files");
-		getInterfaceFiles(squidSourceFiles);
-		logger.debug("** Setting Top Level Services");
-		setTopLevelServices(squidSourceFiles);
-		logger.debug("** Saving Source Files");
-		save(squidSourceFiles);
-	}
+  @Override
+  public void describe(SensorDescriptor descriptor) {
+    descriptor.name("Scans flow files");
+    descriptor.onlyOnLanguage("flow");
+    descriptor.createIssuesForRuleRepositories(FlowRulesDefinition.REPO_KEY);
 
-	private void getInterfaceFiles(Collection<SourceCode> squidSourceFiles) {
-		// Scan node.ndf files
-		List<SquidAstVisitor<Grammar>> visitors = Lists.newArrayList(nodeChecks.all());
-		AstScanner<Grammar> scanner = NodeAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
-		FilePredicates p = fileSystem.predicates();
-		logger.debug("Scanning Interface Files");
-		ArrayList<File> interfaceList = Lists.newArrayList(fileSystem.files(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(FlowLanguage.KEY), p.matchesPathPattern("**/node.ndf"))));
-		for (File interfaceFile: interfaceList)
-		{
-			try {
-				logger.debug("** * Scanning File: "+interfaceFile.getPath());
-				scanner.scanFile(interfaceFile);
-			} catch (Exception e)
-			{
-				if(settings.getBoolean(FlowPlugin.FAIL_ON_SCANERROR))
-					throw e;
-				else
-					logger.error("** * Exception while scanning file, skipping.",e);
-			}
-		}
-	    Collection<SourceCode> nodeFiles = scanner.getIndex().search(new QueryByType(SourceFile.class));
-	    logger.debug("*NODE* nodes found:" + nodeFiles.size() + " *");
-	    for(SourceCode squidSourceFile : squidSourceFiles){
-	    	for(SourceCode nodeFile : nodeFiles){
-	    		if((new File(nodeFile.getKey())).getParent().equals((new File(squidSourceFile.getKey())).getParent())){
-	    			squidSourceFile.addChild(nodeFile);
-	    			String relativePath = pathResolver.relativePath(fileSystem.baseDir(), new java.io.File(nodeFile.getKey()));
-	    			InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasRelativePath(relativePath));
-	    			saveViolations(inputFile, (SourceFile) nodeFile);
-	    		}
-	    		
-	    	}
-	    }
-	}
+  }
 
-	private void setTopLevelServices(Collection<SourceCode> squidSourceFiles) {
-		HashSet<String> dependencies = new HashSet<String>();
-		for (SourceCode squidSourceFile : squidSourceFiles) {
-			ArrayList<String> deps = (ArrayList<String>) squidSourceFile.getData(FlowMetric.DEPENDENCIES);
-			if(deps != null)
-				dependencies.addAll(deps);
-		}
-		for (SourceCode squidSourceFile : squidSourceFiles) {
-			String relativePath = pathResolver.relativePath(fileSystem.baseDir(), new java.io.File(squidSourceFile.getKey()));
-			String service = relativePath.replaceFirst(".*?/", "").replaceAll("/flow\\.xml", "").replaceAll("/", ".").replaceFirst("(.*)\\.(.*?)$", "$1:$2");
-			logger.debug("NrOfDependencies:" + dependencies.size());
-			if(dependencies.contains(service)){
-				logger.debug("X--" + squidSourceFile.getKey() + " is not a top-level Service");
-				squidSourceFile.add(FlowMetric.IS_TOP_LEVEL, 0);
-			}else{
-				logger.debug("X++" + squidSourceFile.getKey() + " is a top-level Service");
-				squidSourceFile.add(FlowMetric.IS_TOP_LEVEL, 1);
-			}
-			logger.debug("+++relativePath: " + relativePath + " +++service: " + service + " +++topLevel: " + squidSourceFile.getInt(FlowMetric.IS_TOP_LEVEL));
-		}
-	}
+  @SuppressWarnings("deprecation")
+  @Override
+  public void execute(SensorContext context) {
+    logger.debug("FlowSquidSensor analysis called");
+    AstScanner<Grammar> flowScanner = FlowAstScanner.create(createConfiguration(), flowChecks.all(),
+        null);
 
-	private FlowConfiguration createConfiguration() {
-		return new FlowConfiguration(fileSystem.encoding());
-	}
+    FileSystem fs = context.fileSystem();
+    Iterable<InputFile> flowFiles = fs.inputFiles(
+        fs.predicates().and(fs.predicates().hasLanguage(FlowLanguage.KEY),
+            fs.predicates().matchesPathPatterns(FlowLanguage.getFlowFilePatterns())));
+    for (InputFile flowFile : flowFiles) {
+      try {
+        logger.debug("** * Scanning File: " + flowFile.toString());
+        flowScanner.scanFile(flowFile.file());
+      } catch (Exception e) {
+        if (config.getBoolean(FlowLanguageProperties.FAIL_ON_SCANERROR).get()) {
+          throw e;
+        } else {
+          logger.error("** * Exception while scanning file, skipping.", e);
+        }
+      }
+    }
+    Collection<SourceCode> squidSourceFiles = flowScanner.getIndex()
+        .search(new QueryByType(SourceFile.class));
+    logger.debug("** Done Scanning");
 
-	private void save(Collection<SourceCode> squidSourceFiles) {
-		for (SourceCode squidSourceFile : squidSourceFiles) {
-			SourceFile squidFile = (SourceFile) squidSourceFile;
-			
-			String relativePath = pathResolver.relativePath(fileSystem.baseDir(), new java.io.File(squidFile.getKey()));
-			InputFile inputFile = fileSystem.inputFile(fileSystem.predicates().hasRelativePath(relativePath));
-			
-			saveClassComplexity(inputFile, squidFile);
-			saveMeasures(inputFile, squidFile);
-			saveViolations(inputFile, squidFile);
-		}
-	}
+    // Process sourceFiles
+    logger.debug("** Getting Interface Files");
+    getInterfaceFiles(squidSourceFiles, context);
+    logger.debug("** Setting Top Level Services");
+    setTopLevelServices(squidSourceFiles);
+    logger.debug("** Saving Source Files");
+    save(context, flowScanner, squidSourceFiles);
 
-	private void saveMeasures(InputFile inputFile, SourceFile squidFile) {
-		context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY, squidFile.getDouble(FlowMetric.COMPLEXITY));
-		context.saveMeasure(inputFile, CoreMetrics.NCLOC, squidFile.getDouble(FlowMetric.LINES_OF_CODE));
-		context.saveMeasure(inputFile, CoreMetrics.COMMENT_LINES, squidFile.getDouble(FlowMetric.COMMENT_LINES));
-	}
+  }
 
-	private void saveClassComplexity(InputFile inputFile, SourceFile squidFile) {
-		Collection<SourceCode> classes = scanner.getIndex().search(new QueryByParent(squidFile),
-				new QueryByType(SourceClass.class));
-		double complexityInClasses = 0;
-		for (SourceCode squidClass : classes) {
-			double classComplexity = squidClass.getDouble(FlowMetric.INVOKES);
-			complexityInClasses += classComplexity;
-		}
-		context.saveMeasure(inputFile, CoreMetrics.COMPLEXITY_IN_CLASSES, complexityInClasses);
-	}
+  @SuppressWarnings("deprecation")
+  private void getInterfaceFiles(Collection<SourceCode> squidSourceFiles, SensorContext context) {
+    // Scan node.ndf files
+    AstScanner<Grammar> scanner = NodeAstScanner.create(createConfiguration(), nodeChecks.all(),
+        null);
+    logger.debug("Scanning Interface Files");
+    FileSystem fs = context.fileSystem();
+    Iterable<InputFile> nodeFiles = fs
+        .inputFiles(fs.predicates().matchesPathPatterns(FlowLanguage.getNodeFilePatterns()));
+    for (InputFile nodeFile : nodeFiles) {
+      try {
+        logger.debug("** * Scanning File: " + nodeFile.toString());
+        scanner.scanFile(nodeFile.file());
+      } catch (Exception e) {
+        if (config.getBoolean(FlowLanguageProperties.FAIL_ON_SCANERROR).get()) {
+          throw e;
+        } else {
+          logger.error("** * Exception while scanning file, skipping.", e);
+        }
+      }
+    }
+    Collection<SourceCode> nodeSources = scanner.getIndex()
+        .search(new QueryByType(SourceFile.class));
+    logger.debug("*NODE* nodes found:" + nodeSources.size() + " *");
+    for (SourceCode squidSourceFile : squidSourceFiles) {
+      for (SourceCode nodeSource : nodeSources) {
+        if ((new File(nodeSource.getKey())).getParent()
+            .equals((new File(squidSourceFile.getKey())).getParent())) {
+          squidSourceFile.addChild(nodeSource);
+          String relativePath = pathResolver.relativePath(fileSystem.baseDir(),
+              new java.io.File(nodeSource.getKey()));
+          InputFile inputFile = fileSystem
+              .inputFile(fileSystem.predicates().hasRelativePath(relativePath));
+          saveViolations(context, inputFile, (SourceFile) nodeSource);
+        }
 
+      }
+    }
+  }
 
+  private void setTopLevelServices(Collection<SourceCode> squidSourceFiles) {
+    HashSet<String> dependencies = new HashSet<String>();
+    for (SourceCode squidSourceFile : squidSourceFiles) {
+      @SuppressWarnings("unchecked")
+      ArrayList<String> deps = (ArrayList<String>) squidSourceFile.getData(FlowMetric.DEPENDENCIES);
+      if (deps != null) {
+        dependencies.addAll(deps);
+      }
+    }
+    for (SourceCode squidSourceFile : squidSourceFiles) {
+      String relativePath = pathResolver.relativePath(fileSystem.baseDir(),
+          new java.io.File(squidSourceFile.getKey()));
+      String service = relativePath.replaceFirst(".*?/", "").replaceAll("/flow\\.xml", "")
+          .replaceAll("/", ".").replaceFirst("(.*)\\.(.*?)$", "$1:$2");
+      logger.debug("NrOfDependencies:" + dependencies.size());
+      if (dependencies.contains(service)) {
+        logger.debug("X--" + squidSourceFile.getKey() + " is not a top-level Service");
+        squidSourceFile.add(FlowMetric.IS_TOP_LEVEL, 0);
+      } else {
+        logger.debug("X++" + squidSourceFile.getKey() + " is a top-level Service");
+        squidSourceFile.add(FlowMetric.IS_TOP_LEVEL, 1);
+      }
+      logger.debug("+++relativePath: " + relativePath + " +++service: " + service + " +++topLevel: "
+          + squidSourceFile.getInt(FlowMetric.IS_TOP_LEVEL));
+    }
+  }
 
-	private void saveViolations(InputFile inputFile, SourceFile squidFile) {
-		Collection<CheckMessage> messages = squidFile.getCheckMessages();
-		if (messages != null) {
-			for (CheckMessage message : messages) {
-				SquidCheck<Grammar> c = (SquidCheck<Grammar>) message.getCheck();
-				logger.debug("+++File: " + squidFile.getKey() + " - Checking message ToplevelService: " + squidFile.getInt(FlowMetric.IS_TOP_LEVEL) + " TopLevelCheck: " +  String.valueOf(c instanceof TopLevelCheck));
-				if(squidFile.getInt(FlowMetric.IS_TOP_LEVEL)!=1 && c instanceof TopLevelCheck){
-					logger.debug("+++Ignoring toplevelCheck: " + c.getKey() + " for file: " + squidFile.getKey());
-				}else{
-					logger.debug("+++ Message " + message.getDefaultMessage());
-					logger.debug("+++ Message " + message.toString());
-					RuleKey ruleKey;
-					if(message.getCheck() instanceof NodeCheck){
-						ruleKey = nodeChecks.ruleKey((SquidCheck<Grammar>) message.getCheck());
-					}else
-						ruleKey = checks.ruleKey((SquidCheck<Grammar>) message.getCheck());
-					Issuable issuable = resourcePerspectives.as(Issuable.class, inputFile);
-					if (issuable != null) {
-						IssueBuilder issueBuilder = issuable.newIssueBuilder().ruleKey(ruleKey).line(message.getLine())
-								.message(message.getText(Locale.ENGLISH));
-	
-						if (message.getCost() != null) {
-							issueBuilder.effortToFix(message.getCost());
-						}
-	
-						issuable.addIssue(issueBuilder.build());
-					}
-				}
-			}
-		}
-	}
+  private FlowConfiguration createConfiguration() {
+    return new FlowConfiguration(fileSystem.encoding());
+  }
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName();
-	}
+  private void save(SensorContext context,AstScanner<Grammar> flowScanner,
+      Collection<SourceCode> squidSourceFiles) {
+    for (SourceCode squidSourceFile : squidSourceFiles) {
+      SourceFile squidFile = (SourceFile) squidSourceFile;
+
+      String relativePath = pathResolver.relativePath(fileSystem.baseDir(),
+          new java.io.File(squidFile.getKey()));
+      InputFile inputFile = fileSystem
+          .inputFile(fileSystem.predicates().hasRelativePath(relativePath));
+
+      saveClassComplexity(context, flowScanner, inputFile, squidFile);
+      saveMeasures(context, inputFile, squidFile);
+      saveViolations(context, inputFile, squidFile);
+    }
+  }
+
+  private void saveMeasures(SensorContext context, InputFile inputFile, SourceFile squidFile) {
+    context.<Integer>newMeasure().on(inputFile).forMetric(CoreMetrics.COMPLEXITY)
+        .withValue(squidFile.getInt(FlowMetric.COMPLEXITY)).save();
+    context.<Integer>newMeasure().on(inputFile).forMetric(CoreMetrics.NCLOC)
+        .withValue(squidFile.getInt(FlowMetric.LINES_OF_CODE)).save();
+    context.<Integer>newMeasure().on(inputFile).forMetric(CoreMetrics.COMMENT_LINES)
+        .withValue(squidFile.getInt(FlowMetric.COMMENT_LINES)).save();
+  }
+
+  private void saveClassComplexity(SensorContext context, AstScanner<Grammar> flowScanner,
+      InputFile inputFile, SourceFile squidFile) {
+    Collection<SourceCode> classes = flowScanner.getIndex().search(new QueryByParent(squidFile),
+        new QueryByType(SourceClass.class));
+    Integer complexityInClasses = 0;
+    for (SourceCode squidClass : classes) {
+      int classComplexity = squidClass.getInt(FlowMetric.INVOKES);
+      complexityInClasses += classComplexity;
+    }
+    context.<Integer>newMeasure().on(inputFile).forMetric(CoreMetrics.COMPLEXITY_IN_CLASSES)
+        .withValue(complexityInClasses).save();
+  }
+
+  private void saveViolations(SensorContext context, InputFile inputFile, SourceFile squidFile) {
+    Collection<CheckMessage> messages = squidFile.getCheckMessages();
+    if (messages != null) {
+      for (CheckMessage message : messages) {
+        Object c = message.getCheck();
+        if (c instanceof FlowCheck) {
+          FlowCheck fc = (FlowCheck) c;
+          if (squidFile.getInt(FlowMetric.IS_TOP_LEVEL) != 1 && fc.isTopLevelCheck()) {
+            logger.debug("+++Ignoring toplevelCheck for file: " + squidFile.getKey());
+          } else {
+            RuleKey ruleKey;
+            if (fc.isNodeCheck()) {
+              ruleKey = nodeChecks.ruleKey(fc);
+            } else {
+              ruleKey = flowChecks.ruleKey(fc);
+            }
+            FlowIssue.create(context, ruleKey, message.getCost()).setPrimaryLocation(inputFile,
+                message).save();
+          }
+        }
+      }
+    }
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 }

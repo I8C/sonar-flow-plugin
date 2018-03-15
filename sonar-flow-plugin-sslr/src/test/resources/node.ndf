@@ -4,10 +4,8 @@
   <value name="svc_type">flow</value>
   <value name="svc_subtype">default</value>
   <value name="svc_sigtype">java 3.5</value>
-  <record name="svc_sig" javaclass="someClass">
-    <number name="jmsTriggerType" type="Integer">0</number>
-    <Boolean name="enabled">false</Boolean>
-    <record name="sig_in" javaclass="someClass">
+  <record name="svc_sig" javaclass="com.wm.util.Values">
+    <record name="sig_in" javaclass="com.wm.util.Values">
       <value name="node_type">record</value>
       <value name="is_public">false</value>
       <value name="field_type">record</value>
@@ -19,7 +17,7 @@
       </array>
       <value name="modifiable">true</value>
     </record>
-    <record name="sig_out" javaclass="someClass">
+    <record name="sig_out" javaclass="com.wm.util.Values">
       <value name="node_type">record</value>
       <value name="is_public">false</value>
       <value name="field_type">record</value>
@@ -50,18 +48,12 @@
   <value name="auditoption">0</value>
   <null name="auditfields_input"/>
   <null name="auditfields_output"/>
-  <record name="auditsettings" javaclass="someClass">
+  <record name="auditsettings" javaclass="com.wm.util.Values">
     <value name="document_data">0</value>
     <value name="startExecution">false</value>
     <value name="stopExecution">false</value>
     <value name="onError">true</value>
   </record>
-  <array name="rec_fields" type="record" depth="1">
-    <record javaclass="com.wm.util.Values">
-      <value name="node_type">record</value>
-        <null name="durableSubscriberName"/>
-    </record>
-  </array>
   <value name="pipeline_option">1</value>
   <null name="originURI"/>
   <value name="modifiable">true</value>

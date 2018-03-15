@@ -17,61 +17,45 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow;
-
-import java.util.List;
-
-import org.sonar.api.SonarPlugin;
-import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
-
-import com.google.common.collect.ImmutableList;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule.FlowRulesDefinition;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule.FlowSquidSensor;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.settings.FlowLanguageProperties;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.web.FlowWebPageDefinition;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.ws.sources.FlowWebWs;
 
-public class FlowPlugin extends SonarPlugin {
+import org.sonar.api.Plugin;
+import org.sonar.api.internal.google.common.collect.ImmutableList;
 
-  public static final String FILE_SUFFIXES_KEY = "sonar.flow.file.suffixes";
-  public static final String FILE_SUFFIXES_DEFVALUE = "xml,ndf";
-  public static final String IGNORE_TOPLEVEL_KEY = "sonar.flow.ignore.toplevel";
-  public static final String IGNORE_TOPLEVEL_DEFVALUE = "false";
-  public static final String FAIL_ON_SCANERROR = "sonar.flow.fail.scanerror";
-  public static final String FAIL_ON_SCANERROR_DEFVALUE = "true";
-
+/**
+ * This class represents the Flow plugin.
+ * It holds references (extensions) to the FlowLanguage, its properties,
+ * the sensor and rule definitions.
+ * @author DEWANST
+ */
+public class FlowPlugin implements Plugin {
 
   @Override
-  public List<Object> getExtensions() {
-    return ImmutableList.of(
-      FlowLanguage.class,
-      
-      FlowProfile.class,
- 
-      FlowSquidSensor.class,
-      
-      FlowRulesDefinition.class,
-      
-      PropertyDefinition.builder(FILE_SUFFIXES_KEY)
-        .defaultValue(FILE_SUFFIXES_DEFVALUE)
-        .name("File Suffixes")
-        .description("Comma-separated list of suffixes for files to analyze.")
-        .onQualifiers(Qualifiers.PROJECT)
-        .build(),
-        
-      PropertyDefinition.builder(IGNORE_TOPLEVEL_KEY)
-        .defaultValue(IGNORE_TOPLEVEL_DEFVALUE)
-        .name("Ignore top-level services")
-        .description("Ignore top-level service checks")
-        .onQualifiers(Qualifiers.PROJECT)
-        .build(),
+  public void define(Context context) {
+    ImmutableList.Builder<Object> builder = ImmutableList.builder();
+    
+    // add language with default profile
+    builder.add(FlowLanguage.class, FlowQualityProfile.class);
+    // add language settings
+    builder.addAll(FlowLanguageProperties.getProperties());
 
-      PropertyDefinition.builder(FAIL_ON_SCANERROR)
-        .defaultValue(FAIL_ON_SCANERROR_DEFVALUE)
-        .name("Fail on scan error")
-        .description("Scanning process fails when a scanning a single file fails")
-        .onQualifiers(Qualifiers.PROJECT)
-        .build()
-    );
+    // add measures
+
+    // add rules
+    builder.add(FlowRulesDefinition.class, FlowSquidSensor.class);
+
+    // add web extensions
+    builder.add(FlowWebPageDefinition.class);
+    builder.add(FlowWebWs.class);
+    
+    context.addExtensions(builder.build());
   }
 
 }

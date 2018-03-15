@@ -17,129 +17,126 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
 
-import java.util.Arrays;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.channels.SaxChannel;
 
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
 import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
 
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.channels.SaxChannel;
+import java.util.Arrays;
 
+/**
+ * This lexer defines the tags of the flow xml file.
+ * @author DEWANST
+ *
+ */
 public class FlowLexer {
-	 
-	private FlowLexer() {
-	  }
 
-	  public static enum FlowTypes implements TokenType {
+  private FlowLexer() {
+  }
 
-	    START_FLOW, STOP_FLOW,
-	    START_SEQUENCE, STOP_SEQUENCE,
-	    START_INVOKE, STOP_INVOKE,
-	    START_LOOP, STOP_LOOP,
-	    START_BRANCH, STOP_BRANCH,
-	    START_EXIT, STOP_EXIT,
-	    START_RETRY, STOP_RETRY,
-	    
-	    START_MAP, STOP_MAP,
-	    START_MAPTARGET, STOP_MAPTARGET,
-	    START_MAPSOURCE, STOP_MAPSOURCE,
-	    START_MAPDELETE, STOP_MAPDELETE,
-	    START_MAPSET, STOP_MAPSET,
-	    START_MAPCOPY, STOP_MAPCOPY,
-	    START_MAPINVOKE, STOP_MAPINVOKE,
-	    
-	    START_DATA, STOP_DATA,
-	    START_VALUES, STOP_VALUES,
-	    START_RECORD, STOP_RECORD,
-	    START_VALUE, STOP_VALUE,
-	    START_NUMBER, STOP_NUMBER,
-	    START_ARRAY, STOP_ARRAY,
-	    START_BOOLEAN, STOP_BOOLEAN,
-	    
-	    ELEMENT_VALUE,
-	    
-	    START_COMMENT, STOP_COMMENT;
-	    
-	    
+  public static enum FlowTypes implements TokenType {
 
-	    public static boolean isInEnum(String value) {
-	         return Arrays.stream(FlowTypes.values()).anyMatch(e -> e.name().equals(value));
-	    }
-	    
-	    private FlowTypes() {
+    START_FLOW, STOP_FLOW, START_SEQUENCE, STOP_SEQUENCE, START_INVOKE, STOP_INVOKE, 
+    
+    START_LOOP, STOP_LOOP, START_BRANCH, STOP_BRANCH, START_EXIT, STOP_EXIT, 
+    
+    START_RETRY, STOP_RETRY, START_MAP, STOP_MAP, START_MAPTARGET, STOP_MAPTARGET, 
+    
+    START_MAPSOURCE, STOP_MAPSOURCE, START_MAPDELETE, STOP_MAPDELETE, START_MAPSET, STOP_MAPSET,
+    
+    START_MAPCOPY, STOP_MAPCOPY, START_MAPINVOKE, STOP_MAPINVOKE, START_DATA, STOP_DATA,
+    
+    START_VALUES, STOP_VALUES, START_RECORD, STOP_RECORD, START_VALUE, STOP_VALUE, 
+    
+    START_NUMBER, STOP_NUMBER, START_ARRAY, STOP_ARRAY, START_BOOLEAN, STOP_BOOLEAN,
 
-	    }
+    ELEMENT_VALUE, START_COMMENT, STOP_COMMENT;
 
-	    @Override
-	    public String getName() {
-	      return name();
-	    }
+    public static boolean isInEnum(String value) {
+      return Arrays.stream(FlowTypes.values()).anyMatch(e -> e.name().equals(value));
+    }
 
-	    @Override
-	    public String getValue() {
-	      return null;
-	    }
+    private FlowTypes() {
 
-	    @Override
-	    public boolean hasToBeSkippedFromAst(AstNode node) {
-	      return true;
-	    }
+    }
 
-	  }
+    @Override
+    public String getName() {
+      return name();
+    }
 
-	public static enum FlowAttTypes implements TokenType {	    
-		SERVICE,EXITON("EXIT-ON"),MODE,NAME,DISABLED,FROM,SIGNAL,FAILUREMESSAGE("FAILURE-MESSAGE"),SWITCH,
-		LABELEXPRESSIONS;
+    @Override
+    public String getValue() {
+      return null;
+    }
 
-		private String attName;
-		  
-		    public static boolean isInEnum(String value) {
-		         return Arrays.stream(FlowAttTypes.values()).anyMatch(e -> e.getAttName().equalsIgnoreCase(value));
-		    }
-		    
-		    public static FlowAttTypes getEnum(String value) {
-		        return Arrays.stream(FlowAttTypes.values()).filter(e -> e.getAttName().equalsIgnoreCase(value)).findFirst().get();
-		    }
-		    
-		    private FlowAttTypes() {
-		    	this.attName = name();
-		    }
-		    
-		    private FlowAttTypes(String name) {
-				  this.attName = name;
-		    }
+    @Override
+    public boolean hasToBeSkippedFromAst(AstNode node) {
+      return true;
+    }
 
-		    public String getAttName() {
-		    	return this.attName;
-		    }
-		    
-		    @Override
-		    public String getName() {
-		      return name();
-		    }
+  }
 
-		    @Override
-		    public String getValue() {
-		      return null;
-		    }
+  public static enum FlowAttTypes implements TokenType {
+    SERVICE, EXITON("EXIT-ON"), MODE, NAME, DISABLED, FROM, SIGNAL, FAILUREMESSAGE(
+        "FAILURE-MESSAGE"), SWITCH, LABELEXPRESSIONS;
 
-		    @Override
-		    public boolean hasToBeSkippedFromAst(AstNode node) {
-		      return false;
-		    }
+    private String attName;
 
-		  }
+    public static boolean isInEnum(String value) {
+      return Arrays.stream(FlowAttTypes.values())
+          .anyMatch(e -> e.getAttName().equalsIgnoreCase(value));
+    }
 
-	  public static Lexer create(FlowConfiguration conf) {
-	    return Lexer.builder()
-	    	.withCharset(conf.getCharset())
-	        .withFailIfNoChannelToConsumeOneCharacter(true)
-	        .withChannel(new SaxChannel())
-	        .withChannel(new BlackHoleChannel(".*"))
-	        .build();
-	  }
+    public static FlowAttTypes getEnum(String value) {
+      return Arrays.stream(FlowAttTypes.values())
+          .filter(e -> e.getAttName().equalsIgnoreCase(value)).findFirst().get();
+    }
+
+    private FlowAttTypes() {
+      this.attName = name();
+    }
+
+    private FlowAttTypes(String name) {
+      this.attName = name;
+    }
+
+    public String getAttName() {
+      return this.attName;
+    }
+
+    @Override
+    public String getName() {
+      return name();
+    }
+
+    @Override
+    public String getValue() {
+      return null;
+    }
+
+    @Override
+    public boolean hasToBeSkippedFromAst(AstNode node) {
+      return false;
+    }
+
+  }
+
+  /**
+   * Creates this lexer.
+   * @param conf
+   * Configuration for this lexer.
+   * @return
+   */
+  public static Lexer create(FlowConfiguration conf) {
+    return Lexer.builder().withCharset(conf.getCharset())
+        .withFailIfNoChannelToConsumeOneCharacter(true).withChannel(new SaxChannel())
+        .withChannel(new BlackHoleChannel(".*")).build();
+  }
 
 }
