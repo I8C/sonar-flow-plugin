@@ -55,16 +55,20 @@ public class FlowLexer {
     
     START_NUMBER, STOP_NUMBER, START_ARRAY, STOP_ARRAY, START_BOOLEAN, STOP_BOOLEAN,
 
-    ELEMENT_VALUE, START_COMMENT, STOP_COMMENT;
+    ELEMENT_VALUE(false), START_COMMENT, STOP_COMMENT;
 
     public static boolean isInEnum(String value) {
       return Arrays.stream(FlowTypes.values()).anyMatch(e -> e.name().equals(value));
     }
 
-    private FlowTypes() {
+    private boolean skip = true;
+    
+    private FlowTypes() {}
 
+    private FlowTypes(boolean skip) {
+      this.skip = skip;
     }
-
+    
     @Override
     public String getName() {
       return name();
@@ -77,7 +81,7 @@ public class FlowLexer {
 
     @Override
     public boolean hasToBeSkippedFromAst(AstNode node) {
-      return true;
+      return skip;
     }
 
   }

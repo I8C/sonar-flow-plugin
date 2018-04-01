@@ -15,7 +15,7 @@ export default class Invoke extends React.PureComponent {
 				<span className="logo"></span>
 				<span className="label">{this.props.invoke.label}</span>
 				<span className="text">INVOKE: {this.props.invoke.service}</span>
-				<span className="comment">{this.props.invoke.comment!=null && (this.props.invoke.comment)}</span>
+				<span className="comment">{this.props.invoke.comment!="" && ("("+this.props.invoke.comment+")")}</span>
 				<span className="lineNr">{this.props.invoke.line}</span>
 			</li>
 		);

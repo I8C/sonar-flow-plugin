@@ -16,7 +16,7 @@ export default class Loop extends React.PureComponent {
 				<span className="logo"></span>
 				<span className="label">{this.props.loop.label}</span>
 				<span className="text">LOOP</span>
-				<span className="comment">{this.props.loop.comment!=null && (this.props.loop.comment)}</span>
+				<span className="comment">{this.props.loop.comment!="" && ("("+this.props.loop.comment+")")}</span>
 				<span className="lineNr">{this.props.loop.line}</span>
 				<ul>
 					{children}

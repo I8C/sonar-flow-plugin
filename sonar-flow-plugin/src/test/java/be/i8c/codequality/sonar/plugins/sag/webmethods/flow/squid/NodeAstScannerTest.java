@@ -20,8 +20,8 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.NodeAstScanner;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.InterfaceCommentsCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
 
 import com.sonar.sslr.api.Grammar;
@@ -51,12 +51,4 @@ public class NodeAstScannerTest {
     NodeAstScanner.scanSingleFile(nodeFile, checks, metrics);
   }
 
-  @Test
-  public void savePipelineCheck() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new InterfaceCommentsCheck());
-    NodeAstScanner.scanSingleFile(nodeFile, checks, metrics);
-  }
 }

@@ -3,6 +3,9 @@ import Sequence from '../Sequence.js';
 import Branch from '../Branch.js';
 import Invoke from '../Invoke.js';
 import Map from '../Map.js';
+import Loop from '../Loop.js';
+import Repeat from '../Repeat.js';
+import Exit from '../Exit.js';
 
 export function getChildren(element, issueLine){
 	let output = [];
@@ -15,6 +18,7 @@ export function getChildren(element, issueLine){
 				case 'map': output.push( <Map map={child.map} issueLine={issueLine} /> );break;
 				case 'loop': output.push( <Loop loop={child.loop} issueLine={issueLine} /> );break;
 				case 'repeat': output.push( <Repeat repeat={child.repeat} issueLine={issueLine} /> );break;
+				case 'exit': output.push( <Exit exit={child.exit} issueLine={issueLine} /> );break;
 			}
 		});
 	}else

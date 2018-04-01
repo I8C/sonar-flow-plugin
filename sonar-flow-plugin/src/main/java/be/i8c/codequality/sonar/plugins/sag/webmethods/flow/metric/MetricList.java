@@ -21,9 +21,9 @@
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.metric;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowCommentLinesVisitor;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowDependencyVisitor;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowLinesOfCodeVisitor;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.type.FlowVisitor;
 
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.AstNodeType;
@@ -32,9 +32,7 @@ import com.sonar.sslr.api.Grammar;
 import java.util.List;
 
 import org.sonar.squidbridge.SquidAstVisitor;
-import org.sonar.squidbridge.metrics.CommentsVisitor;
 import org.sonar.squidbridge.metrics.ComplexityVisitor;
-import org.sonar.squidbridge.metrics.CounterVisitor;
 import org.sonar.squidbridge.metrics.LinesVisitor;
 
 /**
@@ -47,34 +45,46 @@ public class MetricList {
   private static final AstNodeType[] complexityAstNodeType = new AstNodeType[] { FlowGrammar.LOOP,
       FlowGrammar.BRANCH, FlowGrammar.SEQUENCE, FlowGrammar.RETRY };
 
-  public static List<SquidAstVisitor<Grammar>> getVisitors() {
-    return ImmutableList.<SquidAstVisitor<Grammar>>builder().addAll(getFlowVisitors())
-        .addAll(getDefaultVisitors()).build();
-  }
-
   /**
    * This static method returns the list of available flow visitors.
    * @return List of available flow visitors
    */
-  public static List<FlowVisitor<Grammar>> getFlowVisitors() {
-    return ImmutableList.<FlowVisitor<Grammar>>builder()
+  public static List<SquidAstVisitor<Grammar>> getFlowVisitors() {
+    return ImmutableList.<SquidAstVisitor<Grammar>>builder()
+        .addAll(getDefaultFlowVisitors())
         .add(new FlowLinesOfCodeVisitor<Grammar>(FlowMetric.LINES_OF_CODE))
+        .add(new FlowCommentLinesVisitor<Grammar>(FlowMetric.COMMENT_LINES))
         .add(new FlowDependencyVisitor<Grammar>()).build();
   }
   
   /**
-   * This static method returns the list of the required default visitors.
-   * @return List of available required default visitors
+   * This static method returns the list of the required default flow visitors.
+   * @return List of available required default flow visitors
    */
-  public static List<SquidAstVisitor<Grammar>> getDefaultVisitors() {
+  public static List<SquidAstVisitor<Grammar>> getDefaultFlowVisitors() {
     return ImmutableList.<SquidAstVisitor<Grammar>>builder()
         .add(ComplexityVisitor.<Grammar>builder().setMetricDef(FlowMetric.COMPLEXITY)
             .subscribeTo(complexityAstNodeType).build())
-        .add(CommentsVisitor.<Grammar>builder().withCommentMetric(FlowMetric.COMMENT_LINES)
-            .withNoSonar(true).build())
-        .add(CounterVisitor.<Grammar>builder().setMetricDef(FlowMetric.MAPS)
-            .subscribeTo(FlowGrammar.MAP).build())
         .add(new LinesVisitor<Grammar>(FlowMetric.LINES)).build();
   }
 
+  /**
+   * This static method returns the list of available node visitors.
+   * @return List of available node visitors
+   */
+  public static List<SquidAstVisitor<Grammar>> getNodeVisitors() {
+    return ImmutableList.<SquidAstVisitor<Grammar>>builder()
+        .addAll(getDefaultNodeVisitors()).build();
+  }
+  
+  /**
+   * This static method returns the list of the required default node visitors.
+   * @return List of available required default node visitors
+   */
+  public static List<SquidAstVisitor<Grammar>> getDefaultNodeVisitors() {
+    return ImmutableList.<SquidAstVisitor<Grammar>>builder()
+        .add(ComplexityVisitor.<Grammar>builder().setMetricDef(FlowMetric.COMPLEXITY)
+            .subscribeTo(complexityAstNodeType).build())
+        .add(new LinesVisitor<Grammar>(FlowMetric.LINES)).build();
+  }
 }

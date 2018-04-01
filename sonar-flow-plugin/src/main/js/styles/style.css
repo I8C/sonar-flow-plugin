@@ -1,5 +1,9 @@
+.flow-issues div.layout-page-header-panel.layout-page-main-header.issues-main-header{
+	line-height: 18px
+}
+
 .issues-main-header .component-name {
-	line-height: 24px
+	line-height: 18px
 }
 
 .issues-main-header-spinner {

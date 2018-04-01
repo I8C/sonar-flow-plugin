@@ -2,7 +2,7 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.ws.sources;
 
 import static org.mockito.Mockito.mock;
 
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -55,8 +55,7 @@ public class FlowActionHandlerTest {
       .thenReturn("html");
     Response response = mock(Response.class);
     Stream stream = mock(Stream.class);
-    //OutputStream os = new ByteArrayOutputStream();
-    OutputStream os = new FileOutputStream("C:\\temp\\output.html");
+    OutputStream os = new ByteArrayOutputStream();
     Mockito.when(response.stream()).thenReturn(stream);
     Mockito.when(stream.output()).thenReturn(os);
     FlowActionHandler fah = new FlowActionHandler(wsContext);

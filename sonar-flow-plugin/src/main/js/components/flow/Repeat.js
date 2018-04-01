@@ -16,7 +16,7 @@ export default class Repeat extends React.PureComponent {
 				<span className="logo"></span>
 				<span className="label">{this.props.repeat.label}</span>
 				<span className="text">REPEAT</span>
-				<span className="comment">{this.props.repeat.comment!=null && (this.props.repeat.comment)}</span>
+				<span className="comment">{this.props.repeat.comment!="" && ("("+this.props.repeat.comment+")")}</span>
 				<span className="lineNr">{this.props.repeat.line}</span>
 				<ul>
 					{children}

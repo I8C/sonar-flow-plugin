@@ -15,7 +15,7 @@ export default class Map extends React.PureComponent {
 				<span className="logo"></span>
 				<span className="label">{this.props.map.label}</span>
 				<span className="text">MAP</span>
-				<span className="comment">{this.props.map.comment!=null && (this.props.map.comment)}</span>
+				<span className="comment">{this.props.map.comment!="" && ("("+this.props.map.comment+")")}</span>
 				<span className="lineNr">{this.props.map.line}</span>
 			</li>
 		);

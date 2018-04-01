@@ -18,11 +18,14 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid;
+package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.CheckList;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.DisabledCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
 
 import com.sonar.sslr.api.Grammar;
@@ -35,29 +38,31 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.squidbridge.SquidAstVisitor;
+import org.sonar.squidbridge.api.CheckMessage;
+import org.sonar.squidbridge.api.SourceFile;
 
-public class FlowAstScannerTest {
+public class DisabledCheckTest {
 
-  static final Logger logger = LoggerFactory.getLogger(FlowAstScannerTest.class);
+  static final Logger logger = LoggerFactory.getLogger(DisabledCheckTest.class);
 
-  // File flowFile = new File("src/test/resources/WmPackage/ns/WmPackage/flows/myService/flow.xml");
 
   @Test
-  public void debug() {
-    List<Class<? extends FlowCheck>> checks = CheckList.getChecks();
-    for (Class<? extends FlowCheck> check : checks) {
-      logger.debug(check.toString());
-    }
-  }
-  
-  @Test
-  public void gitFolderTest() {
-    logger.debug("Scanning file");
+  public void disabledCheck() {
     List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
     metrics.add(new SimpleMetricVisitor());
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    FlowAstScanner.scanSingleFile(new File("src/test/resources/WmPackage/.git/someFile"), checks,
-        metrics);
+    checks.add(new DisabledCheck());
 
+    String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkDisabledInvalid/flow.xml";
+    String expectedMessage = "Remove disabled code";
+
+    SourceFile sfViolation = FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
+    List<CheckMessage> violationMessages = new ArrayList<CheckMessage>(
+        sfViolation.getCheckMessages());
+    assertEquals(1, violationMessages.size());
+    assertTrue("Returned check message not as expected",
+        expectedMessage.equals(violationMessages.get(0).getDefaultMessage()));
   }
+
 }

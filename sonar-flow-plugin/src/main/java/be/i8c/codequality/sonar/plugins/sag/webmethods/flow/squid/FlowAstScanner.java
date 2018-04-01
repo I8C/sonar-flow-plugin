@@ -83,11 +83,11 @@ public class FlowAstScanner {
     builder.setCommentAnalyser(new CommentAnalyser());
     /* Metrics */
     ArrayList<SquidAstVisitor<Grammar>> metricList = new ArrayList<SquidAstVisitor<Grammar>>();
-    metricList.addAll(MetricList.getDefaultVisitors());
+    metricList.addAll(MetricList.getDefaultFlowVisitors());
     if (metrics != null) {
       metricList.addAll(metrics);
     }
-    setMetrics(builder, MetricList.getVisitors());
+    setMetrics(builder, metricList);
     /* Checks */
     for (FlowCheck flowCheck : checks) {
       builder.withSquidAstVisitor(flowCheck);

@@ -11,6 +11,7 @@ window.registerExtension('flow/flow_issues', options => {
   render(
           <FlowIssuesApp
           component={options.component}
+          className="flow-issues"
           />, el
   );
 

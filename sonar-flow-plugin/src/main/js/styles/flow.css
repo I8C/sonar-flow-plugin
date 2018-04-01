@@ -13,12 +13,19 @@
 }
 
 .flow li {
-	height: 25px;
 	padding: 5px Opx 5px 0px;
+}
+
+.flow li.pre {
+	height: 18px;
 }
 
 .flow span {
 	line-height: 25px;
+}
+
+.flow span.comment {
+	padding-left: 3px;
 }
 
 .flow .text {

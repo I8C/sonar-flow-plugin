@@ -15,7 +15,7 @@
 
 	<xsl:template match="FLOW">
 		<xsl:text>{"flow":{"children":[</xsl:text>
-			<xsl:apply-templates/>
+			<xsl:call-template name="runChildren"/>
 		<xsl:text>]}}</xsl:text>
 	</xsl:template>
 	

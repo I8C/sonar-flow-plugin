@@ -97,10 +97,7 @@ public class FlowSquidSensor implements Sensor {
             FlowLanguageProperties.IGNORE_TOPLEVEL_KEY).get() ? null
                 : CheckList.getTopLevelChecks().toArray());
     this.nodeChecks = checkFactory.<FlowCheck>create(FlowRulesDefinition.REPO_KEY)
-        .addAnnotatedChecks(CheckList.getNodeChecks().toArray())
-        .addAnnotatedChecks(config.getBoolean(
-            FlowLanguageProperties.IGNORE_TOPLEVEL_KEY).get() ? null
-                : CheckList.getTopLevelChecks().toArray());
+        .addAnnotatedChecks(CheckList.getNodeChecks().toArray());
   }
 
   @Override
@@ -117,27 +114,25 @@ public class FlowSquidSensor implements Sensor {
     logger.debug("FlowSquidSensor analysis called");
     AstScanner<Grammar> flowScanner = FlowAstScanner.create(createConfiguration(), flowChecks.all(),
         null);
-
+    logger.debug("Scanning Flow Files with " + flowChecks.all().size() + " checks active");
     FileSystem fs = context.fileSystem();
     Iterable<InputFile> flowFiles = fs.inputFiles(
         fs.predicates().and(fs.predicates().hasLanguage(FlowLanguage.KEY),
             fs.predicates().matchesPathPatterns(FlowLanguage.getFlowFilePatterns())));
-    for (InputFile flowFile : flowFiles) {
-      try {
-        logger.debug("** * Scanning File: " + flowFile.toString());
-        flowScanner.scanFile(flowFile.file());
-      } catch (Exception e) {
-        if (config.getBoolean(FlowLanguageProperties.FAIL_ON_SCANERROR).get()) {
-          throw e;
-        } else {
-          logger.error("** * Exception while scanning file, skipping.", e);
-        }
+    ArrayList<File> files = new ArrayList<File>();
+    flowFiles.forEach(file -> files.add(file.file()));
+    try {
+      flowScanner.scanFiles(files);
+    } catch (Exception e) {
+      if (config.getBoolean(FlowLanguageProperties.FAIL_ON_SCANERROR).get()) {
+        throw e;
+      } else {
+        logger.error("** * Exception while scanning file, skipping.", e);
       }
     }
     Collection<SourceCode> squidSourceFiles = flowScanner.getIndex()
         .search(new QueryByType(SourceFile.class));
     logger.debug("** Done Scanning");
-
     // Process sourceFiles
     logger.debug("** Getting Interface Files");
     getInterfaceFiles(squidSourceFiles, context);
@@ -153,7 +148,7 @@ public class FlowSquidSensor implements Sensor {
     // Scan node.ndf files
     AstScanner<Grammar> scanner = NodeAstScanner.create(createConfiguration(), nodeChecks.all(),
         null);
-    logger.debug("Scanning Interface Files");
+    logger.debug("Scanning Interface Files with " + nodeChecks.all().size() + " checks active");
     FileSystem fs = context.fileSystem();
     Iterable<InputFile> nodeFiles = fs
         .inputFiles(fs.predicates().matchesPathPatterns(FlowLanguage.getNodeFilePatterns()));
@@ -259,6 +254,7 @@ public class FlowSquidSensor implements Sensor {
 
   private void saveViolations(SensorContext context, InputFile inputFile, SourceFile squidFile) {
     Collection<CheckMessage> messages = squidFile.getCheckMessages();
+    logger.debug("+++Nr of violations found: " + messages.size());
     if (messages != null) {
       for (CheckMessage message : messages) {
         Object c = message.getCheck();

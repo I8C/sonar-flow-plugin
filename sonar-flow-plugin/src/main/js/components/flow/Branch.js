@@ -16,7 +16,7 @@ export default class Branch extends React.PureComponent {
 				<span className="logo"></span>
 				<span className="label">{this.props.branch.label}</span>
 				<span className="text">BRANCH</span>
-				<span className="comment">{this.props.branch.comment!=null && (this.props.branch.comment)}</span>
+				<span className="comment">{this.props.branch.comment!="" && ("("+this.props.branch.comment+")")}</span>
 				<span className="lineNr">{this.props.branch.line}</span>
 				<ul>
 					{children}

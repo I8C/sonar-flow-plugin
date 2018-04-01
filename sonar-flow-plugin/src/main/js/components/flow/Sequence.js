@@ -16,7 +16,7 @@ export default class Sequence extends React.PureComponent {
 				<span className="logo"></span>
 				<span className="label">{this.props.sequence.label}</span>
 				<span className="text">SEQUENCE</span>
-				<span className="comment">{this.props.sequence.comment!=null && (this.props.sequence.comment)}</span>
+				<span className="comment">{this.props.sequence.comment!="" && ("("+this.props.sequence.comment+")")}</span>
 				<span className="lineNr">{this.props.sequence.line}</span>
 				<ul>
 					{children}

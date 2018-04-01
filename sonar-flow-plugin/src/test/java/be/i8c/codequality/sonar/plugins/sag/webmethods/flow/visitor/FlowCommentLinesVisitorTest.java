@@ -18,11 +18,12 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid;
+package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor;
 
+import static org.junit.Assert.assertEquals;
+
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.metric.FlowMetric;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.CheckList;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
 
 import com.sonar.sslr.api.Grammar;
@@ -35,29 +36,39 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.squidbridge.SquidAstVisitor;
+import org.sonar.squidbridge.api.SourceFile;
 
-public class FlowAstScannerTest {
+public class FlowCommentLinesVisitorTest {
 
-  static final Logger logger = LoggerFactory.getLogger(FlowAstScannerTest.class);
-
-  // File flowFile = new File("src/test/resources/WmPackage/ns/WmPackage/flows/myService/flow.xml");
+  static final Logger logger = LoggerFactory.getLogger(FlowCommentLinesVisitorTest.class);
 
   @Test
-  public void debug() {
-    List<Class<? extends FlowCheck>> checks = CheckList.getChecks();
-    for (Class<? extends FlowCheck> check : checks) {
-      logger.debug(check.toString());
-    }
+  public void commentLinesTest() {
+    logger.debug("Scanning file");
+    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
+    metrics.add(new FlowCommentLinesVisitor<Grammar>(FlowMetric.COMMENT_LINES));
+    List<FlowCheck> checks = new ArrayList<FlowCheck>();
+
+    SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(
+        "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/commentLinesVisitor/flow.xml"),
+        checks, metrics);
+    int lines = (int) sfCorrect.getDouble(FlowMetric.COMMENT_LINES);
+    assertEquals(2, lines);
   }
   
   @Test
-  public void gitFolderTest() {
+  public void commentLinesTest2() {
     logger.debug("Scanning file");
     List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
+    metrics.add(new FlowCommentLinesVisitor<Grammar>(FlowMetric.COMMENT_LINES));
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    FlowAstScanner.scanSingleFile(new File("src/test/resources/WmPackage/.git/someFile"), checks,
-        metrics);
 
+    SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(
+        "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/commentLinesVisitor2/flow.xml"),
+        checks, metrics);
+    int lines = (int) sfCorrect.getDouble(FlowMetric.COMMENT_LINES);
+    assertEquals(0, lines);
   }
 }
