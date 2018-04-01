@@ -53,7 +53,7 @@ public class EmptyMapCheckTest {
     checks.add(new EmptyMapCheck());
 
     // Invalid
-    String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkEmptyMapInvalid/flow.xml";
     String expectedMessage 
         = "This map step in the flow is empty, create content or remove the map.";
@@ -74,7 +74,7 @@ public class EmptyMapCheckTest {
     checks.add(new EmptyMapCheck());
 
     // Valid
-    String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkEmptyMapValid/flow.xml";
 
     SourceFile sfViolation = FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);

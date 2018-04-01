@@ -51,7 +51,7 @@ public class ExitCheckTest {
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
     checks.add(new ExitCheck());
 
-    String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkExitStepInvalid/flow.xml";
 
     SourceFile sfViolation = FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);

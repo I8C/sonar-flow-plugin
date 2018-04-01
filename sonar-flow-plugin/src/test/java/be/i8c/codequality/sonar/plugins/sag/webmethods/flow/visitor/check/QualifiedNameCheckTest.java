@@ -48,7 +48,7 @@ public class QualifiedNameCheckTest {
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
     checks.add(new QualifiedNameCheck());
 
-    String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkQualityNameInvalid/flow.xml";
 
     FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);

@@ -52,7 +52,7 @@ public class EmptyFlowCheckTest {
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
     checks.add(new EmptyFlowCheck());
 
-    String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkEmptyFlowInvalid/flow.xml";
     String expectedMessage 
         = "Service doesn't contain any flow steps. Remove service or add flow steps.";

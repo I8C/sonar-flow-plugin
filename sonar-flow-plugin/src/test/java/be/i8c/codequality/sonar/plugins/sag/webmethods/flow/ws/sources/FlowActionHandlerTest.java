@@ -25,8 +25,6 @@ public class FlowActionHandlerTest {
 
   static final Logger logger = LoggerFactory.getLogger(FlowActionHandlerTest.class);
 
-  // File flowFile = new File("src/test/resources/WmPackage/ns/WmPackage/flows/myService/flow.xml");
-
   @Test
   public void handleTest() throws Exception {
     Context wsContext = mock(Context.class);
@@ -41,7 +39,7 @@ public class FlowActionHandlerTest {
       Response response = invocation.getArgument(1);
       OutputStream os = response.stream().output();
       InputStream is = this.getClass().getResourceAsStream(
-          "/WmPackage/ns/I8cFlowSonarPluginTest/pub/checkAllDebugFlowsInvalid/flow.xml");
+          "/WmTestPackage/ns/I8cFlowSonarPluginTest/pub/checkAllDebugFlowsInvalid/flow.xml");
       IOUtils.copy(is, os);
       return null;
     }).when(rawActionHandler).handle(Mockito.any(Request.class), Mockito.any(Response.class));
@@ -50,7 +48,7 @@ public class FlowActionHandlerTest {
     Mockito.when(full.getValue()).thenReturn("true");
     Mockito.when(request.getParam("full")).thenReturn(full);
     Mockito.when(request.mandatoryParam("key"))
-      .thenReturn("WmPackage/ns/I8cFlowSonarPluginTest/pub/checkAllDebugFlowsInvalid/flow.xml");
+      .thenReturn("WmTestPackage/ns/I8cFlowSonarPluginTest/pub/checkAllDebugFlowsInvalid/flow.xml");
     Mockito.when(request.mandatoryParam("type"))
       .thenReturn("html");
     Response response = mock(Response.class);

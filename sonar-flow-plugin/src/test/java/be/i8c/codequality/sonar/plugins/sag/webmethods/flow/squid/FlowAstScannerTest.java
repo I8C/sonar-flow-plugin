@@ -56,7 +56,7 @@ public class FlowAstScannerTest {
     List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
     metrics.add(new SimpleMetricVisitor());
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    FlowAstScanner.scanSingleFile(new File("src/test/resources/WmPackage/.git/someFile"), checks,
+    FlowAstScanner.scanSingleFile(new File("src/test/resources/WmTestPackage/.git/someFile"), checks,
         metrics);
 
   }

@@ -51,7 +51,7 @@ public class FlowLinesOfCodeVisitorTest {
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
 
     SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(
-        "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+        "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkLinesOfCode/flow.xml"),
         checks, metrics);
     int lines = (int) sfCorrect.getDouble(FlowMetric.LINES_OF_CODE);

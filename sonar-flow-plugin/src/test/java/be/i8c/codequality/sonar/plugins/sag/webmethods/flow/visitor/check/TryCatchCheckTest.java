@@ -56,7 +56,7 @@ public class TryCatchCheckTest {
 
     // check valid flow
     String validFlowPath 
-        = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest/pub/checkTryCatchValid/flow.xml";
+        = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest/pub/checkTryCatchValid/flow.xml";
     SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(validFlowPath), checks, metrics);
     Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
     assertEquals(0, scmCorrect.size());
@@ -71,7 +71,7 @@ public class TryCatchCheckTest {
     checks.add(new TryCatchCheck());
 
     // check invalid flow
-    String invalidFlowPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+    String invalidFlowPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkTryCatchInvalid/flow.xml";
     String expectedMessage = "Create try-catch sequence";
 

@@ -53,7 +53,7 @@ public class SavePipelineCheckTest {
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
     checks.add(new SavePipelineCheck());
 
-    String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkSavePipelineInvalid/flow.xml";
     String expectedMessage = "Remove service pub.flow:savePipeline";
 

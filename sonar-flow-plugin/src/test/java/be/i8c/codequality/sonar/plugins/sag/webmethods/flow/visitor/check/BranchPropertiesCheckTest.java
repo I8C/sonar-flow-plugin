@@ -55,7 +55,7 @@ public class BranchPropertiesCheckTest {
 
     // Check correct flow
     SourceFile sfCorrect = FlowAstScanner
-        .scanSingleFile(new File("src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+        .scanSingleFile(new File("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
             + "/pub/checkBranchPropertiesValid/flow.xml"), checks, metrics);
     Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
     assertEquals(0, scmCorrect.size());
@@ -73,7 +73,7 @@ public class BranchPropertiesCheckTest {
 
     // Check violation flow A: both switch and evaluate labels defined
     SourceFile sfViolationA = FlowAstScanner
-        .scanSingleFile(new File("src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+        .scanSingleFile(new File("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
             + "/pub/checkBranchPropertiesInvalidA/flow.xml"), checks, metrics);
     List<CheckMessage> violationAMessages = new ArrayList<CheckMessage>(
         sfViolationA.getCheckMessages());
@@ -94,7 +94,7 @@ public class BranchPropertiesCheckTest {
 
     // Check violation flow B: neither switch nor evaluate labels defined
     SourceFile sfViolationB = FlowAstScanner
-        .scanSingleFile(new File("src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+        .scanSingleFile(new File("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
             + "/pub/checkBranchPropertiesInvalidB/flow.xml"), checks, metrics);
     List<CheckMessage> violationBMessages = new ArrayList<CheckMessage>(
         sfViolationB.getCheckMessages());

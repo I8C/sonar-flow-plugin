@@ -50,7 +50,7 @@ public class FlowCommentLinesVisitorTest {
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
 
     SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(
-        "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+        "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/commentLinesVisitor/flow.xml"),
         checks, metrics);
     int lines = (int) sfCorrect.getDouble(FlowMetric.COMMENT_LINES);
@@ -65,7 +65,7 @@ public class FlowCommentLinesVisitorTest {
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
 
     SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(
-        "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+        "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/commentLinesVisitor2/flow.xml"),
         checks, metrics);
     int lines = (int) sfCorrect.getDouble(FlowMetric.COMMENT_LINES);

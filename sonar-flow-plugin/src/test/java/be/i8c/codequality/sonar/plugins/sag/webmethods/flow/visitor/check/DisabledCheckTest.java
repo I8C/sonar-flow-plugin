@@ -53,7 +53,7 @@ public class DisabledCheckTest {
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
     checks.add(new DisabledCheck());
 
-    String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkDisabledInvalid/flow.xml";
     String expectedMessage = "Remove disabled code";
 

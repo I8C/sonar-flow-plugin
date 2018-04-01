@@ -48,7 +48,7 @@ public class InterfaceCommentsCheckTest {
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
     checks.add(new InterfaceCommentsCheck());
 
-    String invalidPath = "src/test/resources/WmPackage/ns/I8cFlowSonarPluginTest"
+    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
         + "/pub/checkInterfaceCommentsInvalid/flow.xml";
 
     FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
