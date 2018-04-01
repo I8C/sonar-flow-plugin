@@ -58,6 +58,5 @@ public class FlowActionHandlerTest {
     Mockito.when(stream.output()).thenReturn(os);
     FlowActionHandler fah = new FlowActionHandler(wsContext);
     fah.handle(request, response);
-    //System.out.println(os);
-  }
+    }
 }

@@ -40,8 +40,6 @@ public class FlowAstScannerTest {
 
   static final Logger logger = LoggerFactory.getLogger(FlowAstScannerTest.class);
 
-  // File flowFile = new File("src/test/resources/WmPackage/ns/WmPackage/flows/myService/flow.xml");
-
   @Test
   public void debug() {
     List<Class<? extends FlowCheck>> checks = CheckList.getChecks();
@@ -56,7 +54,7 @@ public class FlowAstScannerTest {
     List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
     metrics.add(new SimpleMetricVisitor());
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    FlowAstScanner.scanSingleFile(new File("src/test/resources/WmTestPackage/.git/someFile"), checks,
+    FlowAstScanner.scanSingleFile(new File("src/test/resources/WmTestPackage/.gitx/someFile"), checks,
         metrics);
 
   }
