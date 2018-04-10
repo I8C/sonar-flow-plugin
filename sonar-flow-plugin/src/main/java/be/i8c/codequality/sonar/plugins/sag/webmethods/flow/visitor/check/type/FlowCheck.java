@@ -31,4 +31,5 @@ public abstract class FlowCheck extends SquidCheck<Grammar> {
   public abstract boolean isNodeCheck();
 
   public abstract boolean isTopLevelCheck();
+  
 }

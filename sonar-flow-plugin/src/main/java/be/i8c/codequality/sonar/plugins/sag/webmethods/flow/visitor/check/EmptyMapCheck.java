@@ -21,7 +21,7 @@
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
 
 import com.sonar.sslr.api.AstNode;
@@ -67,8 +67,7 @@ public class EmptyMapCheck extends FlowCheck {
       for (AstNode child : children) {
         if (child.getName().equalsIgnoreCase("MAPPING")) {
           for (AstNode child2 : child.getChildren()) {
-            if (child2.getTokenOriginalValue().equalsIgnoreCase("INVOKEINPUT")
-                || child2.getTokenOriginalValue().equalsIgnoreCase("INVOKEOUTPUT")
+            if (child2.getTokenOriginalValue().equalsIgnoreCase("MAPINVOKE")
                 || child2.getTokenOriginalValue().equalsIgnoreCase("MAPDELETE")
                 || child2.getTokenOriginalValue().equalsIgnoreCase("MAPCOPY")
                 || child2.getTokenOriginalValue().equalsIgnoreCase("MAPSET")) {

@@ -50,7 +50,8 @@ public class FlowPlugin implements Plugin {
 
     // add rules
     builder.add(FlowRulesDefinition.class, FlowSquidSensor.class);
-
+    // add rules properties
+    builder.addAll(FlowRulesDefinition.getProperties());
     // add web extensions
     builder.add(FlowWebPageDefinition.class);
     builder.add(FlowWebWs.class);

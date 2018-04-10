@@ -20,19 +20,25 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.FlowLanguage;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.settings.FlowLanguageProperties;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.utils.FlowUtils;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckProperty;
 
 import com.sonar.sslr.api.AstNode;
 
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.PropertyType;
+import org.sonar.api.resources.Qualifiers;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.check.RuleProperty;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 /**
@@ -45,33 +51,44 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
     priority = Priority.MAJOR,
     tags = {Tags.BAD_PRACTICE })
 @SqaleConstantRemediation("1min")
+@FlowCheckProperty(category = FlowLanguageProperties.FLOW_CATEGORY,
+    defaultValue = QualifiedNameCheck.QUALIFIED_NAME_DEFVALUE, 
+    description = "Regular expression for wich the qualified name should comply", 
+    key = QualifiedNameCheck.QUALIFIED_NAME_KEY, 
+    name = "Qualified name check", 
+    onQualifiers = Qualifiers.PROJECT, 
+    subCategory = FlowLanguageProperties.FLOW_SUBCATEGORY_CHECKS, 
+    type = PropertyType.REGULAR_EXPRESSION)
 public class QualifiedNameCheck extends FlowCheck {
 
   static final Logger logger = LoggerFactory.getLogger(QualifiedNameCheck.class);
-
-  private static final String DEFAULT_NC 
+  
+  static final String QUALIFIED_NAME_KEY = "sonar.flow.check.qn";
+  static final String QUALIFIED_NAME_DEFVALUE 
       = "[A-Z][a-z0-9]*[A-Z0-9][a-z0-9]+[A-Z.a-z0-9]*:[a-z]+[A-Z0-9][a-z0-9]+[A-Za-z0-9]*";
 
-  @RuleProperty(key = "Naming convention",
-      description = "Regular expression defining the naming convention of flow assets",
-      defaultValue = "" + DEFAULT_NC)
-  private String namingConvention = DEFAULT_NC;
+  private String namingConvention;
   private Pattern pattern;
 
   @Override
   public void init() {
     logger.debug("++ Initializing {} ++", this.getClass().getName());
-    pattern = Pattern.compile(namingConvention);
     subscribeTo(FlowGrammar.FLOW);
   }
-
+  
+  @Override
+  public void visitFile(@Nullable AstNode astNode) {
+    namingConvention = FlowLanguage.getConfig().get(QUALIFIED_NAME_KEY).get();
+    pattern = Pattern.compile(namingConvention);
+  }
+  
   @Override
   public void visitNode(AstNode astNode) {
     String service = FlowUtils.getQualifiedName(this.getContext().getFile());
     logger.debug("Service found: " + service);
     if (!pattern.matcher(service).matches()) {
       getContext().createLineViolation(this,
-          "Flow name " + service + " does not conform to the naming convention", astNode);
+          "Flow name " + service + " does not conform to the naming convention \"" + namingConvention + "\"", astNode);
     }
   }
 

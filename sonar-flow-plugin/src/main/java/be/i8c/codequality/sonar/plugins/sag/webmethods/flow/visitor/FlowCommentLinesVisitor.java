@@ -21,7 +21,7 @@
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowTypes;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowTypes;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.type.FlowVisitor;
 
 import com.sonar.sslr.api.AstNode;

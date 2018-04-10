@@ -20,14 +20,15 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
 
-import static be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowAttTypes;
-import static be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer.FlowTypes;
-
 import static com.sonar.sslr.api.GenericTokenType.EOF;
 import static com.sonar.sslr.api.GenericTokenType.IDENTIFIER;
 import static com.sonar.sslr.api.GenericTokenType.LITERAL;
 
 import com.sonar.sslr.api.Grammar;
+
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttIdentifierTypes;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowTypes;
 
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.grammar.LexerfulGrammarBuilder;
@@ -52,7 +53,7 @@ public enum FlowGrammar implements GrammarRuleKey {
 
   DATA, VALUES, RECORD, VALUE, NUMBER, ARRAY,
 
-  UNDEF_ATT, ATTRIBUTES;
+  UNDEF_ATT, ATTRIBUTES, REC_FIELDS;
 
   /**
    * Creates the flow grammar.
@@ -107,7 +108,6 @@ public enum FlowGrammar implements GrammarRuleKey {
         FlowTypes.START_MAPINVOKE, 
         ATTRIBUTES, b.optional(COMMENT), b.oneOrMore(MAP), 
         FlowTypes.STOP_MAPINVOKE);
-
     b.rule(DATA).is(
         FlowTypes.START_DATA, ATTRIBUTES, b.optional(VALUES), FlowTypes.STOP_DATA);
     b.rule(VALUES).is(
@@ -116,8 +116,13 @@ public enum FlowGrammar implements GrammarRuleKey {
         FlowTypes.STOP_VALUES);
     b.rule(RECORD).is(
         FlowTypes.START_RECORD,
-        ATTRIBUTES, b.zeroOrMore(b.firstOf(VALUE, ARRAY, RECORD, NUMBER)), 
+        ATTRIBUTES, b.zeroOrMore(b.firstOf(VALUE, ARRAY, RECORD, NUMBER, REC_FIELDS)), 
         FlowTypes.STOP_RECORD);
+    b.rule(REC_FIELDS).is(
+        FlowTypes.START_ARRAY, 
+        FlowAttIdentifierTypes.REC_FIELDS,ATTRIBUTES,
+        b.zeroOrMore(b.firstOf(VALUE, ARRAY, RECORD)), 
+        FlowTypes.STOP_ARRAY);
     b.rule(VALUE).is(
         FlowTypes.START_VALUE, 
         ATTRIBUTES, b.zeroOrMore(FlowTypes.ELEMENT_VALUE), 

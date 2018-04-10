@@ -35,6 +35,10 @@ import org.sonar.api.resources.Qualifiers;
 public class FlowLanguageProperties {
 
   public static final String FLOW_CATEGORY = "flow";
+  public static final String FLOW_SUBCATEGORY_FLOW = "Flow files";
+  public static final String FLOW_SUBCATEGORY_NODE = "Node files";
+  public static final String FLOW_SUBCATEGORY_SCANNER = "Scanner";
+  public static final String FLOW_SUBCATEGORY_CHECKS = "Cheks";
   
   public static final String FLOW_FILE_SUFFIXES_KEY = "sonar.flow.file.suffixes";
   public static final String FLOW_FILE_SUFFIXES_DEFVALUE = "xml";
@@ -59,7 +63,7 @@ public class FlowLanguageProperties {
   }
 
   /**
-   * Get the list of properties.
+   * Get the list of language properties.
    * @return list of properties
    */
   public static List<Object> getProperties() {
@@ -69,7 +73,7 @@ public class FlowLanguageProperties {
             .name("Flow file suffixes")
             .type(PropertyType.STRING)
             .category(FLOW_CATEGORY)
-            .subCategory("General")
+            .subCategory(FLOW_SUBCATEGORY_FLOW)
             .description("Comma-separated list extensions for flow files to analyze.")
             .onQualifiers(Qualifiers.PROJECT).build())
         .add(
@@ -77,30 +81,30 @@ public class FlowLanguageProperties {
             .name("Node file suffixes")
             .type(PropertyType.STRING)
             .category(FLOW_CATEGORY)
-            .subCategory("General")
+            .subCategory(FLOW_SUBCATEGORY_NODE)
             .description("Comma-separated list of extensions for node files to analyze.")
             .onQualifiers(Qualifiers.PROJECT).build())
         .add(
         PropertyDefinition.builder(FLOW_FILE_FILTER_KEY).defaultValue(FLOW_FILE_FILTER_DEFVALUE)
-            .name("Flow file suffixes")
-            .type(PropertyType.STRING)
+            .name("Flow file pattern")
+            .type(PropertyType.REGULAR_EXPRESSION)
             .category(FLOW_CATEGORY)
-            .subCategory("General")
-            .description("Comma-separated list patterns for flow files to analyze.")
+            .subCategory(FLOW_SUBCATEGORY_FLOW)
+            .description("Regex pattern for flow files to analyze.")
             .onQualifiers(Qualifiers.PROJECT).build())
         .add(
         PropertyDefinition.builder(NODE_FILE_FILTER_KEY).defaultValue(NODE_FILE_FILTER_DEFVALUE)
-            .name("Node file suffixes")
-            .type(PropertyType.STRING)
+            .name("Node file patterns")
+            .type(PropertyType.REGULAR_EXPRESSION)
             .category(FLOW_CATEGORY)
-            .subCategory("General")
-            .description("Comma-separated list of patterns for node files to analyze.")
+            .subCategory(FLOW_SUBCATEGORY_NODE)
+            .description("Regex patterns for node files to analyze.")
             .onQualifiers(Qualifiers.PROJECT).build(),
         PropertyDefinition.builder(IGNORE_TOPLEVEL_KEY).defaultValue(IGNORE_TOPLEVEL_DEFVALUE)
             .name("Ignore top-level services")
             .type(PropertyType.BOOLEAN)
             .category(FLOW_CATEGORY)
-            .subCategory("General")
+            .subCategory(FLOW_SUBCATEGORY_CHECKS)
             .description("Ignore top-level service checks")
             .onQualifiers(Qualifiers.PROJECT).build())
         .add(
@@ -108,7 +112,7 @@ public class FlowLanguageProperties {
             .name("Fail on scan error")
             .type(PropertyType.BOOLEAN)
             .category(FLOW_CATEGORY)
-            .subCategory("General")
+            .subCategory(FLOW_SUBCATEGORY_SCANNER)
             .description("Scanning process fails when a scanning a single file fails")
             .onQualifiers(Qualifiers.PROJECT).build());
     return props.build();

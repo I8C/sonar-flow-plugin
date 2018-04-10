@@ -20,7 +20,9 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.channels.sax;
 
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowLexer;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttIdentifierTypes;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowTypes;
 
 import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Token;
@@ -55,40 +57,77 @@ public class FlowContentHandler extends DefaultHandler {
   @Override
   public void startElement(String uri, String name, String qualifiedName, Attributes atts) {
     int line = locator.getLineNumber();
-    int column = locator.getColumnNumber();
-    if (FlowLexer.FlowTypes.isInEnum("START_" + name.toUpperCase())) {
-      logger.debug("Start element: " + qualifiedName + "[" + line + "," + column + "]" + "[START_"
-          + name.toUpperCase() + "]");
-      Token token = tokenBuilder.setType(FlowLexer.FlowTypes.valueOf("START_" + name.toUpperCase()))
-          .setValueAndOriginalValue(name.toUpperCase(), name).setURI(lex.getURI()).setLine(line)
-          .setColumn(0).build();
-      lex.addToken(token);
+    //int column = locator.getColumnNumber();
+    
+    if (FlowTypes.isInEnum("START_" + name.toUpperCase())) {
+      // KNOWN TYPE
+      createStartToken(lex, name, line);
       // CHECK THE ATTRIBUTES
       for (int i = 0; i < atts.getLength(); i++) {
-        if (FlowLexer.FlowAttTypes.isInEnum(atts.getQName(i).toUpperCase())) {
-          token = tokenBuilder
-              .setType(FlowLexer.FlowAttTypes.getEnum(atts.getQName(i).toUpperCase()))
-              .setValueAndOriginalValue(atts.getValue(i).toUpperCase(), atts.getValue(i))
-              .setURI(lex.getURI()).setLine(line).setColumn(0).build();
-          lex.addToken(token);
-          logger.debug(
-              "TOKEN " + token.getValue() + "[" + token.getLine() + "," + token.getColumn() + "]");
-        } else {
-          token = tokenBuilder.setType(GenericTokenType.IDENTIFIER)
-              .setValueAndOriginalValue(atts.getQName(i)).setURI(lex.getURI()).setLine(line)
-              .setColumn(0).build();
-          lex.addToken(token);
-          logger.debug("IDENTIFIER " + token.getValue() + "[" + token.getLine() + ","
-              + token.getColumn() + "]");
-          token = tokenBuilder.setType(GenericTokenType.LITERAL)
-              .setValueAndOriginalValue(atts.getValue(i)).setURI(lex.getURI()).setLine(line)
-              .setColumn(0).build();
-          lex.addToken(token);
-          logger.debug("LITERAL " + token.getValue() + "[" + token.getLine() + ","
-              + token.getColumn() + "]");
-        }
+        createAttributeToken(lex, atts, i, line);
       }
     }
+  }
+  
+  private void createAttributeToken(Lexer lex, Attributes atts, int i, int line) {
+    if (FlowAttIdentifierTypes.isInEnum(atts.getQName(i).toUpperCase(), atts.getValue(i))) {
+      // IDENTIFER ATTRIBUTE
+      Token token = tokenBuilder
+          .setType(FlowAttIdentifierTypes.getEnum(atts.getQName(i).toUpperCase(), atts.getValue(i)))
+          .setURI(lex.getURI()).setLine(line).setColumn(0).build();
+      lex.addToken(token);
+      logger.debug(
+          "TOKEN " + token.getValue() + "[" + token.getLine() + "," + token.getColumn() + "]");
+    } else if (FlowAttTypes.isInEnum(atts.getQName(i).toUpperCase())) {
+      // KNOWN ATTRIBUTE
+      Token token = tokenBuilder
+          .setType(FlowAttTypes.getEnum(atts.getQName(i).toUpperCase()))
+          .setValueAndOriginalValue(atts.getValue(i).toUpperCase(), atts.getValue(i))
+          .setURI(lex.getURI()).setLine(line).setColumn(0).build();
+      lex.addToken(token);
+      logger.debug(
+          "TOKEN " + token.getValue() + "[" + token.getLine() + "," + token.getColumn() + "]");
+    } else {
+      // UNKNOWN ATTRIBUTE
+      Token token = tokenBuilder.setType(GenericTokenType.IDENTIFIER)
+          .setValueAndOriginalValue(atts.getQName(i)).setURI(lex.getURI()).setLine(line)
+          .setColumn(0).build();
+      lex.addToken(token);
+      logger.debug("IDENTIFIER " + token.getValue() + "[" + token.getLine() + ","
+          + token.getColumn() + "]");
+      token = tokenBuilder.setType(GenericTokenType.LITERAL)
+          .setValueAndOriginalValue(atts.getValue(i)).setURI(lex.getURI()).setLine(line)
+          .setColumn(0).build();
+      lex.addToken(token);
+      logger.debug("LITERAL " + token.getValue() + "[" + token.getLine() + ","
+          + token.getColumn() + "]");
+    }
+  }
+
+  private void createStartToken(Lexer lex, String name, int line) {
+    Token token = tokenBuilder.setType(FlowTypes.valueOf("START_" + name.toUpperCase()))
+        .setValueAndOriginalValue(name.toUpperCase(), name).setURI(lex.getURI()).setLine(line)
+        .setColumn(0).build();
+    lex.addToken(token);
+  }
+  
+  private void createEndToken(Lexer lex, String name, int line, int column) {
+    Token token = tokenBuilder.setType(FlowTypes.valueOf("STOP_" + name.toUpperCase()))
+        .setValueAndOriginalValue(name.toUpperCase(), name).setURI(lex.getURI()).setLine(line)
+        .setColumn(column).build();
+    lex.addToken(token);
+  }
+
+  private void createElementValueToken(Lexer lex, int line, int column) {
+    String value = chars.toString();
+    if (ignoreWs && !value.trim().replace("\n", "").replace("\r", "").equals("")) {
+      logger.debug("element value" + "[" + line + "," + column + "]");
+      Token token = tokenBuilder.setType(FlowTypes.ELEMENT_VALUE)
+          .setValueAndOriginalValue(value).setURI(lex.getURI()).setLine(charsLine)
+          .setColumn(charsColumn).build();
+      lex.addToken(token);
+    }
+    chars = new StringBuilder();
   }
   
   @Override
@@ -96,25 +135,13 @@ public class FlowContentHandler extends DefaultHandler {
     int line = locator.getLineNumber();
     int column = locator.getColumnNumber();
     if (chars.length() > 0) {
-      String value = chars.toString();
-      if (ignoreWs && !value.trim().replace("\n", "").replace("\r", "").equals("")) {
-        logger.debug("element value" + "[" + line + "," + column + "]");
-        Token token = tokenBuilder.setType(FlowLexer.FlowTypes.ELEMENT_VALUE)
-            .setValueAndOriginalValue(value).setURI(lex.getURI()).setLine(charsLine)
-            .setColumn(charsColumn).build();
-        lex.addToken(token);
-      }
-      chars = new StringBuilder();
+      createElementValueToken(lex, line, column);
     }
-    if (FlowLexer.FlowTypes.isInEnum("STOP_" + name.toUpperCase())) {
-      logger.debug("Stop element: " + qualifiedName + "[" + line + "," + column + "]");
-      Token token = tokenBuilder.setType(FlowLexer.FlowTypes.valueOf("STOP_" + name.toUpperCase()))
-          .setValueAndOriginalValue(name.toUpperCase(), name).setURI(lex.getURI()).setLine(line)
-          .setColumn(column).build();
-      lex.addToken(token);
+    if (FlowTypes.isInEnum("STOP_" + name.toUpperCase())) {
+      createEndToken(lex, name, line, column);
     }
   }
-  
+
   @Override
   public void characters(char[] ch, int start, int length) {
     charsLine = locator.getLineNumber();

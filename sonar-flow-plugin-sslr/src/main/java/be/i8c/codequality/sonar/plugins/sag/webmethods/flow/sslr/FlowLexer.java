@@ -22,12 +22,8 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.channels.SaxChannel;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.TokenType;
 import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
-
-import java.util.Arrays;
 
 /**
  * This lexer defines the tags of the flow xml file.
@@ -38,99 +34,7 @@ public class FlowLexer {
 
   private FlowLexer() {
   }
-
-  public static enum FlowTypes implements TokenType {
-
-    START_FLOW, STOP_FLOW, START_SEQUENCE, STOP_SEQUENCE, START_INVOKE, STOP_INVOKE, 
-    
-    START_LOOP, STOP_LOOP, START_BRANCH, STOP_BRANCH, START_EXIT, STOP_EXIT, 
-    
-    START_RETRY, STOP_RETRY, START_MAP, STOP_MAP, START_MAPTARGET, STOP_MAPTARGET, 
-    
-    START_MAPSOURCE, STOP_MAPSOURCE, START_MAPDELETE, STOP_MAPDELETE, START_MAPSET, STOP_MAPSET,
-    
-    START_MAPCOPY, STOP_MAPCOPY, START_MAPINVOKE, STOP_MAPINVOKE, START_DATA, STOP_DATA,
-    
-    START_VALUES, STOP_VALUES, START_RECORD, STOP_RECORD, START_VALUE, STOP_VALUE, 
-    
-    START_NUMBER, STOP_NUMBER, START_ARRAY, STOP_ARRAY, START_BOOLEAN, STOP_BOOLEAN,
-
-    ELEMENT_VALUE(false), START_COMMENT, STOP_COMMENT;
-
-    public static boolean isInEnum(String value) {
-      return Arrays.stream(FlowTypes.values()).anyMatch(e -> e.name().equals(value));
-    }
-
-    private boolean skip = true;
-    
-    private FlowTypes() {}
-
-    private FlowTypes(boolean skip) {
-      this.skip = skip;
-    }
-    
-    @Override
-    public String getName() {
-      return name();
-    }
-
-    @Override
-    public String getValue() {
-      return null;
-    }
-
-    @Override
-    public boolean hasToBeSkippedFromAst(AstNode node) {
-      return skip;
-    }
-
-  }
-
-  public static enum FlowAttTypes implements TokenType {
-    SERVICE, EXITON("EXIT-ON"), MODE, NAME, DISABLED, FROM, SIGNAL, FAILUREMESSAGE(
-        "FAILURE-MESSAGE"), SWITCH, LABELEXPRESSIONS;
-
-    private String attName;
-
-    public static boolean isInEnum(String value) {
-      return Arrays.stream(FlowAttTypes.values())
-          .anyMatch(e -> e.getAttName().equalsIgnoreCase(value));
-    }
-
-    public static FlowAttTypes getEnum(String value) {
-      return Arrays.stream(FlowAttTypes.values())
-          .filter(e -> e.getAttName().equalsIgnoreCase(value)).findFirst().get();
-    }
-
-    private FlowAttTypes() {
-      this.attName = name();
-    }
-
-    private FlowAttTypes(String name) {
-      this.attName = name;
-    }
-
-    public String getAttName() {
-      return this.attName;
-    }
-
-    @Override
-    public String getName() {
-      return name();
-    }
-
-    @Override
-    public String getValue() {
-      return null;
-    }
-
-    @Override
-    public boolean hasToBeSkippedFromAst(AstNode node) {
-      return false;
-    }
-
-  }
-
+  
   /**
    * Creates this lexer.
    * @param conf

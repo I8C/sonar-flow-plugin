@@ -24,6 +24,7 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.settings.FlowLanguag
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -47,7 +48,15 @@ public class FlowLanguage extends AbstractLanguage {
     super(KEY, NAME);
     FlowLanguage.config = config;
   }
+  
+  public static Configuration getConfig() {
+    return config;
+  }
 
+  public static void setConfig(Configuration config) {
+    FlowLanguage.config = config;
+  }
+  
   @Override
   public String[] getFileSuffixes() {
     String[] suffixes = (String[]) ArrayUtils.addAll(getFlowFileSuffixes(), getNodeFileSuffixes());
@@ -73,31 +82,23 @@ public class FlowLanguage extends AbstractLanguage {
   }
 
   /**
-   * This methods returns the configured suffixes for flow files.
+   * This methods returns the configured pattern for flow files.
    * 
-   * @return Array of suffixes for flow files
+   * @return Pattern for flow files
    */
   public static String[] getFlowFilePatterns() {
-    String[] suffixes = filterEmptyStrings(
-        config.getStringArray(FlowLanguageProperties.FLOW_FILE_FILTER_KEY));
-    if (suffixes.length == 0) {
-      suffixes = StringUtils.split(FlowLanguageProperties.FLOW_FILE_FILTER_DEFVALUE, ",");
-    }
-    return suffixes;
+    Optional<String> suffix = config.get(FlowLanguageProperties.FLOW_FILE_FILTER_KEY);
+    return new String[] {suffix.orElse(".*")};
   }
 
   /**
-   * This methods returns the configured suffixes for node files.
-   * 
-   * @return Array of suffixes for node files
+   * This methods returns the configured pattern for node files.
+   * s
+   * @return Pattern for node files
    */
   public static String[] getNodeFilePatterns() {
-    String[] suffixes = filterEmptyStrings(
-        config.getStringArray(FlowLanguageProperties.NODE_FILE_FILTER_KEY));
-    if (suffixes.length == 0) {
-      suffixes = StringUtils.split(FlowLanguageProperties.NODE_FILE_FILTER_DEFVALUE, ",");
-    }
-    return suffixes;
+    Optional<String> suffix = config.get(FlowLanguageProperties.NODE_FILE_FILTER_KEY);
+    return new String[] {suffix.orElse(".*")};
   }
 
   private static String[] filterEmptyStrings(String[] stringArray) {

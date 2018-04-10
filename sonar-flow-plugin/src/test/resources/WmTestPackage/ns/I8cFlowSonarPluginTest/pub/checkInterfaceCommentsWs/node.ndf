@@ -1,0 +1,968 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Values version="2.0">
+  <value name="node_type">webServiceDescriptor</value>
+  <value name="node_nsName">test.pub.appManAgent.in.ws:appManAgent_v1_0</value>
+  <value name="node_pkg">TEST_AppManAgent</value>
+  <Boolean name="inbound">true</Boolean>
+  <Boolean name="WSICompliant">false</Boolean>
+  <value name="SOAPProtocol">SOAP 1.1 Protocol</value>
+  <value name="targetNamespace">http://www.demo.be/test/appManAgent_v1_0</value>
+  <Boolean name="attachmentEnabled">false</Boolean>
+  <number name="mtomThreshold" type="Integer">0</number>
+  <value name="WSDLURL">http://server.demo:3000/ws/test.pub.appManAgent.in.ws:appManAgent_v1_0?WSDL</value>
+  <value name="externalWSDL">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;wsdl:definitions xmlns:tns="http://www.demo.be/test/appManAgent_v1_0" xmlns:ama="http://www.demo.be/TEST/AppManAgent/2012-09-06" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="appManAgent" targetNamespace="http://www.demo.be/test/appManAgent_v1_0"&gt;
+	&lt;wsdl:types&gt;
+		&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.demo.be/test/appManAgent_v1_0" xmlns:ama="http://www.demo.be/TEST/AppManAgent/2012-09-06" targetNamespace="http://www.demo.be/test/appManAgent_v1_0"&gt;
+			&lt;xsd:import namespace="http://www.demo.be/TEST/AppManAgent/2012-09-06" schemaLocation="file:///C:/LocalData/TEMP/appManAgent.xsd"/&gt;
+			&lt;xsd:complexType name="pingApplication"&gt;
+				&lt;xsd:sequence&gt;
+					&lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+				&lt;/xsd:sequence&gt;
+			&lt;/xsd:complexType&gt;
+			&lt;xsd:complexType name="pingApplicationResponse"&gt;
+				&lt;xsd:sequence&gt;
+					&lt;xsd:element name="state" nillable="true" type="xsd:string"/&gt;
+				&lt;/xsd:sequence&gt;
+			&lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="getApplicationState"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="getApplicationStateResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="application" nillable="true" type="ama:ApplicationType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="suspendApplication"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="reason" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="suspendApplicationResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="application" nillable="true" type="ama:ApplicationType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="resumeApplication"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="reason" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="resumeApplicationResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="application" nillable="true" type="ama:ApplicationType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="getServerState"&gt;
+            &lt;xsd:sequence&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="getServerStateResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationList" nillable="true" type="ama:ApplicationListType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="suspendServer"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="reason" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="suspendServerResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationList" nillable="true" type="ama:ApplicationListType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="resumeServer"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="reason" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="resumeServerResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationList" nillable="true" type="ama:ApplicationListType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="getAssetGroupState"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="assetGroupID" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="getAssetGroupStateResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="assetGroup" nillable="true" type="ama:AssetGroupType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="suspendAssetGroup"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="assetGroupID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="reason" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="suspendAssetGroupResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="assetGroup" nillable="true" type="ama:AssetGroupType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="resumeAssetGroup"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="assetGroupID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="reason" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="resumeAssetGroupResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="assetGroup" nillable="true" type="ama:AssetGroupType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+			&lt;xsd:complexType name="getAssetState"&gt;
+				&lt;xsd:sequence&gt;
+					&lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+					&lt;xsd:element name="assetGroupID" nillable="true" type="xsd:string"/&gt;
+					&lt;xsd:element name="assetID" nillable="true" type="xsd:string"/&gt;
+				&lt;/xsd:sequence&gt;
+			&lt;/xsd:complexType&gt;
+			&lt;xsd:complexType name="getAssetStateResponse"&gt;
+				&lt;xsd:sequence&gt;
+					&lt;xsd:element name="asset" nillable="true" type="ama:AssetType"/&gt;
+				&lt;/xsd:sequence&gt;
+			&lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="suspendAsset"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="assetGroupID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="assetID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="reason" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="suspendAssetResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="asset" nillable="true" type="ama:AssetType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="resumeAsset"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="applicationID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="assetGroupID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="assetID" nillable="true" type="xsd:string"/&gt;
+              &lt;xsd:element name="reason" nillable="true" type="xsd:string"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+          &lt;xsd:complexType name="resumeAssetResponse"&gt;
+            &lt;xsd:sequence&gt;
+              &lt;xsd:element name="asset" nillable="true" type="ama:AssetType"/&gt;
+            &lt;/xsd:sequence&gt;
+          &lt;/xsd:complexType&gt;
+
+			&lt;xsd:element name="pingApplication" type="tns:pingApplication"/&gt;
+			&lt;xsd:element name="pingApplicationResponse" type="tns:pingApplicationResponse"/&gt;
+   			&lt;xsd:element name="getApplicationState" type="tns:getApplicationState"/&gt;
+			&lt;xsd:element name="getApplicationStateResponse" type="tns:getApplicationStateResponse"/&gt;
+			&lt;xsd:element name="suspendApplication" type="tns:suspendApplication"/&gt;
+			&lt;xsd:element name="suspendApplicationResponse" type="tns:suspendApplicationResponse"/&gt;
+			&lt;xsd:element name="resumeApplication" type="tns:resumeApplication"/&gt;
+			&lt;xsd:element name="resumeApplicationResponse" type="tns:resumeApplicationResponse"/&gt;
+			&lt;xsd:element name="getServerState" type="tns:getServerState"/&gt;
+			&lt;xsd:element name="getServerStateResponse" type="tns:getServerStateResponse"/&gt;
+			&lt;xsd:element name="suspendServer" type="tns:suspendServer"/&gt;
+			&lt;xsd:element name="suspendServerResponse" type="tns:suspendServerResponse"/&gt;
+			&lt;xsd:element name="resumeServer" type="tns:resumeServer"/&gt;
+			&lt;xsd:element name="resumeServerResponse" type="tns:resumeServerResponse"/&gt;
+			&lt;xsd:element name="getAssetGroupState" type="tns:getAssetGroupState"/&gt;
+			&lt;xsd:element name="getAssetGroupStateResponse" type="tns:getAssetGroupStateResponse"/&gt;
+			&lt;xsd:element name="suspendAssetGroup" type="tns:suspendAssetGroup"/&gt;
+			&lt;xsd:element name="suspendAssetGroupResponse" type="tns:suspendAssetGroupResponse"/&gt;
+			&lt;xsd:element name="resumeAssetGroup" type="tns:resumeAssetGroup"/&gt;
+			&lt;xsd:element name="resumeAssetGroupResponse" type="tns:resumeAssetGroupResponse"/&gt;
+			&lt;xsd:element name="getAssetState" type="tns:getAssetState"/&gt;
+			&lt;xsd:element name="getAssetStateResponse" type="tns:getAssetStateResponse"/&gt;
+			&lt;xsd:element name="suspendAsset" type="tns:suspendAsset"/&gt;
+			&lt;xsd:element name="suspendAssetResponse" type="tns:suspendAssetResponse"/&gt;
+			&lt;xsd:element name="resumeAsset" type="tns:resumeAsset"/&gt;
+			&lt;xsd:element name="resumeAssetResponse" type="tns:resumeAssetResponse"/&gt;
+		&lt;/xsd:schema&gt;
+	&lt;/wsdl:types&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_suspendServerResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:suspendServerResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_suspendAssetResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:suspendAssetResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_resumeApplication"&gt;
+    &lt;wsdl:part name="parameters" element="tns:resumeApplication"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_resumeAssetResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:resumeAssetResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_getApplicationState"&gt;
+    &lt;wsdl:part name="parameters" element="tns:getApplicationState"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_suspendApplication"&gt;
+    &lt;wsdl:part name="parameters" element="tns:suspendApplication"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_getAssetGroupStateResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:getAssetGroupStateResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_pingApplication"&gt;
+    &lt;wsdl:part name="parameters" element="tns:pingApplication"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_getAssetState"&gt;
+    &lt;wsdl:part name="parameters" element="tns:getAssetState"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_getServerState"&gt;
+    &lt;wsdl:part name="parameters" element="tns:getServerState"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_suspendAssetGroup"&gt;
+    &lt;wsdl:part name="parameters" element="tns:suspendAssetGroup"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_resumeAsset"&gt;
+    &lt;wsdl:part name="parameters" element="tns:resumeAsset"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_suspendAssetGroupResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:suspendAssetGroupResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_suspendAsset"&gt;
+    &lt;wsdl:part name="parameters" element="tns:suspendAsset"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_resumeAssetGroup"&gt;
+    &lt;wsdl:part name="parameters" element="tns:resumeAssetGroup"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_resumeServerResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:resumeServerResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_resumeServer"&gt;
+    &lt;wsdl:part name="parameters" element="tns:resumeServer"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_pingApplicationResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:pingApplicationResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_suspendApplicationResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:suspendApplicationResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_getServerStateResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:getServerStateResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_getAssetStateResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:getAssetStateResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_resumeAssetGroupResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:resumeAssetGroupResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_getApplicationStateResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:getApplicationStateResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_suspendServer"&gt;
+    &lt;wsdl:part name="parameters" element="tns:suspendServer"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_getAssetGroupState"&gt;
+    &lt;wsdl:part name="parameters" element="tns:getAssetGroupState"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:mtestge name="appManAgent_PortType_resumeApplicationResponse"&gt;
+    &lt;wsdl:part name="parameters" element="tns:resumeApplicationResponse"&gt;
+    &lt;/wsdl:part&gt;
+  &lt;/wsdl:mtestge&gt;
+  &lt;wsdl:portType name="appManAgent_PortType"&gt;
+    &lt;wsdl:operation name="getApplicationState"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_getApplicationState"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_getApplicationStateResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="getAssetGroupState"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_getAssetGroupState"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_getAssetGroupStateResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="getAssetState"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_getAssetState"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_getAssetStateResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="getServerState"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_getServerState"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_getServerStateResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="pingApplication"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_pingApplication"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_pingApplicationResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="resumeApplication"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_resumeApplication"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_resumeApplicationResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="resumeAsset"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_resumeAsset"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_resumeAssetResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="resumeAssetGroup"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_resumeAssetGroup"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_resumeAssetGroupResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="resumeServer"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_resumeServer"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_resumeServerResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="suspendApplication"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_suspendApplication"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_suspendApplicationResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="suspendAsset"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_suspendAsset"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_suspendAssetResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="suspendAssetGroup"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_suspendAssetGroup"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_suspendAssetGroupResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="suspendServer"&gt;
+      &lt;wsdl:input mtestge="tns:appManAgent_PortType_suspendServer"&gt;
+    &lt;/wsdl:input&gt;
+      &lt;wsdl:output mtestge="tns:appManAgent_PortType_suspendServerResponse"&gt;
+    &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+  &lt;/wsdl:portType&gt;
+  &lt;wsdl:binding name="test_pub_appManAgent_appManAgent_Binder" type="tns:appManAgent_PortType"&gt;
+    &lt;soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/&gt;
+    &lt;wsdl:operation name="getApplicationState"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_getApplicationState" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="getAssetGroupState"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_getAssetGroupState" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="getAssetState"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_getAssetState" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="getServerState"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_getServerState" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="pingApplication"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_pingApplication" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="resumeApplication"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_resumeApplication" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="resumeAsset"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_resumeAsset" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="resumeAssetGroup"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_resumeAssetGroup" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="resumeServer"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_resumeServer" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="suspendApplication"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_suspendApplication" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="suspendAsset"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_suspendAsset" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="suspendAssetGroup"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_suspendAssetGroup" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+    &lt;wsdl:operation name="suspendServer"&gt;
+      &lt;soap:operation soapAction="test_pub_appManAgent_appManAgent_Binder_suspendServer" style="document"/&gt;
+      &lt;wsdl:input&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:input&gt;
+      &lt;wsdl:output&gt;
+        &lt;soap:body parts="parameters" use="literal"/&gt;
+      &lt;/wsdl:output&gt;
+    &lt;/wsdl:operation&gt;
+  &lt;/wsdl:binding&gt;
+  &lt;wsdl:service name="appManAgent"&gt;
+    &lt;wsdl:port name="test_pub_appManAgent_appManAgent_Port" binding="tns:test_pub_appManAgent_appManAgent_Binder"&gt;
+      &lt;soap:address location="http://10.50.48.51:3000/ws/test.pub.appManAgent.in.ws:appManAgent_v1_0"/&gt;
+    &lt;/wsdl:port&gt;
+  &lt;/wsdl:service&gt;
+&lt;/wsdl:definitions&gt;
+</value>
+  <value name="externalWSDLURL">file:/C:/LocalData/TEMP/appManAgent_v1_0.wsdl</value>
+  <value name="definitionName">appManAgent</value>
+  <array name="handlerList" type="record" depth="1">
+  </array>
+  <array name="binderList" type="record" depth="1">
+    <record javaclass="com.wm.util.Values">
+      <value name="binderName">test_pub_appManAgent_appManAgent_Binder</value>
+      <value name="portAlias">default</value>
+      <value name="bindingName">test_pub_appManAgent_appManAgent_Binder</value>
+      <value name="bindingStyle">document</value>
+      <value name="bindingUse">literal</value>
+      <value name="bindingType">SOAP</value>
+      <value name="portName">test_pub_appManAgent_appManAgent_Port</value>
+      <value name="portTypeName">appManAgent_PortType</value>
+      <value name="bindingTransport">http://schemas.xmlsoap.org/soap/http</value>
+      <value name="transportType">http</value>
+      <record name="operationMap" javaclass="com.wm.util.Values">
+        <value name="test_pub_appManAgent_appManAgent_Binder_getApplicationState">getApplicationState</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_getAssetGroupState">getAssetGroupState</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_getAssetState">getAssetState</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_getServerState">getServerState</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_pingApplication">pingApplication</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_resumeApplication">resumeApplication</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_resumeAsset">resumeAsset</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_resumeAssetGroup">resumeAssetGroup</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_resumeServer">resumeServer</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_suspendApplication">suspendApplication</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_suspendAsset">suspendAsset</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_suspendAssetGroup">suspendAssetGroup</value>
+        <value name="test_pub_appManAgent_appManAgent_Binder_suspendServer">suspendServer</value>
+      </record>
+      <value name="SOAPProtocol">SOAP 1.1 Protocol</value>
+      <value name="SOAPDirective">ws</value>
+    </record>
+  </array>
+  <array name="operationList" type="record" depth="1">
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">getApplicationState</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:getApplicationState</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_getApplicationState_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getApplicationState</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getApplicationState</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">getApplicationState</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_getApplicationState_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getApplicationStateResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getApplicationStateResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">getApplicationStateResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">getAssetGroupState</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:getAssetGroupState</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_getAssetGroupState_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getAssetGroupState</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getAssetGroupState</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">getAssetGroupState</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_getAssetGroupState_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getAssetGroupStateResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getAssetGroupStateResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">getAssetGroupStateResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">getAssetState</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:getAssetState</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_getAssetState_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getAssetState</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getAssetState</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">getAssetState</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_getAssetState_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getAssetStateResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getAssetStateResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">getAssetStateResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">getServerState</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:getServerState</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_getServerState_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getServerState</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getServerState</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">getServerState</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_getServerState_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getServerStateResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_getServerStateResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">getServerStateResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">pingApplication</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:pingApplication</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_pingApplication_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_pingApplication</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_pingApplication</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">pingApplication</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_pingApplication_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_pingApplicationResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_pingApplicationResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">pingApplicationResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">resumeApplication</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:resumeApplication</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_resumeApplication_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeApplication</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeApplication</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">resumeApplication</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_resumeApplication_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeApplicationResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeApplicationResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">resumeApplicationResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">resumeAsset</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:resumeAsset</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_resumeAsset_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeAsset</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeAsset</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">resumeAsset</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_resumeAsset_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeAssetResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeAssetResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">resumeAssetResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">resumeAssetGroup</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:resumeAssetGroup</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_resumeAssetGroup_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeAssetGroup</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeAssetGroup</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">resumeAssetGroup</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_resumeAssetGroup_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeAssetGroupResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeAssetGroupResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">resumeAssetGroupResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">resumeServer</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:resumeServer</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_resumeServer_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeServer</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeServer</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">resumeServer</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_resumeServer_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeServerResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_resumeServerResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">resumeServerResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">suspendApplication</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:suspendApplication</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_suspendApplication_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendApplication</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendApplication</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">suspendApplication</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_suspendApplication_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendApplicationResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendApplicationResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">suspendApplicationResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">suspendAsset</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:suspendAsset</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_suspendAsset_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendAsset</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendAsset</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">suspendAsset</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_suspendAsset_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendAssetResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendAssetResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">suspendAssetResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">suspendAssetGroup</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:suspendAssetGroup</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_suspendAssetGroup_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendAssetGroup</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendAssetGroup</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">suspendAssetGroup</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_suspendAssetGroup_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendAssetGroupResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendAssetGroupResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">suspendAssetGroupResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+    <record javaclass="com.wm.util.Values">
+      <value name="operationName">suspendServer</value>
+      <value name="serviceName">test.pub.appManAgent.in.ws.appManAgent_v1_0_.services:suspendServer</value>
+      <record name="requestElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_suspendServer_Input</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendServer</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendServer</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">suspendServer</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+      <record name="responseElement" javaclass="com.wm.util.Values">
+        <array name="headers" type="record" depth="1">
+        </array>
+        <record name="body" javaclass="com.wm.util.Values">
+          <value name="name">http://www.demo.be/test/appManAgent_v1_0:appManAgent_PortType_suspendServer_Output</value>
+          <value name="docType">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendServerResponse</value>
+          <value name="nsOwner">test.pub.appManAgent.in.ws.appManAgent_v1_0_.docTypes:docTypeRef_tns_suspendServerResponse</value>
+          <number name="nsOwnerType" type="Integer">3</number>
+          <Boolean name="addedByClient">false</Boolean>
+          <value name="originalDocName">suspendServerResponse</value>
+        </record>
+        <array name="faults" type="record" depth="1">
+        </array>
+      </record>
+    </record>
+  </array>
+  <record name="namespaces" javaclass="com.wm.util.Values">
+    <value name="tns">http://www.demo.be/test/appManAgent_v1_0</value>
+    <value name="http">http://schemas.xmlsoap.org/wsdl/http/</value>
+    <value name="mime">http://schemas.xmlsoap.org/wsdl/mime/</value>
+    <value name="soap12">http://schemas.xmlsoap.org/wsdl/soap12/</value>
+    <value name="soapenc">http://schemas.xmlsoap.org/soap/encoding/</value>
+    <value name="xsd">http://www.w3.org/2001/XMLSchema</value>
+    <value name="soap">http://schemas.xmlsoap.org/wsdl/soap/</value>
+    <value name="wsdl">http://schemas.xmlsoap.org/wsdl/</value>
+    <value name="ama">http://www.demo.be/TEST/AppManAgent/2012-09-06</value>
+  </record>
+  <Boolean name="validateSchemaUsingXerces">true</Boolean>
+</Values>
