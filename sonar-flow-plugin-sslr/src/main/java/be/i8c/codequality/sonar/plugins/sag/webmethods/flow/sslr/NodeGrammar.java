@@ -36,7 +36,7 @@ public enum NodeGrammar implements GrammarRuleKey {
 
   DATA, VALUES, SIGNATURE, RECORD, VALUE, ARRAY, NUMBER, BOOLEAN,
 
-  UNDEF_ATT, ATTRIBUTES, SIGNATURE_IN, SIGNATURE_OUT, REC_FIELDS;
+  UNDEF_ATT, ATTRIBUTES, SIGNATURE_IN, SIGNATURE_OUT, REC_FIELDS, STATELESS;
   
   /**
    * Enum of the different node grammar components.
@@ -57,7 +57,7 @@ public enum NodeGrammar implements GrammarRuleKey {
     b.rule(VALUES).is(
         FlowTypes.START_VALUES, 
         ATTRIBUTES,
-        b.zeroOrMore(b.firstOf(VALUE, ARRAY, SIGNATURE, RECORD, NUMBER, BOOLEAN)), 
+        b.zeroOrMore(b.firstOf(STATELESS,VALUE, ARRAY, SIGNATURE, RECORD, NUMBER, BOOLEAN)), 
         FlowTypes.STOP_VALUES);
     b.rule(RECORD).is(
         FlowTypes.START_RECORD, 
@@ -84,6 +84,11 @@ public enum NodeGrammar implements GrammarRuleKey {
         FlowAttIdentifierTypes.REC_FIELDS,ATTRIBUTES,
         b.zeroOrMore(b.firstOf(VALUE, ARRAY, RECORD)), 
         FlowTypes.STOP_ARRAY);
+    b.rule(STATELESS).is(
+        FlowTypes.START_VALUE, 
+        FlowAttIdentifierTypes.STATELESS,ATTRIBUTES,
+        b.zeroOrMore(FlowTypes.ELEMENT_VALUE), 
+        FlowTypes.STOP_VALUE);
     b.rule(VALUE).is(
         FlowTypes.START_VALUE, 
         ATTRIBUTES,

@@ -6,7 +6,7 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
 
 public enum FlowAttIdentifierTypes implements TokenType {
-  SIGNATURE("name","svc_sig"), SIGN_IN("name","sig_in"), SIGN_OUT("name","sig_out"), REC_FIELDS("name","rec_fields");
+  SIGNATURE("name","svc_sig"), SIGN_IN("name","sig_in"), SIGN_OUT("name","sig_out"), REC_FIELDS("name","rec_fields"), STATELESS("name","stateless");
 
   private String attName;
   private String attValue;
