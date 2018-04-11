@@ -3,7 +3,7 @@
 Download the sonar-flow-plugin jar to your working directory. The jar can be found on the GitHub [release page](https://github.com/I8C/sonar-flow-plugin/releases).
 
 ```sh
-wget https://github.com/I8C/sonar-flow-plugin/releases/download/v0.1/sonar-flow-plugin-0.1.jar
+wget https://github.com/I8C/sonar-flow-plugin/releases/download/v1.0/sonar-flow-plugin-1.0.jar
 ```
 ## Install the plugin on the SonarQube server
 
@@ -13,21 +13,14 @@ To install this plugin just add the downloaded jar to your SonarQube server in t
 
 If you do not have a SonarQube server, you can quickly create one using docker. For this part we will use the sonarqube docker image from the docker hub and add the sonar-flow-plugin jar to it. More info about this image can be found on: https://hub.docker.com/_/sonarqube/
 
-In the same directory as the downloaded jar, create a Dockerfile with the following content:
+Create a folder and download the [dockerfile](https://github.com/I8C/sonar-flow-plugin/blob/master/Dockerfile)
 
-```
-FROM sonarqube
-
-COPY ./sonar-flow-plugin-0.1.jar /opt/sonarqube/extensions/plugins
-```
-This will use the official SonarQube image as base and add the jar to the plugins directory of the sonarqube server.
-
-Next is to build this container and run it using following commands:
+Create a the structure sonar-flow-plugin/target inside your folder and put the downloaded in the target folder.
+Next is to build this container and run it using following commands from the Dockerfile location:
 
 ```sh
-docker build -t i8c/wm-sonarqube .
-
-docker run -d -p 9000:9000 -p 9092:9092 i8c/wm-sonarqube
+docker build . -t i8c/sonarqube-flow
+docker run --name sonarqube-flow -p 9000:9000 i8c/sonarqube-flow
 ```
 
 Now you should have a running SonarQube server with the sonar-flow-plugin installed on port 9000 of your dockerhost.
@@ -38,11 +31,11 @@ The documentation for the scanner can be found [here](http://docs.sonarqube.org/
 Download the scanner to your filesystem and unzip it.
 
 ```sh
-wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-2.6.1.zip
-unzip sonar-scanner-2.6.1.zip
+wget https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.1.0.1141.zip
+unzip sonar-scanner-cli-3.1.0.1141.zip
 ```
 
-Now configure the SonarQube scanner to point to your SonarQube server. This is done using the config file at `sonar-scanner-2.6.1/conf/sonar-scanner.properties`. The content of this file should look like this:
+Now configure the SonarQube scanner to point to your SonarQube server. This is done using the config file at `sonar-scanner-cli-3.1.0.1141/conf/sonar-scanner.properties`. The content of this file should look like this:
 
 ```
 #No information about specific project should appear here
@@ -77,7 +70,7 @@ sonar.flow.ignore.toplevel=false
 And finally run SonarQube Scanner script inside this directory.
 
 ```
-../sonar-scanner-2.6.1/bin/sonar-scanner
+../sonar-scanner-cli-3.1.0.1141/bin/sonar-scanner
 ```
 
 ## View results
