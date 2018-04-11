@@ -24,11 +24,13 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.NodeGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowTypes;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
 
 import com.sonar.sslr.api.AstNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.rules.RuleType;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -39,9 +41,11 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
  * @author DEWANST
  *
  */
-@Rule(key = "S00004", name = "Interfaces of services should contain comments", priority = Priority.MINOR, tags = {
+@Rule(key = "S00004", name = "Interfaces of services should contain comments", 
+    priority = Priority.MINOR, tags = {
     Tags.BAD_PRACTICE })
 @SqaleConstantRemediation("2min")
+@FlowCheckRuleType (ruletype = RuleType.CODE_SMELL)
 public class InterfaceCommentsCheck extends FlowCheck {
 
   static final Logger logger = LoggerFactory.getLogger(InterfaceCommentsCheck.class);

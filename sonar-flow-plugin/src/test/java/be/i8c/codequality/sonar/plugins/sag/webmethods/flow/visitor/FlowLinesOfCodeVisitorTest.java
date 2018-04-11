@@ -24,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.metric.FlowMetric;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowLinesOfCodeVisitor;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
 
 import com.sonar.sslr.api.Grammar;
@@ -47,7 +46,6 @@ public class FlowLinesOfCodeVisitorTest {
   public void linesOfCodeTest() {
     logger.debug("Scanning file");
     List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new FlowLinesOfCodeVisitor<Grammar>(FlowMetric.LINES_OF_CODE));
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
 
     SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(

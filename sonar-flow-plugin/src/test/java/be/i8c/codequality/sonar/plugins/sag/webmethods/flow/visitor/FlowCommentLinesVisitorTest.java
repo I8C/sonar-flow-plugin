@@ -46,7 +46,6 @@ public class FlowCommentLinesVisitorTest {
   public void commentLinesTest() {
     logger.debug("Scanning file");
     List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new FlowCommentLinesVisitor<Grammar>(FlowMetric.COMMENT_LINES));
     List<FlowCheck> checks = new ArrayList<FlowCheck>();
 
     SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(

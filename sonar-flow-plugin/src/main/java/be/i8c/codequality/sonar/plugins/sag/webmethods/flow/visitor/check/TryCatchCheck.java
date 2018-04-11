@@ -23,11 +23,13 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
 
 import com.sonar.sslr.api.AstNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.rules.RuleType;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
@@ -44,6 +46,7 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
     tags = {Tags.ERROR_HANDLING }
     )
 @SqaleConstantRemediation("2min")
+@FlowCheckRuleType (ruletype = RuleType.CODE_SMELL)
 public class TryCatchCheck extends FlowCheck {
 
   static final Logger logger = LoggerFactory.getLogger(TryCatchCheck.class);

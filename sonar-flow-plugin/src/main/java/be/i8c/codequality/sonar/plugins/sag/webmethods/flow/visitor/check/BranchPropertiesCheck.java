@@ -23,11 +23,13 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
 
 import com.sonar.sslr.api.AstNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.rules.RuleType;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
@@ -40,7 +42,8 @@ import org.sonar.check.Rule;
 @Rule(key = "S00009",
     name = "Checks \"evaluate labels\" and \"switch\" properties of a branch",
     priority = Priority.MAJOR,
-    tags = {"bug", Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
+    tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
+@FlowCheckRuleType (ruletype = RuleType.BUG)
 public class BranchPropertiesCheck extends FlowCheck {
 
   static final Logger logger = LoggerFactory.getLogger(BranchPropertiesCheck.class);

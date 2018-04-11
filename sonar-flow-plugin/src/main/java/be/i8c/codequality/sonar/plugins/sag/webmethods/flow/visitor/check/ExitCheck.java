@@ -23,6 +23,7 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
 
 import com.sonar.sslr.api.AstNode;
 
@@ -44,6 +45,7 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
     priority = Priority.MINOR,
     tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
 @SqaleConstantRemediation("2min")
+@FlowCheckRuleType (ruletype = RuleType.CODE_SMELL)
 public class ExitCheck extends FlowCheck {
 
   static final Logger logger = LoggerFactory.getLogger(ExitCheck.class);
