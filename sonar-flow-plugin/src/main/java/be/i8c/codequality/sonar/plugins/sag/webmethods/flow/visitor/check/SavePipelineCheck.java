@@ -65,7 +65,6 @@ public class SavePipelineCheck extends FlowCheck {
   public void init() {
     logger.debug("++ Initializing {} ++", this.getClass().getName());
     subscribeTo(FlowGrammar.INVOKE);
-    logger.debug("++ subscribing to {} nodeTypes ++", this.getAstNodeTypesToVisit().size());
   }
 
   @Override

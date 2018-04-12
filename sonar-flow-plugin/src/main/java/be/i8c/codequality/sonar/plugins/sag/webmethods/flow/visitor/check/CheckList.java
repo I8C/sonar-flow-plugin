@@ -47,7 +47,9 @@ public class CheckList {
    * @return
    */
   public static List<Class<? extends FlowCheck>> getNodeChecks() {
-    return ImmutableList.<Class<? extends FlowCheck>>builder().add(InterfaceCommentsCheck.class)
+    return ImmutableList.<Class<? extends FlowCheck>>builder()
+        .add(InterfaceCommentsCheck.class)
+        .add(StatelessFlagCheck.class)
         .build();
   }
   

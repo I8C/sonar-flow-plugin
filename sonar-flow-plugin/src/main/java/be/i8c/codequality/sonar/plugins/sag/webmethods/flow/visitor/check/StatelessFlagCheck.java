@@ -51,8 +51,8 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.F
  *
  */
 @Rule(key = "S00010", name = "Flow services should have stateless flag set to true", 
-    priority = Priority.MINOR, tags = {
-    Tags.BAD_PRACTICE })
+    priority = Priority.MINOR,
+    tags = {Tags.BAD_PRACTICE })
 @SqaleConstantRemediation("1min")
 @FlowCheckProperty(category = FlowLanguageProperties.FLOW_CATEGORY,
     defaultValue = "false", 
@@ -100,7 +100,9 @@ public class StatelessFlagCheck extends FlowCheck {
   @Override
   public void visitNode(AstNode astNode) {
     String service = FlowUtils.getQualifiedName(this.getContext().getFile());
+    logger.debug("++ CHECKING Stateless flag: " + filterEnabled + " ++");
     if (!Boolean.valueOf(filterEnabled) || !pattern.matcher(service).matches()) {
+      logger.debug("++ Stateless flag Filter passed++");
       if(astNode.getFirstChild(FlowTypes.ELEMENT_VALUE).getTokenOriginalValue().trim().equals("no")) {
         logger.debug("++ Stateless flag VIOLATION found: " + astNode.getTokenLine() + " ++");
         getContext().createLineViolation(this, "Set stateless flag to \"true\"", astNode);

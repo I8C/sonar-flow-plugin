@@ -89,4 +89,5 @@ public class StatelessFlagCheckTest {
     Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
     assertEquals(1, scmCorrect.size());
   }
+  
 }
