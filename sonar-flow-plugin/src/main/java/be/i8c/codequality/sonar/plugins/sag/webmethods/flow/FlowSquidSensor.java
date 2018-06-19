@@ -125,7 +125,11 @@ public class FlowSquidSensor implements Sensor {
     List<InputFile> flowFiles = new ArrayList<>();
     fileSystem.inputFiles(flowPredicate).forEach(flowFiles::add);
     List<InputFile> nodeFiles = new ArrayList<>();
+<<<<<<< HEAD
     fileSystem.inputFiles(nodePredicate).forEach(nodeFiles::add);
+=======
+    fileSystem.inputFiles(nodePredicate).forEach(flowFiles::add);
+>>>>>>> refs/remotes/origin/dev03_refactor
 
     ProgressReport flowProgressReport = new ProgressReport("Report about progress of Flow analyzer",
         TimeUnit.SECONDS.toMillis(10));
