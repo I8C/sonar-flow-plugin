@@ -42,7 +42,7 @@ public class FlowPluginTest {
     Plugin.Context context = new Plugin.Context(runtime);
     new FlowPlugin().define(context);
     logger.debug("Nr of extentions: " + context.getExtensions().size());
-    assertTrue(context.getExtensions().size() == 13);
+    assertTrue(context.getExtensions().size() == 17);
   }
 
 }

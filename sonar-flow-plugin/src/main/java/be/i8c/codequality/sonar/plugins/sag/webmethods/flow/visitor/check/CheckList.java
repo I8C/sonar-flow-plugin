@@ -20,7 +20,8 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.NodeCheck;
 
 import com.google.common.collect.ImmutableList;
 
@@ -32,22 +33,15 @@ import java.util.List;
  *
  */
 public class CheckList {
-
-  /**
-   * Returns all checks.
-   * @return
-   */
-  public static List<Class<? extends FlowCheck>> getChecks() {
-    return ImmutableList.<Class<? extends FlowCheck>>builder().addAll(getFlowChecks())
-        .addAll(getTopLevelChecks()).addAll(getNodeChecks()).build();
-  }
   
   /**
    * Returns checks that apply to nodes.
    * @return
    */
-  public static List<Class<? extends FlowCheck>> getNodeChecks() {
-    return ImmutableList.<Class<? extends FlowCheck>>builder().add(InterfaceCommentsCheck.class)
+  public static List<Class<? extends NodeCheck>> getNodeChecks() {
+    return ImmutableList.<Class<? extends NodeCheck>>builder()
+        .add(InterfaceCommentsCheck.class)
+        .add(StatelessFlagCheck.class)
         .build();
   }
   
@@ -56,7 +50,8 @@ public class CheckList {
    * @return
    */
   public static List<Class<? extends FlowCheck>> getTopLevelChecks() {
-    return ImmutableList.<Class<? extends FlowCheck>>builder().add(TryCatchCheck.class).build();
+    return ImmutableList.<Class<? extends FlowCheck>>builder()
+        .add(TryCatchCheck.class).build();
   }
 
   /**
@@ -64,9 +59,14 @@ public class CheckList {
    * @return
    */
   public static List<Class<? extends FlowCheck>> getFlowChecks() {
-    return ImmutableList.<Class<? extends FlowCheck>>builder().add(QualifiedNameCheck.class)
-        .add(SavePipelineCheck.class).add(DisabledCheck.class).add(ExitCheck.class)
-        .add(EmptyMapCheck.class).add(BranchPropertiesCheck.class).add(EmptyFlowCheck.class)
+    return ImmutableList.<Class<? extends FlowCheck>>builder()
+        .add(QualifiedNameCheck.class)
+        .add(SavePipelineCheck.class)
+        .add(DisabledCheck.class)
+        .add(ExitCheck.class)
+        .add(EmptyMapCheck.class)
+        .add(BranchPropertiesCheck.class)
+        .add(EmptyFlowCheck.class)
         .build();
   }
 }

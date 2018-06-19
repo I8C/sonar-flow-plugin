@@ -20,8 +20,9 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow;
 
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.metric.FlowMetrics;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule.FlowRulesDefinition;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule.FlowSquidSensor;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule.NodeRulesDefinition;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.settings.FlowLanguageProperties;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.web.FlowWebPageDefinition;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.ws.sources.FlowWebWs;
@@ -45,13 +46,13 @@ public class FlowPlugin implements Plugin {
     builder.add(FlowLanguage.class, FlowQualityProfile.class);
     // add language settings
     builder.addAll(FlowLanguageProperties.getProperties());
-
-    // add measures
-
+    // add metrics
+    builder.add(FlowMetrics.class);
     // add rules
-    builder.add(FlowRulesDefinition.class, FlowSquidSensor.class);
+    builder.add(FlowRulesDefinition.class, NodeRulesDefinition.class, FlowSquidSensor.class);
     // add rules properties
     builder.addAll(FlowRulesDefinition.getProperties());
+    builder.addAll(NodeRulesDefinition.getProperties());
     // add web extensions
     builder.add(FlowWebPageDefinition.class);
     builder.add(FlowWebWs.class);

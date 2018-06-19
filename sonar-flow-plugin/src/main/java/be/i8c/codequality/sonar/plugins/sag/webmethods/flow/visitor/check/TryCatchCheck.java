@@ -22,17 +22,22 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRemediation;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRuleType;
 
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.AstNodeType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.rules.RuleType;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 /**
  * Checks if try-catch is the top implementation.
@@ -45,17 +50,11 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
     priority = Priority.MAJOR,
     tags = {Tags.ERROR_HANDLING }
     )
-@SqaleConstantRemediation("2min")
-@FlowCheckRuleType (ruletype = RuleType.CODE_SMELL)
+@CheckRemediation (func = "Constant", constantCost= "5min")
+@CheckRuleType (ruletype = RuleType.CODE_SMELL)
 public class TryCatchCheck extends FlowCheck {
 
   static final Logger logger = LoggerFactory.getLogger(TryCatchCheck.class);
-
-  @Override
-  public void init() {
-    logger.debug("++ Initializing {} ++", this.getClass().getName());
-    subscribeTo(FlowGrammar.FLOW);
-  }
 
   @Override
   public void visitNode(AstNode astNode) {
@@ -72,7 +71,7 @@ public class TryCatchCheck extends FlowCheck {
         }
       }
     }
-    getContext().createLineViolation(this, "Create try-catch sequence", astNode);
+    addIssue("Create try-catch sequence", astNode);
   }
 
   private String getSequenceType(AstNode sequenceNode) {
@@ -96,17 +95,12 @@ public class TryCatchCheck extends FlowCheck {
   }
 
   @Override
-  public boolean isFlowCheck() {
-    return true;
+  public List<AstNodeType> subscribedTo() {
+    return new ArrayList<AstNodeType>(Arrays.asList(FlowGrammar.FLOW));
   }
 
   @Override
-  public boolean isNodeCheck() {
-    return false;
-  }
-
-  @Override
-  public boolean isTopLevelCheck() {
+  public boolean isTopLevel() {
     return true;
   }
 }

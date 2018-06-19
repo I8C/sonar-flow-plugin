@@ -23,6 +23,7 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow;
 import static be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule.FlowRulesDefinition.REPO_KEY;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule.FlowRulesDefinition;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.CheckList;
 
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 
@@ -32,10 +33,12 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
  */
 public class FlowQualityProfile implements BuiltInQualityProfilesDefinition {
 
+  public static final String SONAR_WAY_PROFILE_PATH = "be/i8c/l10n/flow/rules/i8c_way_profile.json";
+  public static final String I8C_FLOW_PROFILE = "i8c flow profile";
+
   @Override
   public void define(Context context) {
-    NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile("i8c Flow Rules",
-        FlowLanguage.KEY);
+    NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile(FlowQualityProfile.I8C_FLOW_PROFILE, FlowLanguage.KEY);
     profile.setDefault(true);
     // ACTIVATE RULES
     for (String key : FlowRulesDefinition.getRuleKeys()) {

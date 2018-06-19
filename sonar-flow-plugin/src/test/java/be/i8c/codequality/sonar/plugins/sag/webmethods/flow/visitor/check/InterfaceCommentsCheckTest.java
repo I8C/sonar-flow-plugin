@@ -20,26 +20,14 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.NodeAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.InterfaceCommentsCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
 
-import com.sonar.sslr.api.Grammar;
-
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.squidbridge.SquidAstVisitor;
-import org.sonar.squidbridge.api.CheckMessage;
-import org.sonar.squidbridge.api.SourceFile;
 
 public class InterfaceCommentsCheckTest {
 
@@ -48,61 +36,42 @@ public class InterfaceCommentsCheckTest {
 
   @Test
   public void interfaceCommentsCheckInvalid() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new InterfaceCommentsCheck());
-
-    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkInterfaceCommentsInvalid/node.ndf";
-
-    SourceFile sfCorrect = NodeAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
-    Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
-    assertEquals(2, scmCorrect.size());
+    java.util.List<java.util.Map.Entry<String,Integer>> expectedIssues= new java.util.ArrayList<>();
+    Entry<String,Integer> issue1=new SimpleEntry<>("Add comment",19);
+    Entry<String,Integer> issue2=new SimpleEntry<>("Add comment", 58);
+    expectedIssues.add(issue1);
+    expectedIssues.add(issue2);
+    
+    NodeVerifier.verifyMultipleIssueOnFile(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkInterfaceCommentsInvalid/node.ndf"), new InterfaceCommentsCheck(), expectedIssues);
   }
 
   @Test
   public void interfaceCommentsCheckInvalid2() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new InterfaceCommentsCheck());
-
-    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkInterfaceCommentsInvalid2/node.ndf";
-
-    SourceFile sfCorrect = NodeAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
-    Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
-    assertEquals(4, scmCorrect.size());
+    java.util.List<java.util.Map.Entry<String,Integer>> expectedIssues= new java.util.ArrayList<>();
+    Entry<String,Integer> issue1=new SimpleEntry<>("Add comment",20);
+    Entry<String,Integer> issue2=new SimpleEntry<>("Add comment", 51);
+    Entry<String,Integer> issue3=new SimpleEntry<>("Add comment",67);
+    Entry<String,Integer> issue4=new SimpleEntry<>("Add comment", 85);
+    expectedIssues.add(issue1);
+    expectedIssues.add(issue2);
+    expectedIssues.add(issue3);
+    expectedIssues.add(issue4);
+    
+    NodeVerifier.verifyMultipleIssueOnFile(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkInterfaceCommentsInvalid2/node.ndf"), new InterfaceCommentsCheck(), expectedIssues);
   }
   
   @Test
   public void interfaceCommentsCheckWs() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new InterfaceCommentsCheck());
-
-    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkInterfaceCommentsWs/node.ndf";
-
-    SourceFile sfCorrect = NodeAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
-    Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
-    assertEquals(0, scmCorrect.size());
+    NodeVerifier.verifyNoIssue(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkInterfaceCommentsWs/node.ndf"), new InterfaceCommentsCheck());
+    
   }
   
   @Test
   public void interfaceCommentsCheckValid() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new InterfaceCommentsCheck());
-
-    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkInterfaceCommentsValid/node.ndf";
-
-    SourceFile sfCorrect = NodeAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
-    Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
-    assertEquals(0, scmCorrect.size());
+    NodeVerifier.verifyNoIssue(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkInterfaceCommentsValid/node.ndf"), new InterfaceCommentsCheck());
   }
 }

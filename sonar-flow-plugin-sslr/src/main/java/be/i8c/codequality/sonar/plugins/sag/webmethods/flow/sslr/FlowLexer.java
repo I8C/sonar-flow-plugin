@@ -22,6 +22,8 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.channels.SaxChannel;
 
+import java.nio.charset.Charset;
+
 import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
 
@@ -41,10 +43,17 @@ public class FlowLexer {
    * Configuration for this lexer.
    * @return
    */
-  public static Lexer create(FlowConfiguration conf) {
-    return Lexer.builder().withCharset(conf.getCharset())
+  public static Lexer create() {
+    return Lexer.builder()
         .withFailIfNoChannelToConsumeOneCharacter(true).withChannel(new SaxChannel())
         .withChannel(new BlackHoleChannel(".*")).build();
+  }
+
+  public static Lexer create(Charset charset) {
+    return Lexer.builder()
+        .withFailIfNoChannelToConsumeOneCharacter(true).withChannel(new SaxChannel())
+        .withChannel(new BlackHoleChannel(".*"))
+        .withCharset(charset).build();
   }
 
 }

@@ -20,25 +20,15 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
-import static org.junit.Assert.assertEquals;
 
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.ExitCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
 
-import com.sonar.sslr.api.Grammar;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map.Entry;
+import java.util.AbstractMap.SimpleEntry;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.squidbridge.SquidAstVisitor;
-import org.sonar.squidbridge.api.CheckMessage;
-import org.sonar.squidbridge.api.SourceFile;
 
 public class ExitCheckTest {
 
@@ -46,19 +36,14 @@ public class ExitCheckTest {
 
   @Test
   public void exitCheck() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new ExitCheck());
-
-    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkExitStepInvalid/flow.xml";
-
-    SourceFile sfViolation = FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
-    List<CheckMessage> violationMessages = new ArrayList<CheckMessage>(
-        sfViolation.getCheckMessages());
-    assertEquals(2, violationMessages.size());
-    // TODO check both violation messages
+    java.util.List<java.util.Map.Entry<String,Integer>> expectedIssues= new java.util.ArrayList<>();
+    Entry<String,Integer> issue1=new SimpleEntry<>("The \"Exit from\" property must be defined for the interface element 'EXIT'",448);
+    Entry<String,Integer> issue2=new SimpleEntry<>("Create a Failure message for the interface element 'EXIT'.", 448);
+    expectedIssues.add(issue1);
+    expectedIssues.add(issue2);
+    
+    FlowVerifier.verifyMultipleIssueOnFile(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkExitStepInvalid/flow.xml"), new ExitCheck(), expectedIssues);
   }
 
 }

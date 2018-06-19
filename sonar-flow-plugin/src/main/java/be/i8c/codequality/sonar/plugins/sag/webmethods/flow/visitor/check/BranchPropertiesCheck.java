@@ -22,10 +22,16 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRemediation;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRuleType;
 
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.AstNodeType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,16 +49,11 @@ import org.sonar.check.Rule;
     name = "Checks \"evaluate labels\" and \"switch\" properties of a branch",
     priority = Priority.MAJOR,
     tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
-@FlowCheckRuleType (ruletype = RuleType.BUG)
+@CheckRuleType (ruletype = RuleType.BUG)
+@CheckRemediation (func = "Constant", constantCost= "3min")
 public class BranchPropertiesCheck extends FlowCheck {
 
   static final Logger logger = LoggerFactory.getLogger(BranchPropertiesCheck.class);
-
-  @Override
-  public void init() {
-    logger.debug("++ Initializing {} ++", this.getClass().getName());
-    subscribeTo(FlowGrammar.BRANCH);
-  }
 
   @Override
   public void visitNode(AstNode astNode) {
@@ -68,29 +69,17 @@ public class BranchPropertiesCheck extends FlowCheck {
         || "".equals(labelExpressions.getTokenOriginalValue())) ? false : true;
 
     if (switchDefined && evaluateLabelsDefined) {
-      getContext().createLineViolation(this,
-          "Both switch and evaluate labels are defined in properties of BRANCH", astNode);
+      addIssue("Both switch and evaluate labels are defined in properties of BRANCH", astNode);
     }
 
     if (!switchDefined && !evaluateLabelsDefined) {
-      getContext().createLineViolation(this,
-          "Evaluate labels must be true when no switch parameter is defined in BRANCH", astNode);
+      addIssue("Evaluate labels must be true when no switch parameter is defined in BRANCH", astNode);
     }
   }
 
   @Override
-  public boolean isFlowCheck() {
-    return true;
-  }
-
-  @Override
-  public boolean isNodeCheck() {
-    return false;
-  }
-
-  @Override
-  public boolean isTopLevelCheck() {
-    return false;
+  public List<AstNodeType> subscribedTo() {
+    return new ArrayList<AstNodeType>(Arrays.asList(FlowGrammar.BRANCH));
   }
 
 }

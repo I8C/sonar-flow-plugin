@@ -24,12 +24,17 @@ import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.FlowLanguage;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.settings.FlowLanguageProperties;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.utils.FlowUtils;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckProperty;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckProperty;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRemediation;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRuleType;
 
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.AstNodeType;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
@@ -41,7 +46,6 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.rules.RuleType;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 /**
  * Checks Qualified name of the service for naming convention.
@@ -52,8 +56,8 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
     name = "Flow assets should follow the predefined naming convention",
     priority = Priority.MAJOR,
     tags = {Tags.BAD_PRACTICE })
-@SqaleConstantRemediation("1min")
-@FlowCheckProperty(category = FlowLanguageProperties.FLOW_CATEGORY,
+@CheckRemediation (func = "Constant", constantCost= "5min")
+@CheckProperty(category = FlowLanguageProperties.FLOW_CATEGORY,
     defaultValue = QualifiedNameCheck.QUALIFIED_NAME_DEFVALUE, 
     description = "Regular expression for wich the qualified name should comply", 
     key = QualifiedNameCheck.QUALIFIED_NAME_KEY, 
@@ -61,7 +65,7 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
     onQualifiers = Qualifiers.PROJECT, 
     subCategory = FlowLanguageProperties.FLOW_SUBCATEGORY_CHECKS, 
     type = PropertyType.REGULAR_EXPRESSION)
-@FlowCheckRuleType (ruletype = RuleType.CODE_SMELL)
+@CheckRuleType (ruletype = RuleType.CODE_SMELL)
 public class QualifiedNameCheck extends FlowCheck {
 
   static final Logger logger = LoggerFactory.getLogger(QualifiedNameCheck.class);
@@ -72,12 +76,6 @@ public class QualifiedNameCheck extends FlowCheck {
 
   private String namingConvention;
   private Pattern pattern;
-
-  @Override
-  public void init() {
-    logger.debug("++ Initializing {} ++", this.getClass().getName());
-    subscribeTo(FlowGrammar.FLOW);
-  }
   
   @Override
   public void visitFile(@Nullable AstNode astNode) {
@@ -87,26 +85,16 @@ public class QualifiedNameCheck extends FlowCheck {
   
   @Override
   public void visitNode(AstNode astNode) {
-    String service = FlowUtils.getQualifiedName(this.getContext().getFile());
+    String service = FlowUtils.getQualifiedName(this.getContext().getInputFile().uri());
     logger.debug("Service found: " + service);
     if (!pattern.matcher(service).matches()) {
-      getContext().createLineViolation(this,
+      addIssue(
           "Flow name " + service + " does not conform to the naming convention \"" + namingConvention + "\"", astNode);
     }
   }
 
   @Override
-  public boolean isFlowCheck() {
-    return true;
-  }
-
-  @Override
-  public boolean isNodeCheck() {
-    return false;
-  }
-
-  @Override
-  public boolean isTopLevelCheck() {
-    return false;
+  public List<AstNodeType> subscribedTo() {
+    return new ArrayList<AstNodeType>(Arrays.asList(FlowGrammar.FLOW));
   }
 }

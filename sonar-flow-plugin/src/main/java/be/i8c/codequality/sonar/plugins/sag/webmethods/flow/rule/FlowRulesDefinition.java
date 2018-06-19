@@ -21,11 +21,12 @@
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.FlowLanguage;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowCheck;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.CheckList;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.AnnotationUtils;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckProperty;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.AnnotationUtils;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckProperty;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRemediation;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRuleType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -39,9 +40,9 @@ import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.api.internal.google.common.collect.Iterables;
 import org.sonar.api.internal.google.common.io.Resources;
 import org.sonar.api.rules.RuleType;
+import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
-import org.sonar.squidbridge.annotations.RuleTemplate;
 
 /**
  * This class creates the repository that holds the rules for this language.
@@ -53,7 +54,7 @@ import org.sonar.squidbridge.annotations.RuleTemplate;
  */
 public class FlowRulesDefinition implements RulesDefinition {
 
-  private static final String RESOURCE_BASE_PATH = "/org/sonar/l10n/flow/rules/flow";
+  private static final String RESOURCE_BASE_PATH = "/be/i8c/l10n/flow/rules";
 
   protected static final String KEY = "i8cFlow";
   protected static final String NAME = "I8cFlow";
@@ -62,13 +63,13 @@ public class FlowRulesDefinition implements RulesDefinition {
   protected static final String REPO_NAME = FlowLanguage.KEY + "-" + NAME;
 
   private static List<String> ruleKeys = new ArrayList<String>();
-  private static List<Object> ruleProperties = null;
-  
+  private static List<PropertyDefinition> ruleProperties = null;
+
   private void defineRulesForLanguage(Context context, String repositoryKey, String repositoryName,
       String languageKey) {
     NewRepository repository = context.createRepository(repositoryKey, languageKey)
         .setName(repositoryName);
-    List<Class<? extends FlowCheck>> checks = CheckList.getChecks();
+    List<Class<? extends FlowCheck>> checks = CheckList.getFlowChecks();
     new RulesDefinitionAnnotationLoader().load(repository, Iterables.toArray(checks, Class.class));
     for (Class<? extends FlowCheck> check : checks) {
       newRule(check, repository);
@@ -76,9 +77,9 @@ public class FlowRulesDefinition implements RulesDefinition {
     repository.done();
   }
 
-  
   /**
    * Converts the check to a rule by reading the params
+   * 
    * @param check
    * @param repository
    */
@@ -91,20 +92,24 @@ public class FlowRulesDefinition implements RulesDefinition {
       throw new IllegalArgumentException("No Rule annotation was found on " + check.getName());
     }
     // Read the ruleType annotation of the check
-    FlowCheckRuleType ruleTypeAnnotation = AnnotationUtils.getAnnotation(check,
-        FlowCheckRuleType.class);
+    CheckRuleType ruleTypeAnnotation = AnnotationUtils.getAnnotation(check,
+        CheckRuleType.class);
     RuleType rt;
+    Boolean isTemplate = false;
     if (ruleTypeAnnotation == null) {
       rt = RuleType.CODE_SMELL;
-    }else {
+    } else {
       rt = ruleTypeAnnotation.ruletype();
+      isTemplate = ruleTypeAnnotation.isTemplate();
     }
     // Add to repo
     String ruleKey = ruleAnnotation.key();
     if (StringUtils.isEmpty(ruleKey)) {
-      throw new IllegalArgumentException("No key is defined in Rule annotation of " + check.getName());
+      throw new IllegalArgumentException(
+          "No key is defined in Rule annotation of " + check.getName());
     }
     NewRule rule = repository.rule(ruleKey);
+
     if (rule == null) {
       throw new IllegalStateException(
           "No rule was created for " + check + " in " + repository.key());
@@ -112,29 +117,33 @@ public class FlowRulesDefinition implements RulesDefinition {
     ruleKeys.add(rule.key());
     // Set html template
     addHtmlDescription(rule, ruleKey);
-    rule.setTemplate(AnnotationUtils.getAnnotation(check, RuleTemplate.class) != null);
+    rule.setTemplate(isTemplate);
     // Set the type of the rule, instead of working with tags
     rule.setType(rt);
+    // Set the debt remediationFunction
+    CheckRemediation remediationAnnotation = AnnotationUtils.getAnnotation(check,
+        CheckRemediation.class);
+    if (remediationAnnotation != null) {
+      rule.setDebtRemediationFunction(remediationFunction(rule.debtRemediationFunctions(),remediationAnnotation));
+      rule.setGapDescription(remediationAnnotation.linearDesc());
+    }
+    
   }
+
+
 
   /**
    * Create properties from annotation and add to the list
+   * 
    * @param propertyAnnotations
    */
-  private static void addRuleProperties(FlowCheckProperty[] propertyAnnotations) {
-    for(FlowCheckProperty fcp:propertyAnnotations) {
-      ruleProperties.add(
-          PropertyDefinition.builder(fcp.key()).defaultValue(fcp.defaultValue())
-            .name(fcp.name())
-            .type(fcp.type())
-            .category(fcp.category())
-            .subCategory(fcp.subCategory())
-            .description(fcp.description())
-            .onQualifiers(fcp.onQualifiers())
-          .build());
+  private static void addRuleProperties(CheckProperty[] propertyAnnotations) {
+    for (CheckProperty fcp : propertyAnnotations) {
+      ruleProperties.add(PropertyDefinition.builder(fcp.key()).defaultValue(fcp.defaultValue())
+          .name(fcp.name()).type(fcp.type()).category(fcp.category()).subCategory(fcp.subCategory())
+          .description(fcp.description()).onQualifiers(fcp.onQualifiers()).build());
     }
   }
-
 
   private void addHtmlDescription(NewRule rule, String metadataKey) {
     URL resource = FlowRulesDefinition.class
@@ -157,32 +166,43 @@ public class FlowRulesDefinition implements RulesDefinition {
     defineRulesForLanguage(context, REPO_KEY, REPO_NAME, FlowLanguage.KEY);
   }
 
-  
   /**
    * @return List of keys of the rules in the repo
    */
   public static List<String> getRuleKeys() {
     return ruleKeys;
   }
-  
+
   /**
    * Get the list of rule properties.
+   * 
    * @return list of properties
    */
-  public static List<Object> getProperties() {
-    if(ruleProperties==null) {
-      ruleProperties = new ArrayList<Object>();
-      List<Class<? extends FlowCheck>> checks = CheckList.getChecks();
+  public static List<PropertyDefinition> getProperties() {
+    if (ruleProperties == null) {
+      ruleProperties = new ArrayList<PropertyDefinition>();
+      List<Class<? extends FlowCheck>> checks = CheckList.getFlowChecks();
       for (Class<? extends FlowCheck> check : checks) {
         // Read the property annotations of the check
-        FlowCheckProperty[] propertyAnnotations = AnnotationUtils.getAnnotations(check,
-            FlowCheckProperty.class);
+        CheckProperty[] propertyAnnotations = AnnotationUtils.getAnnotations(check,
+            CheckProperty.class);
         if (propertyAnnotations != null) {
           addRuleProperties(propertyAnnotations);
         }
       }
     }
     return ruleProperties;
+  }
+
+  public DebtRemediationFunction remediationFunction(DebtRemediationFunctions drf, CheckRemediation flowCheckRemediation) {
+    if (flowCheckRemediation.func().startsWith("Constant")) {
+      return drf.constantPerIssue(flowCheckRemediation.constantCost().replace("mn", "min"));
+    }
+    if ("Linear".equals(flowCheckRemediation.func())) {
+      return drf.linear(flowCheckRemediation.linearFactor().replace("mn", "min"));
+    }
+    return drf.linearWithOffset(flowCheckRemediation.linearFactor().replace("mn", "min"),
+        flowCheckRemediation.linearOffset().replace("mn", "min"));
   }
 
 }
