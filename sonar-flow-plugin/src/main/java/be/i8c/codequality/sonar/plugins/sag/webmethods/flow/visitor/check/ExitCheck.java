@@ -22,17 +22,22 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.FlowGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.FlowCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRemediation;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRuleType;
 
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.AstNodeType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.rules.RuleType;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 /**
  * Checks for empty "from"-property on exit component.
@@ -44,17 +49,11 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
     + "the \"Failure message\" must be defined if the \"signal\" property is FAILURE",
     priority = Priority.MINOR,
     tags = {Tags.DEBUG_CODE, Tags.BAD_PRACTICE })
-@SqaleConstantRemediation("2min")
-@FlowCheckRuleType (ruletype = RuleType.CODE_SMELL)
+@CheckRemediation (func = "Constant", constantCost= "2min")
+@CheckRuleType (ruletype = RuleType.CODE_SMELL)
 public class ExitCheck extends FlowCheck {
 
   static final Logger logger = LoggerFactory.getLogger(ExitCheck.class);
-
-  @Override
-  public void init() {
-    logger.debug("++ Initializing {} ++", this.getClass().getName());
-    subscribeTo(FlowGrammar.EXIT);
-  }
 
   @Override
   public void visitNode(AstNode astNode) {
@@ -64,7 +63,7 @@ public class ExitCheck extends FlowCheck {
       String exitFrom = getExitFrom(exitNode);
       if (exitFrom == null || exitFrom.trim().equals("")) {
         logger.debug("++ \"Exit from\" property found to be empty! ++");
-        getContext().createLineViolation(this,
+        addIssue(
             "The \"Exit from\" " + "property must be defined for the interface element 'EXIT'",
             exitNode);
       }
@@ -73,7 +72,7 @@ public class ExitCheck extends FlowCheck {
         if (exitFailureMessage == null || exitFailureMessage.trim().equals("")) {
           logger.debug("++ Failure message has not been set even though"
               + " the signal status has been set to failure! ++");
-          getContext().createLineViolation(this,
+          addIssue(
               "Create a Failure message" + " for the interface element 'EXIT'.", exitNode);
         }
       }
@@ -123,18 +122,8 @@ public class ExitCheck extends FlowCheck {
   }
 
   @Override
-  public boolean isFlowCheck() {
-    return true;
-  }
-
-  @Override
-  public boolean isNodeCheck() {
-    return false;
-  }
-
-  @Override
-  public boolean isTopLevelCheck() {
-    return false;
+  public List<AstNodeType> subscribedTo() {
+    return new ArrayList<AstNodeType>(Arrays.asList(FlowGrammar.EXIT));
   }
   
   public static RuleType getRuleType() {

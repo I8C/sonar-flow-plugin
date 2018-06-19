@@ -21,30 +21,17 @@
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.FlowLanguage;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.QualifiedNameCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
 
-import com.sonar.sslr.api.Grammar;
-
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Configuration;
-import org.sonar.squidbridge.SquidAstVisitor;
-import org.sonar.squidbridge.api.CheckMessage;
-import org.sonar.squidbridge.api.SourceFile;
 
 public class QualifiedNameCheckTest {
 
@@ -56,17 +43,8 @@ public class QualifiedNameCheckTest {
     Configuration cfg = mock(Configuration.class);
     Mockito.when(cfg.get(QualifiedNameCheck.QUALIFIED_NAME_KEY)).thenReturn(Optional.of(QualifiedNameCheck.QUALIFIED_NAME_DEFVALUE));
     FlowLanguage.setConfig(cfg);
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    QualifiedNameCheck qnc = new QualifiedNameCheck();
-    checks.add(qnc);
-    String validPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkQualityNameInvalid/flow.xml";
-
-    SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(validPath), checks, metrics);
-    Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
-    assertEquals(0, scmCorrect.size());  
+    FlowVerifier.verifyNoIssue(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkQualityNameInvalid/flow.xml"), new QualifiedNameCheck());
   }
 
   @Test
@@ -74,17 +52,9 @@ public class QualifiedNameCheckTest {
     Configuration cfg = mock(Configuration.class);
     Mockito.when(cfg.get(QualifiedNameCheck.QUALIFIED_NAME_KEY)).thenReturn(Optional.of("test.*"));
     FlowLanguage.setConfig(cfg);
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    QualifiedNameCheck qnc = new QualifiedNameCheck();
-    checks.add(qnc);
-    String validPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkQualityNameInvalid/flow.xml";
-
-    SourceFile sfCorrect = FlowAstScanner.scanSingleFile(new File(validPath), checks, metrics);
-    Set<CheckMessage> scmCorrect = sfCorrect.getCheckMessages();
-    assertEquals(1, scmCorrect.size());  
+    FlowVerifier.verifySingleIssueOnFile(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkQualityNameInvalid/flow.xml"), new QualifiedNameCheck(),
+        "Flow name I8cFlowSonarPluginTest.pub:checkQualityNameInvalid does not conform to the naming convention \"test.*\"", 3);
   }
   
 }

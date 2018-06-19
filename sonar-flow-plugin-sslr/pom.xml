@@ -1,14 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.i8c.codequality.sonar.plugins.sag.webmethods.flow</groupId>
 	<artifactId>sonar-flow-plugin-sslr</artifactId>
-	<version>1.0</version>
+	<version>1.5</version>
 	<name>Flow :: Plugin :: SSLR</name>
 	<properties>
-		<sonar.apiVersion>6.6</sonar.apiVersion>
+		<sonar.apiVersion>6.7</sonar.apiVersion>
 		<sonar.sslrVersion>1.22</sonar.sslrVersion>
-		<sonar.sslrSquidVersion>2.6.1</sonar.sslrSquidVersion>
+		<sonar.sslrSquidVersion>2.7.0.377</sonar.sslrSquidVersion>
 		<junit.version>4.12</junit.version>
 		<slf4j.version>1.5.6</slf4j.version>
 		<logback.version>0.9.1</logback.version>
@@ -16,14 +17,19 @@
 	</properties>
 	<dependencies>
 		<dependency>
-		    <groupId>org.sonarsource.sslr</groupId>
-		    <artifactId>sslr-core</artifactId>
-		    <version>${sonar.sslrVersion}</version>
+			<groupId>org.sonarsource.sslr</groupId>
+			<artifactId>sslr-core</artifactId>
+			<version>${sonar.sslrVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.sonarsource.sslr-squid-bridge</groupId>
 			<artifactId>sslr-squid-bridge</artifactId>
 			<version>${sonar.sslrSquidVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>

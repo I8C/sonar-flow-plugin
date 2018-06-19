@@ -4,13 +4,14 @@
 
 	<groupId>be.i8c.codequality.sonar.plugins.sag.webmethods.flow</groupId>
 	<artifactId>sonar-flow-plugin</artifactId>
-	<version>1.0</version>
+	<version>1.5</version>
 	<name>Sonar :: Flow plugin</name>
 
 	<properties>
-		<sonar.apiVersion>6.6</sonar.apiVersion>
+		<sonar.apiVersion>6.7</sonar.apiVersion>
 		<sonar.sslrVersion>1.22</sonar.sslrVersion>
-		<sonar.sslrSquidVersion>2.6.1</sonar.sslrSquidVersion>
+		<sonar.sslrSquidVersion>2.7.0.377</sonar.sslrSquidVersion>
+		<sonar.AnalyzerCommonsVersion>1.6.0.219</sonar.AnalyzerCommonsVersion>
 		<junit.version>4.12</junit.version>
 		<mockito.version>2.13.0</mockito.version>
 		<hamcrest.version>1.3</hamcrest.version>
@@ -75,6 +76,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+      	<dependency>
+        	<groupId>org.sonarsource.analyzer-commons</groupId>
+        	<artifactId>sonar-analyzer-test-commons</artifactId>
+        	<version>${sonar.AnalyzerCommonsVersion}</version>
+        	<scope>test</scope>
+		</dependency>		
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>

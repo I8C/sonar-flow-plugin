@@ -20,26 +20,11 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.DisabledCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
-
-import com.sonar.sslr.api.Grammar;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.squidbridge.SquidAstVisitor;
-import org.sonar.squidbridge.api.CheckMessage;
-import org.sonar.squidbridge.api.SourceFile;
 
 public class DisabledCheckTest {
 
@@ -48,21 +33,9 @@ public class DisabledCheckTest {
 
   @Test
   public void disabledCheck() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new DisabledCheck());
-
-    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkDisabledInvalid/flow.xml";
-    String expectedMessage = "Remove disabled code";
-
-    SourceFile sfViolation = FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
-    List<CheckMessage> violationMessages = new ArrayList<CheckMessage>(
-        sfViolation.getCheckMessages());
-    assertEquals(1, violationMessages.size());
-    assertTrue("Returned check message not as expected",
-        expectedMessage.equals(violationMessages.get(0).getDefaultMessage()));
+    FlowVerifier.verifySingleIssueOnFile(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkDisabledInvalid/flow.xml"), new DisabledCheck(),
+        "Remove disabled code", 18);
   }
 
 }

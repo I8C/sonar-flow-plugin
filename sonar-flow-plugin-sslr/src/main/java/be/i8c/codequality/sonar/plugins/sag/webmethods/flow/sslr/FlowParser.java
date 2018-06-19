@@ -26,6 +26,7 @@ import com.sonar.sslr.impl.Parser;
 
 import java.io.File;
 import java.nio.charset.Charset;
+
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -35,23 +36,25 @@ import org.apache.commons.io.FileUtils;
  */
 public class FlowParser {
   private static final Parser<Grammar> P = FlowParser.create();
-  private static FlowConfiguration conf;
 
   private FlowParser() {
   }
 
-  public static Parser<Grammar> create(FlowConfiguration conf) {
-    FlowParser.conf = conf;
-    return Parser.builder(FlowGrammar.create()).withLexer(FlowLexer.create(conf)).build();
+  /**
+   * Creates this parser with default charset.
+   * @return
+   */
+  public static Parser<Grammar> create() {
+    return Parser.builder(FlowGrammar.create()).withLexer(FlowLexer.create())
+        .build();
   }
-
+  
   /**
    * Creates this parser.
    * @return
    */
-  public static Parser<Grammar> create() {
-    FlowParser.conf = new FlowConfiguration(Charset.defaultCharset());
-    return Parser.builder(FlowGrammar.create()).withLexer(FlowLexer.create(FlowParser.conf))
+  public static Parser<Grammar> create(Charset charset) {
+    return Parser.builder(FlowGrammar.create()).withLexer(FlowLexer.create(charset))
         .build();
   }
 
@@ -74,5 +77,6 @@ public class FlowParser {
   public static AstNode parseString(String source) {
     return P.parse(source);
   }
+
 
 }

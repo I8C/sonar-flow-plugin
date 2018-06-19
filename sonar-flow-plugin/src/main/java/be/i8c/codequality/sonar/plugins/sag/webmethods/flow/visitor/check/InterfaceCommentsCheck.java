@@ -23,17 +23,22 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.NodeGrammar;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowAttTypes;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.sslr.types.FlowTypes;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheckRuleType;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.NodeCheck;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRemediation;
+import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.annotations.CheckRuleType;
 
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.AstNodeType;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.rules.RuleType;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 
 /**
  * Checks interface comments being set. This is useful in combination with document-generator.
@@ -44,17 +49,11 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 @Rule(key = "S00004", name = "Interfaces of services should contain comments", 
     priority = Priority.MINOR, tags = {
     Tags.BAD_PRACTICE })
-@SqaleConstantRemediation("2min")
-@FlowCheckRuleType (ruletype = RuleType.CODE_SMELL)
-public class InterfaceCommentsCheck extends FlowCheck {
+@CheckRemediation (func = "Constant", constantCost= "2min")
+@CheckRuleType (ruletype = RuleType.CODE_SMELL)
+public class InterfaceCommentsCheck extends NodeCheck {
 
   static final Logger logger = LoggerFactory.getLogger(InterfaceCommentsCheck.class);
-
-  @Override
-  public void init() {
-    logger.debug("++ Initializing {} ++", this.getClass().getName());
-    subscribeTo(NodeGrammar.REC_FIELDS);
-  }
 
   @Override
   public void visitNode(AstNode astNode) {
@@ -65,7 +64,7 @@ public class InterfaceCommentsCheck extends FlowCheck {
             if (name.getTokenValue().equals("NODE_COMMENT")) {
               if (attr.getParent().getChildren(FlowTypes.ELEMENT_VALUE).size() <= 0) {
                 logger.debug("++ Comment VIOLATION found: " + value.getTokenLine() + " ++");
-                getContext().createLineViolation(this, "Add comment", value);
+                addIssue("Add comment", value);
               }
             }
           }
@@ -75,17 +74,8 @@ public class InterfaceCommentsCheck extends FlowCheck {
   }
 
   @Override
-  public boolean isFlowCheck() {
-    return false;
+  public List<AstNodeType> subscribedTo() {
+    return new ArrayList<AstNodeType>(Arrays.asList(NodeGrammar.REC_FIELDS));
   }
-
-  @Override
-  public boolean isNodeCheck() {
-    return true;
-  }
-
-  @Override
-  public boolean isTopLevelCheck() {
-    return false;
-  }
+  
 }

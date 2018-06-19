@@ -20,26 +20,11 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.EmptyMapCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
-
-import com.sonar.sslr.api.Grammar;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.squidbridge.SquidAstVisitor;
-import org.sonar.squidbridge.api.CheckMessage;
-import org.sonar.squidbridge.api.SourceFile;
 
 public class EmptyMapCheckTest {
 
@@ -47,40 +32,15 @@ public class EmptyMapCheckTest {
 
   @Test
   public void emptyMapCheckInvalid() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new EmptyMapCheck());
-
-    // Invalid
-    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkEmptyMapInvalid/flow.xml";
-    String expectedMessage 
-        = "This map step in the flow is empty, create content or remove the map.";
-
-    SourceFile sfViolation = FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
-    List<CheckMessage> violationMessages = new ArrayList<CheckMessage>(
-        sfViolation.getCheckMessages());
-    assertEquals(1, violationMessages.size());
-    assertTrue("Returned check message not as expected",
-        expectedMessage.equals(violationMessages.get(0).getDefaultMessage()));
+    FlowVerifier.verifySingleIssueOnFile(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkEmptyMapInvalid/flow.xml"), new EmptyMapCheck(),
+        "This map step in the flow is empty, create content or remove the map.", 18);
   }
   
   @Test
   public void emptyMapCheckValid() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new EmptyMapCheck());
-
-    // Valid
-    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkEmptyMapValid/flow.xml";
-
-    SourceFile sfViolation = FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
-    List<CheckMessage> violationMessages = new ArrayList<CheckMessage>(
-        sfViolation.getCheckMessages());
-    assertEquals(0, violationMessages.size());
+    FlowVerifier.verifyNoIssue(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkEmptyMapValid/flow.xml"), new EmptyMapCheck());
   }
 
 }

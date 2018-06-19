@@ -20,26 +20,11 @@
 
 package be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.squid.FlowAstScanner;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.SimpleMetricVisitor;
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.SavePipelineCheck;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.type.FlowCheck;
-
-import com.sonar.sslr.api.Grammar;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.squidbridge.SquidAstVisitor;
-import org.sonar.squidbridge.api.CheckMessage;
-import org.sonar.squidbridge.api.SourceFile;
 
 public class SavePipelineCheckTest {
 
@@ -48,21 +33,9 @@ public class SavePipelineCheckTest {
 
   @Test
   public void savePipelineCheck() {
-    List<SquidAstVisitor<Grammar>> metrics = new ArrayList<SquidAstVisitor<Grammar>>();
-    metrics.add(new SimpleMetricVisitor());
-    List<FlowCheck> checks = new ArrayList<FlowCheck>();
-    checks.add(new SavePipelineCheck());
-
-    String invalidPath = "src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
-        + "/pub/checkSavePipelineInvalid/flow.xml";
-    String expectedMessage = "Remove service pub.flow:savePipeline";
-
-    SourceFile sfViolation = FlowAstScanner.scanSingleFile(new File(invalidPath), checks, metrics);
-    List<CheckMessage> violationMessages = new ArrayList<CheckMessage>(
-        sfViolation.getCheckMessages());
-    assertEquals(1, violationMessages.size());
-    assertTrue("Returned check message not as expected",
-        expectedMessage.equals(violationMessages.get(0).getDefaultMessage()));
+    FlowVerifier.verifySingleIssueOnFile(new TestFile("src/test/resources/WmTestPackage/ns/I8cFlowSonarPluginTest"
+        + "/pub/checkSavePipelineInvalid/flow.xml"), new SavePipelineCheck(),
+        "Remove service pub.flow:savePipeline", 18);
 
   }
 
