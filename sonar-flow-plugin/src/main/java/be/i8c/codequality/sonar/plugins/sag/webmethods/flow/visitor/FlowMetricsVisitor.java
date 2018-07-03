@@ -65,12 +65,8 @@ public class FlowMetricsVisitor extends FlowVisitor {
       checkLinesOfComments(astNode);
     }else if(linesOfCodeSubscr.contains(astNode.getType())) {
       checkLinesOfCode(astNode);
-<<<<<<< HEAD
     }
     if(dependenciesSubscr.contains(astNode.getType())) {
-=======
-    }else if(dependenciesSubscr.contains(astNode.getType())) {
->>>>>>> refs/remotes/origin/dev03_refactor
       checkDependency(astNode);
     }
     

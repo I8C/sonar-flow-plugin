@@ -13,11 +13,7 @@ import org.sonar.api.measures.Metrics;
  */
 public class FlowMetrics implements Metrics {
 
-<<<<<<< HEAD
   private static final String DOMAIN = "i8c-Flow-plugin";
-=======
-  private static final String DOMAIN = "i8C-Flow-plugin";
->>>>>>> refs/remotes/origin/dev03_refactor
   private static final String FLOW_DEPENDENCIES_KEY = "flow.dependencies";
   private static final String FLOW_TOPLEVEL_KEY = "flow.istoplevel";
 

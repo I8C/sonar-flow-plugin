@@ -23,7 +23,6 @@ package be.i8c.codequality.sonar.plugins.sag.webmethods.flow;
 import static be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule.FlowRulesDefinition.REPO_KEY;
 
 import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.rule.FlowRulesDefinition;
-import be.i8c.codequality.sonar.plugins.sag.webmethods.flow.visitor.check.CheckList;
 
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 
